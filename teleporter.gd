@@ -12,5 +12,5 @@ func _ready() -> void:
 		collider.scale.x = collider_x
 		collider.scale.z = collider_z
 
-#func _on_body_entered(body: Node3D) -> void:
-	#body.global_position = location
+func _on_body_entered(body: Node3D) -> void:
+	body.global_position = location

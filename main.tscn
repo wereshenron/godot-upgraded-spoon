@@ -3,23 +3,53 @@
 [ext_resource type="PackedScene" uid="uid://cuaggjrhykbyn" path="res://player/Player.tscn" id="1_ig7tw"]
 [ext_resource type="PackedScene" uid="uid://spsfcd2qh6wa" path="res://ducky/rubber_duck_toy_4k.glb" id="2_0xm2m"]
 [ext_resource type="Texture2D" uid="uid://cqjwaqslp6ofg" path="res://testing/random_noise.res" id="2_7mycd"]
+[ext_resource type="Script" uid="uid://dgwnhfln12odx" path="res://ducky/ducky.gd" id="3_272bh"]
+[ext_resource type="Texture2D" uid="uid://bpmb7vjkyxcaj" path="res://textures/trippytexture.tres" id="3_kek77"]
 [ext_resource type="PackedScene" uid="uid://b3ab4tgayy8s2" path="res://shrekwazowski/shrek_wazowski.glb" id="4_1bvp3"]
 [ext_resource type="PackedScene" uid="uid://daokd5re032ms" path="res://teleporter.tscn" id="5_lquwl"]
 [ext_resource type="PackedScene" uid="uid://clxoe71k1iero" path="res://quit_button.tscn" id="6_272bh"]
-[ext_resource type="Script" uid="uid://dsle7qdtlcku1" path="res://scene_manager.gd" id="7_5vw27"]
+[ext_resource type="Script" uid="uid://6l167k8ap4cr" path="res://fps.gd" id="8_5vw27"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ig7tw"]
 size = Vector3(50, 1, 50)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7mycd"]
 albedo_texture = ExtResource("2_7mycd")
+metallic = 1.0
+metallic_texture = ExtResource("2_7mycd")
+metallic_texture_channel = 3
+roughness_texture = ExtResource("2_7mycd")
 normal_enabled = true
+normal_scale = 16.0
 normal_texture = ExtResource("2_7mycd")
+bent_normal_enabled = true
+bent_normal_texture = ExtResource("2_7mycd")
+heightmap_enabled = true
+heightmap_scale = 16.0
+heightmap_texture = ExtResource("3_kek77")
+subsurf_scatter_strength = 1.0
+refraction_scale = -1.0
+detail_enabled = true
+detail_blend_mode = 3
+detail_normal = ExtResource("3_kek77")
+uv1_scale = Vector3(1.065, 1.57, 1.065)
+uv1_offset = Vector3(0, -1.495, 0)
+uv1_triplanar_sharpness = 9.513649
+stencil_flags = 2
 
 [sub_resource type="BoxMesh" id="BoxMesh_0xm2m"]
+lightmap_size_hint = Vector2i(14, 21)
 material = SubResource("StandardMaterial3D_7mycd")
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ig7tw"]
+sky_top_color = Color(0.6509804, 0.63529414, 0.7764706, 1)
+sky_horizon_color = Color(0.5019608, 0.44313726, 0.32156864, 1)
+sky_curve = 0.3567625
+ground_horizon_color = Color(0.5019608, 0.44313726, 0.32156864, 1)
+ground_curve = 0.028963197
+sun_angle_max = 118.3
+sun_curve = 0.02745131
+use_debanding = false
 
 [sub_resource type="Sky" id="Sky_lquwl"]
 sky_material = SubResource("ProceduralSkyMaterial_ig7tw")
@@ -33,19 +63,20 @@ ambient_light_color = Color(1, 1, 1, 1)
 ambient_light_energy = 3.19
 tonemap_mode = 3
 tonemap_white = 0.83
+ssao_enabled = true
+ssao_light_affect = 0.39
+ssao_ao_channel_affect = 0.18
 glow_enabled = true
 glow_normalized = true
-glow_intensity = 1.64
-glow_strength = 1.32
-glow_bloom = 0.26
+glow_intensity = 0.21
+glow_strength = 1.29
+glow_bloom = 1.0
+glow_blend_mode = 2
 volumetric_fog_density = 0.0289
 
-[sub_resource type="GDScript" id="GDScript_1bvp3"]
-script/source = "extends RigidBody3D
-
-func _ready() -> void:
-	angular_velocity = Vector3(randi_range(0, 5), randi_range(0, 5), randi_range(0, 5))
-"
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_7mycd"]
+friction = 0.74
+bounce = 0.78
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_0xm2m"]
 size = Vector3(0.211182, 0.321716, 0.348267)
@@ -56,12 +87,20 @@ size = Vector3(0.211182, 0.321716, 0.348267)
 default_font = SubResource("SystemFont_272bh")
 default_font_size = 13
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_kek77"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_kek77"]
+
 [node name="Main" type="Node3D" unique_id=1451496822]
 
 [node name="Player" parent="." unique_id=198879016 instance=ExtResource("1_ig7tw")]
 transform = Transform3D(-0.997826, 0, -0.0659082, 0, 1, 0, 0.0659082, 0, -0.997826, 0, 0, 0)
+mouse_sensitivity = 0.005
+jump_force = 8.209
 sprint_multiplier = 2.0
-speed = 6
+camera_smoothing = 0.2
+turn_speed = 4.87
+speed = 8.0
 
 [node name="Floor" type="StaticBody3D" parent="." unique_id=1787325063]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.55729, 0)
@@ -81,15 +120,16 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12.9325, 0)
 
 [node name="Ducky" type="RigidBody3D" parent="." unique_id=1845748385]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.3957, 1.44006, 0)
-mass = 0.5
-script = SubResource("GDScript_1bvp3")
+physics_material_override = SubResource("PhysicsMaterial_7mycd")
+angular_velocity = Vector3(0.017191494, 0, 0)
+script = ExtResource("3_272bh")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Ducky" unique_id=178757074]
-transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0.0289307, 0.162262, 0.000793457)
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0.028930664, 0.45028937, 0.000793457)
 shape = SubResource("BoxShape3D_0xm2m")
 
 [node name="blend_export" parent="Ducky" unique_id=371809800 instance=ExtResource("2_0xm2m")]
-transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)
+transform = Transform3D(3, 0, 0, 0, 3.005, 0, 0, 0, 3, 0, 0, 0)
 
 [node name="Shrak" type="Node3D" parent="." unique_id=1382403881]
 
@@ -98,11 +138,9 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, -15
 
 [node name="Teleporter" parent="." unique_id=617189033 instance=ExtResource("5_lquwl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -9.51279, 0)
+location = Vector3(0, 5, 0)
 collider_x = 10000
 collider_z = 10000
-
-[node name="SceneManager" type="Node3D" parent="." unique_id=1702871653]
-script = ExtResource("7_5vw27")
 
 [node name="Button" parent="." unique_id=950579551 instance=ExtResource("6_272bh")]
 
@@ -137,4 +175,28 @@ autowrap_mode = 0
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[connection signal="body_entered" from="Teleporter" to="SceneManager" method="_on_teleporter_body_entered"]
+[node name="FPS" type="RichTextLabel" parent="Control" unique_id=932697073]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_bottom = 40.0
+grow_horizontal = 0
+theme_override_colors/default_color = Color(0.40784314, 1, 0.37254903, 1)
+text = "300"
+autowrap_mode = 0
+horizontal_alignment = 1
+script = ExtResource("8_5vw27")
+
+[node name="Node3D" type="Node3D" parent="." unique_id=345564406]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5402012, 0, 0)
+
+[node name="RigidBody3D" type="RigidBody3D" parent="Node3D" unique_id=1959331295]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Node3D/RigidBody3D" unique_id=1747384881]
+shape = SubResource("BoxShape3D_kek77")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D/RigidBody3D" unique_id=2083474541]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.93991446, 0)
+mesh = SubResource("BoxMesh_kek77")
