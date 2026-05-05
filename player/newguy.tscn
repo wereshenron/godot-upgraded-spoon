@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://b13yu5d6guhx"]
+
+[ext_resource type="PackedScene" uid="uid://b62q5tqetlv4s" path="res://player/newguy.glb" id="1_pvtov"]
+
+[node name="newguy" instance=ExtResource("1_pvtov")]
+
+[node name="Sphere" parent="." index="0"]
+layers = 2

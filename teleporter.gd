@@ -1,0 +1,16 @@
+extends Area3D
+
+@export var location : Vector3
+@export var collider_x : int = 100
+@export var collider_z : int = 100
+
+var collider : CollisionShape3D
+
+func _ready() -> void:
+	collider = $CollisionShape3D
+	if collider:
+		collider.scale.x = collider_x
+		collider.scale.z = collider_z
+
+#func _on_body_entered(body: Node3D) -> void:
+	#body.global_position = location

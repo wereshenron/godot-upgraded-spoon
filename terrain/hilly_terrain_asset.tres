@@ -1,0 +1,46 @@
+[gd_resource type="Terrain3DAssets" format=3 uid="uid://d2gp2p3kv80ud"]
+
+[ext_resource type="Texture2D" uid="uid://bbdyqtkopjhkn" path="res://terrain/rock_alb_ht.dds" id="1_b6ip0"]
+[ext_resource type="Texture2D" uid="uid://bg26phwfe21hp" path="res://terrain/rock_nrm_rgh.png" id="2_ybcxf"]
+[ext_resource type="Texture2D" uid="uid://bay1plb5kqnj8" path="res://terrain/bricks_alb_ht.dds" id="3_3i68l"]
+[ext_resource type="Texture2D" uid="uid://cff7bj0bnomla" path="res://terrain/bricks_nrm_rgh.png" id="4_qmdkh"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_q5hbt"]
+transparency = 4
+cull_mode = 2
+vertex_color_use_as_albedo = true
+backlight_enabled = true
+backlight = Color(0.5, 0.5, 0.5, 1)
+distance_fade_mode = 1
+distance_fade_min_distance = 128.0
+distance_fade_max_distance = 96.0
+
+[sub_resource type="Terrain3DMeshAsset" id="Terrain3DMeshAsset_ein4f"]
+generated_type = 1
+height_offset = 0.5
+material_override = SubResource("StandardMaterial3D_q5hbt")
+last_lod = 0
+last_shadow_lod = 0
+lod0_range = 128.0
+
+[sub_resource type="Terrain3DTextureAsset" id="Terrain3DTextureAsset_1h7xe"]
+name = "rock_alb_ht"
+albedo_texture = ExtResource("1_b6ip0")
+normal_texture = ExtResource("2_ybcxf")
+normal_depth = 1.432
+roughness = 1.0
+uv_scale = 0.025
+
+[sub_resource type="Terrain3DTextureAsset" id="Terrain3DTextureAsset_6uryf"]
+name = "bricks_alb_ht"
+id = 1
+albedo_texture = ExtResource("3_3i68l")
+normal_texture = ExtResource("4_qmdkh")
+normal_depth = 2.0
+ao_strength = 2.0
+roughness = 1.0
+uv_scale = 0.356
+
+[resource]
+mesh_list = Array[Terrain3DMeshAsset]([SubResource("Terrain3DMeshAsset_ein4f")])
+texture_list = Array[Terrain3DTextureAsset]([SubResource("Terrain3DTextureAsset_1h7xe"), SubResource("Terrain3DTextureAsset_6uryf")])
