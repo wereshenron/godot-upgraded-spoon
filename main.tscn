@@ -2,44 +2,15 @@
 
 [ext_resource type="PackedScene" uid="uid://cuaggjrhykbyn" path="res://player/Player.tscn" id="1_ig7tw"]
 [ext_resource type="PackedScene" uid="uid://spsfcd2qh6wa" path="res://ducky/rubber_duck_toy_4k.glb" id="2_0xm2m"]
-[ext_resource type="Texture2D" uid="uid://cqjwaqslp6ofg" path="res://testing/random_noise.res" id="2_7mycd"]
+[ext_resource type="Texture2D" uid="uid://cqjwaqslp6ofg" path="res://textures/random_noise.res" id="2_7mycd"]
+[ext_resource type="Material" uid="uid://bub02b2ns134q" path="res://materials/base_mat.tres" id="2_dg77c"]
 [ext_resource type="Script" uid="uid://dgwnhfln12odx" path="res://ducky/ducky.gd" id="3_272bh"]
 [ext_resource type="Texture2D" uid="uid://bpmb7vjkyxcaj" path="res://textures/trippytexture.tres" id="3_kek77"]
-[ext_resource type="PackedScene" uid="uid://b3ab4tgayy8s2" path="res://shrekwazowski/shrek_wazowski.glb" id="4_1bvp3"]
 [ext_resource type="PackedScene" uid="uid://daokd5re032ms" path="res://teleporter.tscn" id="5_lquwl"]
-[ext_resource type="PackedScene" uid="uid://clxoe71k1iero" path="res://quit_button.tscn" id="6_272bh"]
-[ext_resource type="Script" uid="uid://6l167k8ap4cr" path="res://fps.gd" id="8_5vw27"]
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_ig7tw"]
-size = Vector3(50, 1, 50)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7mycd"]
-albedo_texture = ExtResource("2_7mycd")
-metallic = 1.0
-metallic_texture = ExtResource("2_7mycd")
-metallic_texture_channel = 3
-roughness_texture = ExtResource("2_7mycd")
-normal_enabled = true
-normal_scale = 16.0
-normal_texture = ExtResource("2_7mycd")
-bent_normal_enabled = true
-bent_normal_texture = ExtResource("2_7mycd")
-heightmap_enabled = true
-heightmap_scale = 16.0
-heightmap_texture = ExtResource("3_kek77")
-subsurf_scatter_strength = 1.0
-refraction_scale = -1.0
-detail_enabled = true
-detail_blend_mode = 3
-detail_normal = ExtResource("3_kek77")
-uv1_scale = Vector3(1.065, 1.57, 1.065)
-uv1_offset = Vector3(0, -1.495, 0)
-uv1_triplanar_sharpness = 9.513649
-stencil_flags = 2
-
-[sub_resource type="BoxMesh" id="BoxMesh_0xm2m"]
-lightmap_size_hint = Vector2i(14, 21)
-material = SubResource("StandardMaterial3D_7mycd")
+[ext_resource type="PackedScene" uid="uid://clxoe71k1iero" path="res://hud/quit_button.tscn" id="6_272bh"]
+[ext_resource type="Script" uid="uid://6l167k8ap4cr" path="res://hud/fps.gd" id="8_5vw27"]
+[ext_resource type="Script" uid="uid://bje23tj3ictas" path="res://traits/grabbable.gd" id="10_efxa6"]
+[ext_resource type="PackedScene" uid="uid://bvhp50pa3ln0p" path="res://shrekwazowski/shrak.glb" id="12_w48qg"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ig7tw"]
 sky_top_color = Color(0.6509804, 0.63529414, 0.7764706, 1)
@@ -82,6 +53,7 @@ bounce = 0.78
 size = Vector3(0.211182, 0.321716, 0.348267)
 
 [sub_resource type="SystemFont" id="SystemFont_272bh"]
+subpixel_positioning = 0
 
 [sub_resource type="Theme" id="Theme_5vw27"]
 default_font = SubResource("SystemFont_272bh")
@@ -90,6 +62,38 @@ default_font_size = 13
 [sub_resource type="BoxShape3D" id="BoxShape3D_kek77"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_kek77"]
+material = ExtResource("2_dg77c")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ig7tw"]
+size = Vector3(50, 1, 50)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7mycd"]
+albedo_texture = ExtResource("2_7mycd")
+metallic = 1.0
+metallic_texture = ExtResource("2_7mycd")
+metallic_texture_channel = 3
+roughness_texture = ExtResource("2_7mycd")
+normal_enabled = true
+normal_scale = 16.0
+normal_texture = ExtResource("2_7mycd")
+bent_normal_enabled = true
+bent_normal_texture = ExtResource("2_7mycd")
+heightmap_enabled = true
+heightmap_scale = 16.0
+heightmap_texture = ExtResource("3_kek77")
+subsurf_scatter_strength = 1.0
+refraction_scale = -1.0
+detail_enabled = true
+detail_blend_mode = 3
+detail_normal = ExtResource("3_kek77")
+uv1_scale = Vector3(1.065, 1.57, 1.065)
+uv1_offset = Vector3(0, -1.495, 0)
+uv1_triplanar_sharpness = 9.513649
+stencil_flags = 2
+
+[sub_resource type="BoxMesh" id="BoxMesh_0xm2m"]
+lightmap_size_hint = Vector2i(14, 21)
+material = SubResource("StandardMaterial3D_7mycd")
 
 [node name="Main" type="Node3D" unique_id=1451496822]
 
@@ -102,23 +106,13 @@ camera_smoothing = 0.2
 turn_speed = 4.87
 speed = 8.0
 
-[node name="Floor" type="StaticBody3D" parent="." unique_id=1787325063]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.55729, 0)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor" unique_id=432204150]
-shape = SubResource("BoxShape3D_ig7tw")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor" unique_id=1182062683]
-transform = Transform3D(50, 0, 0, 0, 1, 0, 0, 0, 50, 0, 0, 0)
-mesh = SubResource("BoxMesh_0xm2m")
-
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1569142963]
 environment = SubResource("Environment_h2yge")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=994105193]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12.9325, 0)
 
-[node name="Ducky" type="RigidBody3D" parent="." unique_id=1845748385]
+[node name="Ducky" type="RigidBody3D" parent="." unique_id=1845748385 groups=["Grabbable"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.3957, 1.44006, 0)
 physics_material_override = SubResource("PhysicsMaterial_7mycd")
 angular_velocity = Vector3(0.017191494, 0, 0)
@@ -131,13 +125,12 @@ shape = SubResource("BoxShape3D_0xm2m")
 [node name="blend_export" parent="Ducky" unique_id=371809800 instance=ExtResource("2_0xm2m")]
 transform = Transform3D(3, 0, 0, 0, 3.005, 0, 0, 0, 3, 0, 0, 0)
 
-[node name="Shrak" type="Node3D" parent="." unique_id=1382403881]
-
-[node name="shrek_wazowski" parent="Shrak" unique_id=193028672 instance=ExtResource("4_1bvp3")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, -15.6381, 71.8412)
+[node name="Grabbable" type="Node3D" parent="Ducky" unique_id=2145394779]
+script = ExtResource("10_efxa6")
 
 [node name="Teleporter" parent="." unique_id=617189033 instance=ExtResource("5_lquwl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -9.51279, 0)
+monitorable = false
 location = Vector3(0, 5, 0)
 collider_x = 10000
 collider_z = 10000
@@ -189,14 +182,39 @@ autowrap_mode = 0
 horizontal_alignment = 1
 script = ExtResource("8_5vw27")
 
-[node name="Node3D" type="Node3D" parent="." unique_id=345564406]
+[node name="RigidBody3D" type="RigidBody3D" parent="." unique_id=1959331295 groups=["Grabbable"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5402012, 0, 0)
 
-[node name="RigidBody3D" type="RigidBody3D" parent="Node3D" unique_id=1959331295]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Node3D/RigidBody3D" unique_id=1747384881]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D" unique_id=1747384881]
 shape = SubResource("BoxShape3D_kek77")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D/RigidBody3D" unique_id=2083474541]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.93991446, 0)
+[node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D" unique_id=2083474541]
 mesh = SubResource("BoxMesh_kek77")
+
+[node name="Grabbable" type="Node3D" parent="RigidBody3D" unique_id=148693957]
+script = ExtResource("10_efxa6")
+
+[node name="Floor" type="StaticBody3D" parent="." unique_id=1787325063]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.55729, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor" unique_id=432204150]
+shape = SubResource("BoxShape3D_ig7tw")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor" unique_id=1182062683]
+transform = Transform3D(50, 0, 0, 0, 1, 0, 0, 0, 50, 0, 0, 0)
+material_override = ExtResource("2_dg77c")
+mesh = SubResource("BoxMesh_0xm2m")
+
+[node name="Floor2" type="StaticBody3D" parent="." unique_id=1425941629]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50, -3.55729, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor2" unique_id=242094118]
+shape = SubResource("BoxShape3D_ig7tw")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor2" unique_id=1258081847]
+transform = Transform3D(50, 0, 0, 0, 1, 0, 0, 0, 50, 0, 0, 0)
+material_override = ExtResource("2_dg77c")
+mesh = SubResource("BoxMesh_0xm2m")
+
+[node name="shrak" parent="." unique_id=1545948184 instance=ExtResource("12_w48qg")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 4, -2, 33)

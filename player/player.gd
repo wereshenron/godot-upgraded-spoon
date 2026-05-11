@@ -3,7 +3,7 @@ extends CharacterBody3D
 @onready var _camera : Camera3D = get_node("CameraPivot/Camera3D")
 @onready var _camera_pivot : Node3D = get_node("CameraPivot")
 
-@export_range(0.0, 1.0) var mouse_sensitivity : float = 0.01
+@export_range(0.001, 0.01) var mouse_sensitivity : float = 0.01
 @export_range(0.0, 50.0) var jump_force : float = 25.0;
 @export_range(1.0, 2.0) var sprint_multiplier : float = 1.6
 @export_range(0.01, 1.0) var camera_smoothing : float = 0.12

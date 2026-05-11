@@ -2,13 +2,15 @@
 
 [ext_resource type="Script" uid="uid://vj0hl7lhx8us" path="res://player/player.gd" id="1_xhfnw"]
 [ext_resource type="PackedScene" uid="uid://b13yu5d6guhx" path="res://player/newguy.tscn" id="2_kne1u"]
-[ext_resource type="Script" uid="uid://b1ltd5s3pdxhe" path="res://camera_3d.gd" id="3_kne1u"]
-[ext_resource type="PackedScene" uid="uid://clxoe71k1iero" path="res://quit_button.tscn" id="4_83hs8"]
+[ext_resource type="Script" uid="uid://b1ltd5s3pdxhe" path="res://player/camera_3d.gd" id="3_kne1u"]
+[ext_resource type="PackedScene" uid="uid://clxoe71k1iero" path="res://hud/quit_button.tscn" id="4_83hs8"]
+[ext_resource type="Script" uid="uid://cbuqwortgp1ys" path="res://player/interaction_handler.gd" id="5_x8kxw"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0rwas"]
 
 [node name="Player" type="CharacterBody3D" unique_id=5736185]
 script = ExtResource("1_xhfnw")
+mouse_sensitivity = 0.003
 turn_speed = 5.0
 
 [node name="Pivot" type="Node3D" parent="." unique_id=1910403145]
@@ -29,4 +31,11 @@ current = true
 fov = 65.0
 script = ExtResource("3_kne1u")
 
+[node name="RayCast3D" type="RayCast3D" parent="CameraPivot/Camera3D" unique_id=270234958]
+target_position = Vector3(0, 0, -3)
+
 [node name="Button" parent="." unique_id=1094543307 instance=ExtResource("4_83hs8")]
+
+[node name="InteractionHandler" type="Node3D" parent="." unique_id=1228017416 node_paths=PackedStringArray("raycast")]
+script = ExtResource("5_x8kxw")
+raycast = NodePath("../CameraPivot/Camera3D/RayCast3D")
