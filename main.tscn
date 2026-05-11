@@ -114,7 +114,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12.9325, 0)
 
 [node name="Ducky" type="RigidBody3D" parent="." unique_id=1845748385 groups=["Grabbable"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.3957, 1.44006, 0)
+mass = 10.712
 physics_material_override = SubResource("PhysicsMaterial_7mycd")
+gravity_scale = 3.149
+freeze_mode = 1
 angular_velocity = Vector3(0.017191494, 0, 0)
 script = ExtResource("3_272bh")
 
@@ -184,6 +187,7 @@ script = ExtResource("8_5vw27")
 
 [node name="RigidBody3D" type="RigidBody3D" parent="." unique_id=1959331295 groups=["Grabbable"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5402012, 0, 0)
+freeze_mode = 1
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D" unique_id=1747384881]
 shape = SubResource("BoxShape3D_kek77")

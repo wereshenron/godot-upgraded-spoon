@@ -36,6 +36,7 @@ target_position = Vector3(0, 0, -3)
 
 [node name="Button" parent="." unique_id=1094543307 instance=ExtResource("4_83hs8")]
 
-[node name="InteractionHandler" type="Node3D" parent="." unique_id=1228017416 node_paths=PackedStringArray("raycast")]
+[node name="InteractionHandler" type="Node3D" parent="." unique_id=1228017416 node_paths=PackedStringArray("raycast", "camera")]
 script = ExtResource("5_x8kxw")
 raycast = NodePath("../CameraPivot/Camera3D/RayCast3D")
+camera = NodePath("../CameraPivot/Camera3D")
