@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://dwtx0c8jtca5s"]
+
+[ext_resource type="PackedScene" uid="uid://bvhp50pa3ln0p" path="res://shrekwazowski/shrak.glb" id="1_jf2u8"]
+[ext_resource type="Script" uid="uid://1k53p7bv7vlh" path="res://shrak.gd" id="2_l01br"]
+
+[node name="shrak" unique_id=1545948184 instance=ExtResource("1_jf2u8")]
+script = ExtResource("2_l01br")

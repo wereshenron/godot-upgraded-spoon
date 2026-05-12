@@ -2,15 +2,13 @@
 
 [ext_resource type="PackedScene" uid="uid://cuaggjrhykbyn" path="res://player/Player.tscn" id="1_ig7tw"]
 [ext_resource type="PackedScene" uid="uid://spsfcd2qh6wa" path="res://ducky/rubber_duck_toy_4k.glb" id="2_0xm2m"]
-[ext_resource type="Texture2D" uid="uid://cqjwaqslp6ofg" path="res://textures/random_noise.res" id="2_7mycd"]
 [ext_resource type="Material" uid="uid://bub02b2ns134q" path="res://materials/base_mat.tres" id="2_dg77c"]
 [ext_resource type="Script" uid="uid://dgwnhfln12odx" path="res://ducky/ducky.gd" id="3_272bh"]
-[ext_resource type="Texture2D" uid="uid://bpmb7vjkyxcaj" path="res://textures/trippytexture.tres" id="3_kek77"]
 [ext_resource type="PackedScene" uid="uid://daokd5re032ms" path="res://teleporter.tscn" id="5_lquwl"]
 [ext_resource type="PackedScene" uid="uid://clxoe71k1iero" path="res://hud/quit_button.tscn" id="6_272bh"]
 [ext_resource type="Script" uid="uid://6l167k8ap4cr" path="res://hud/fps.gd" id="8_5vw27"]
+[ext_resource type="PackedScene" uid="uid://dwtx0c8jtca5s" path="res://shrekwazowski/shrak.tscn" id="9_kek77"]
 [ext_resource type="Script" uid="uid://bje23tj3ictas" path="res://traits/grabbable.gd" id="10_efxa6"]
-[ext_resource type="PackedScene" uid="uid://bvhp50pa3ln0p" path="res://shrekwazowski/shrak.glb" id="12_w48qg"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ig7tw"]
 sky_top_color = Color(0.6509804, 0.63529414, 0.7764706, 1)
@@ -67,33 +65,8 @@ material = ExtResource("2_dg77c")
 [sub_resource type="BoxShape3D" id="BoxShape3D_ig7tw"]
 size = Vector3(50, 1, 50)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7mycd"]
-albedo_texture = ExtResource("2_7mycd")
-metallic = 1.0
-metallic_texture = ExtResource("2_7mycd")
-metallic_texture_channel = 3
-roughness_texture = ExtResource("2_7mycd")
-normal_enabled = true
-normal_scale = 16.0
-normal_texture = ExtResource("2_7mycd")
-bent_normal_enabled = true
-bent_normal_texture = ExtResource("2_7mycd")
-heightmap_enabled = true
-heightmap_scale = 16.0
-heightmap_texture = ExtResource("3_kek77")
-subsurf_scatter_strength = 1.0
-refraction_scale = -1.0
-detail_enabled = true
-detail_blend_mode = 3
-detail_normal = ExtResource("3_kek77")
-uv1_scale = Vector3(1.065, 1.57, 1.065)
-uv1_offset = Vector3(0, -1.495, 0)
-uv1_triplanar_sharpness = 9.513649
-stencil_flags = 2
-
 [sub_resource type="BoxMesh" id="BoxMesh_0xm2m"]
 lightmap_size_hint = Vector2i(14, 21)
-material = SubResource("StandardMaterial3D_7mycd")
 
 [node name="Main" type="Node3D" unique_id=1451496822]
 
@@ -110,7 +83,8 @@ speed = 8.0
 environment = SubResource("Environment_h2yge")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=994105193]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12.9325, 0)
+transform = Transform3D(1, 0, 0, 0, 0.8660254, 0.5, 0, -0.5, 0.8660254, 0, 12.9325, 10)
+shadow_enabled = true
 
 [node name="Ducky" type="RigidBody3D" parent="." unique_id=1845748385 groups=["Grabbable"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.3957, 1.44006, 0)
@@ -206,19 +180,9 @@ shape = SubResource("BoxShape3D_ig7tw")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Floor" unique_id=1182062683]
 transform = Transform3D(50, 0, 0, 0, 1, 0, 0, 0, 50, 0, 0, 0)
-material_override = ExtResource("2_dg77c")
 mesh = SubResource("BoxMesh_0xm2m")
 
-[node name="Floor2" type="StaticBody3D" parent="." unique_id=1425941629]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50, -3.55729, 0)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor2" unique_id=242094118]
-shape = SubResource("BoxShape3D_ig7tw")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor2" unique_id=1258081847]
-transform = Transform3D(50, 0, 0, 0, 1, 0, 0, 0, 50, 0, 0, 0)
-material_override = ExtResource("2_dg77c")
-mesh = SubResource("BoxMesh_0xm2m")
-
-[node name="shrak" parent="." unique_id=1545948184 instance=ExtResource("12_w48qg")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 4, -2, 33)
+[node name="shrak" parent="." unique_id=1545948184 instance=ExtResource("9_kek77")]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0, -7, 57)
+idle_speed = 1.0
+idle_amount = 900.0

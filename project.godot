@@ -22,7 +22,7 @@ config/icon="res://icon.svg"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/terrain_3d/plugin.cfg")
+enabled=PackedStringArray()
 
 [global_group]
 
@@ -71,3 +71,7 @@ sprint={
 jolt_physics_3d/simulation/velocity_steps=14
 jolt_physics_3d/simulation/position_steps=4
 common/physics_interpolation=true
+
+[rendering]
+
+anti_aliasing/quality/screen_space_aa=1

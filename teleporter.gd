@@ -10,6 +10,8 @@ func _ready() -> void:
 	collider.scale.z = collider_z
 
 func _on_body_entered(body: Node3D) -> void:
-	body.linear_velocity = Vector3.ZERO
-	body.angular_velocity = Vector3.ZERO
+	if body.has_method("set_linear_velocity"):
+		body.linear_velocity = Vector3.ZERO
+		body.angular_velocity = Vector3.ZERO
+		
 	body.global_position = location
