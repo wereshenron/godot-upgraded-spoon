@@ -7,6 +7,8 @@
 [ext_resource type="Script" uid="uid://cbuqwortgp1ys" path="res://player/interaction_handler.gd" id="5_x8kxw"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0rwas"]
+radius = 0.6225586
+height = 4.1311646
 
 [node name="Player" type="CharacterBody3D" unique_id=5736185]
 script = ExtResource("1_xhfnw")
@@ -14,16 +16,17 @@ mouse_sensitivity = 0.003
 turn_speed = 5.0
 
 [node name="Pivot" type="Node3D" parent="." unique_id=1910403145]
-transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 0)
+transform = Transform3D(-1.31, 0, 1.978045e-07, 0, 1.31, 0, -1.978045e-07, 0, -1.31, 0, 0, 0)
 
 [node name="newguy2" parent="Pivot" unique_id=517916326 instance=ExtResource("2_kne1u")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1387311879]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8472595, 0)
 shape = SubResource("CapsuleShape3D_0rwas")
 
 [node name="CameraPivot" type="Node3D" parent="." unique_id=348688890]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8834, -0.0139734)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.145008, -0.0139734)
 
 [node name="Camera3D" type="Camera3D" parent="CameraPivot" unique_id=804032513]
 cull_mask = 1048573
@@ -32,7 +35,7 @@ fov = 65.0
 script = ExtResource("3_kne1u")
 
 [node name="RayCast3D" type="RayCast3D" parent="CameraPivot/Camera3D" unique_id=270234958]
-target_position = Vector3(0, 0, -3)
+target_position = Vector3(0, 0, -4)
 
 [node name="Button" parent="." unique_id=1094543307 instance=ExtResource("4_83hs8")]
 

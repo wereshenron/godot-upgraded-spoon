@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://c47mtmclgwgxd"]
+
+[ext_resource type="Script" uid="uid://dyf87vyqicd34" path="res://chunks/base_chunk.gd" id="1_cu0ab"]
+
+[node name="BaseChunk" type="Node3D" unique_id=6855709]
+script = ExtResource("1_cu0ab")
+
+[node name="Geometry" type="Node3D" parent="." unique_id=671437461]
+
+[node name="SpawnPoints" type="Node3D" parent="." unique_id=870977032]
+
+[node name="Exits" type="Node3D" parent="." unique_id=906267539]

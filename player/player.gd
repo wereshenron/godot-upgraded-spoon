@@ -55,6 +55,7 @@ func _physics_process(delta):
 		var current = $Pivot.basis
 		var target = Basis.looking_at(look_direction)
 		$Pivot.basis = current.slerp(target, delta * turn_speed)
+		#$Pivot.basis = current.slerp(target, delta * turn_speed)
 
 	# Ground Velocity
 	target_velocity.x = lerp(target_velocity.x, direction.x * running_speed, t)
