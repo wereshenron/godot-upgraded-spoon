@@ -12,6 +12,7 @@ extends CharacterBody3D
 @export var turn_speed : float = 0.5
 @export var speed : float = 14.0
 @export var fall_acceleration : float = 75
+@export var push_force : float = 5.0
 
 var target_velocity = Vector3.ZERO
 var _target_cam_x := 0.0
@@ -52,10 +53,10 @@ func _physics_process(delta):
 		direction = (right * direction.x + forward * direction.z).normalized()
 		
 		var look_direction = Vector3(direction.x, 0, direction.z)
-		var current = $Pivot.basis
-		var target = Basis.looking_at(look_direction)
+		var current: Basis = $Pivot.basis.orthonormalized()
+		var target: Basis = Basis.looking_at(look_direction).orthonormalized()
+		target = Basis(target.x.normalized(), Vector3.UP, target.z.normalized())
 		$Pivot.basis = current.slerp(target, delta * turn_speed)
-		#$Pivot.basis = current.slerp(target, delta * turn_speed)
 
 	# Ground Velocity
 	target_velocity.x = lerp(target_velocity.x, direction.x * running_speed, t)
@@ -71,3 +72,12 @@ func _physics_process(delta):
 	# Moving the Character
 	velocity = target_velocity
 	move_and_slide()
+	_push_things_away()
+
+func _push_things_away():
+	for i in get_slide_collision_count():
+		var collision = get_slide_collision(i)
+		var collider = collision.get_collider()
+		if collider is RigidBody3D:
+			var push_dir = -collision.get_normal()
+			collider.apply_impulse(push_dir * push_force, collision.get_position() - collider.global_position)

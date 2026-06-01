@@ -17,7 +17,6 @@ func _process(_delta: float) -> void:
 			if target != _current_target:
 				_set_highlight(target, true)
 				_current_target = target
-	
 			return
 			
 	_clear_highlight()
@@ -25,10 +24,10 @@ func _process(_delta: float) -> void:
 				
 				
 func _unhandled_input(event):
-	if event is InputEventMouseButton and event.is_pressed() and _current_target:
+	if event is InputEventKey and Input.is_action_pressed("pick_up") and _current_target:
 		_pickup(_current_target)
 	
-	if event is InputEventMouseButton and !event.is_pressed() and _object_held:
+	if event is InputEventKey and Input.is_action_pressed("pick_up") and _object_held:
 		_let_go()
 	
 func _clear_highlight() -> void:

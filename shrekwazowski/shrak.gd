@@ -6,6 +6,9 @@ extends Node3D
 @export var idle_amount: float = 15.0  # degrees
 @export var bone_name: String = "mixamorig_Head"
 
+#func _ready() -> void:
+	#$ShrekWazowski/Skeleton3D/PhysicalBoneSimulator3D.physical_bones_start_simulation()
+
 func _process(_delta: float) -> void:
 	var bone_idx = skeleton.find_bone(bone_name)
 	if bone_idx == -1:

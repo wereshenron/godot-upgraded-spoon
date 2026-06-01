@@ -1,0 +1,72 @@
+[gd_scene format=3 uid="uid://dhm5g3q5q5voa"]
+
+[ext_resource type="PackedScene" uid="uid://du5l53os6i5pi" path="res://playground/block.tscn" id="1_avr2o"]
+
+[node name="WallOfBlocks" type="Node3D" unique_id=932241229]
+
+[node name="Row" type="Node3D" parent="." unique_id=1081800215]
+
+[node name="Block" parent="Row" unique_id=1541687413 instance=ExtResource("1_avr2o")]
+
+[node name="Block2" parent="Row" unique_id=831263993 instance=ExtResource("1_avr2o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+
+[node name="Block3" parent="Row" unique_id=542915138 instance=ExtResource("1_avr2o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+
+[node name="Block4" parent="Row" unique_id=968846382 instance=ExtResource("1_avr2o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
+
+[node name="Block5" parent="Row" unique_id=902576640 instance=ExtResource("1_avr2o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Row2" type="Node3D" parent="." unique_id=1520867348]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="Block" parent="Row2" unique_id=205161133 instance=ExtResource("1_avr2o")]
+
+[node name="Block2" parent="Row2" unique_id=1445178594 instance=ExtResource("1_avr2o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+
+[node name="Block3" parent="Row2" unique_id=372878683 instance=ExtResource("1_avr2o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+
+[node name="Block4" parent="Row2" unique_id=959083571 instance=ExtResource("1_avr2o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
+
+[node name="Block5" parent="Row2" unique_id=2137324123 instance=ExtResource("1_avr2o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Row3" type="Node3D" parent="." unique_id=1335123682]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+
+[node name="Block" parent="Row3" unique_id=1172824156 instance=ExtResource("1_avr2o")]
+
+[node name="Block2" parent="Row3" unique_id=224069863 instance=ExtResource("1_avr2o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+
+[node name="Block3" parent="Row3" unique_id=954533998 instance=ExtResource("1_avr2o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+
+[node name="Block4" parent="Row3" unique_id=1197231372 instance=ExtResource("1_avr2o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
+
+[node name="Block5" parent="Row3" unique_id=2085490766 instance=ExtResource("1_avr2o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Row4" type="Node3D" parent="." unique_id=394282049]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+
+[node name="Block" parent="Row4" unique_id=1221421522 instance=ExtResource("1_avr2o")]
+
+[node name="Block2" parent="Row4" unique_id=474947986 instance=ExtResource("1_avr2o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+
+[node name="Block3" parent="Row4" unique_id=25500876 instance=ExtResource("1_avr2o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+
+[node name="Block4" parent="Row4" unique_id=1426107942 instance=ExtResource("1_avr2o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
+
+[node name="Block5" parent="Row4" unique_id=1481777379 instance=ExtResource("1_avr2o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
