@@ -17,6 +17,16 @@ extends CharacterBody3D
 var target_velocity = Vector3.ZERO
 var _target_cam_x := 0.0
 var _target_cam_y := 0.0
+var _is_sprinting := false
+
+#func _process(_delta: float) -> void:
+	#print(get_real_velocity().length())
+	#if _is_sprinting:
+		#set_collision_layer_value(16, true)
+		#set_collision_mask_value(16, false)
+	#else: 
+		#set_collision_layer_value(16, false)
+		#set_collision_mask_value(16, true)
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
@@ -40,23 +50,24 @@ func _physics_process(delta):
 		direction.z -= 1
 	if Input.is_action_pressed("move_forward"):
 		direction.z += 1
-	
 	if Input.is_action_pressed("sprint"):
 		running_speed *= sprint_multiplier
+		#_is_sprinting = true
+	#else: _is_sprinting = false
 
-	if direction != Vector3.ZERO:
-		var camera_basis = _camera.global_transform.basis
-		camera_basis = Basis(Vector3.UP, _camera.global_transform.basis.get_euler().y)
-		
-		var forward = -camera_basis.z.normalized()
-		var right = camera_basis.x.normalized()
-		direction = (right * direction.x + forward * direction.z).normalized()
-		
-		var look_direction = Vector3(direction.x, 0, direction.z)
-		var current: Basis = $Pivot.basis.orthonormalized()
-		var target: Basis = Basis.looking_at(look_direction).orthonormalized()
-		target = Basis(target.x.normalized(), Vector3.UP, target.z.normalized())
-		$Pivot.basis = current.slerp(target, delta * turn_speed)
+	#if direction != Vector3.ZERO:
+		#var camera_basis = _camera.global_transform.basis
+		#camera_basis = Basis(Vector3.UP, _camera.global_transform.basis.get_euler().y)
+		#
+		#var forward = -camera_basis.z.normalized()
+		#var right = camera_basis.x.normalized()
+		#direction = (right * direction.x + forward * direction.z).normalized()
+		#
+		#var look_direction = Vector3(direction.x, 0, direction.z)
+		#var current: Basis = $Pivot.basis.orthonormalized()
+		#var target: Basis = Basis.looking_at(look_direction).orthonormalized()
+		#target = Basis(target.x.normalized(), Vector3.UP, target.z.normalized())
+		#$Pivot.basis = current.slerp(target, delta * turn_speed)
 
 	# Ground Velocity
 	target_velocity.x = lerp(target_velocity.x, direction.x * running_speed, t)
@@ -69,15 +80,5 @@ func _physics_process(delta):
 	if not is_on_floor():
 		target_velocity.y = lerp(target_velocity.y, target_velocity.y - (fall_acceleration * delta), t)
 		
-	# Moving the Character
 	velocity = target_velocity
 	move_and_slide()
-	_push_things_away()
-
-func _push_things_away():
-	for i in get_slide_collision_count():
-		var collision = get_slide_collision(i)
-		var collider = collision.get_collider()
-		if collider is RigidBody3D:
-			var push_dir = -collision.get_normal()
-			collider.apply_impulse(push_dir * push_force, collision.get_position() - collider.global_position)

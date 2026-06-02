@@ -142,6 +142,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5402012, 0, 0)
 
 [node name="Floor" type="StaticBody3D" parent="." unique_id=1787325063]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.55729, 0)
+collision_layer = 3
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Floor" unique_id=432204150]
 shape = SubResource("BoxShape3D_ig7tw")
@@ -157,5 +158,28 @@ transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0, -
 [node name="TestHallway" parent="." unique_id=6855709 instance=ExtResource("10_4c57u")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17, -1, 5)
 
-[node name="WallOfBlocks" parent="." unique_id=932241229 instance=ExtResource("10_efxa6")]
+[node name="WallzOfBlocks" type="Node3D" parent="." unique_id=770109192]
+
+[node name="WallOfBlocks" parent="WallzOfBlocks" unique_id=932241229 instance=ExtResource("10_efxa6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, -3, 6)
+
+[node name="WallOfBlocks2" parent="WallzOfBlocks" unique_id=441388893 instance=ExtResource("10_efxa6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 1, 6)
+
+[node name="WallOfBlocks3" parent="WallzOfBlocks" unique_id=1345882777 instance=ExtResource("10_efxa6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, -3, 1)
+
+[node name="WallOfBlocks4" parent="WallzOfBlocks" unique_id=1517196289 instance=ExtResource("10_efxa6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 1, 1)
+
+[node name="WallOfBlocks5" parent="WallzOfBlocks" unique_id=370085052 instance=ExtResource("10_efxa6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, -3, -4)
+
+[node name="WallOfBlocks6" parent="WallzOfBlocks" unique_id=1498429503 instance=ExtResource("10_efxa6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 1, -4)
+
+[node name="WallOfBlocks7" parent="WallzOfBlocks" unique_id=753339364 instance=ExtResource("10_efxa6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, -3, -9)
+
+[node name="WallOfBlocks8" parent="WallzOfBlocks" unique_id=1833304238 instance=ExtResource("10_efxa6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 1, -9)
