@@ -9,8 +9,6 @@
 material = ExtResource("1_275sg")
 
 [node name="Block" type="RigidBody3D" unique_id=1541687413 groups=["Grabbable"]]
-collision_layer = 32768
-collision_mask = 32770
 freeze_mode = 1
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1341274789]
@@ -19,5 +17,6 @@ shape = SubResource("BoxShape3D_kek77")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=929182026]
 mesh = SubResource("BoxMesh_j7rbv")
 
-[node name="Grabbable" type="Node3D" parent="." unique_id=1075988873]
+[node name="Grabbable" type="Node3D" parent="." unique_id=1075988873 node_paths=PackedStringArray("geometry")]
 script = ExtResource("2_j7rbv")
+geometry = NodePath("../MeshInstance3D")

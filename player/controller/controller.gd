@@ -55,19 +55,19 @@ func _physics_process(delta):
 		#_is_sprinting = true
 	#else: _is_sprinting = false
 
-	#if direction != Vector3.ZERO:
-		#var camera_basis = _camera.global_transform.basis
-		#camera_basis = Basis(Vector3.UP, _camera.global_transform.basis.get_euler().y)
-		#
-		#var forward = -camera_basis.z.normalized()
-		#var right = camera_basis.x.normalized()
-		#direction = (right * direction.x + forward * direction.z).normalized()
-		#
-		#var look_direction = Vector3(direction.x, 0, direction.z)
-		#var current: Basis = $Pivot.basis.orthonormalized()
-		#var target: Basis = Basis.looking_at(look_direction).orthonormalized()
-		#target = Basis(target.x.normalized(), Vector3.UP, target.z.normalized())
-		#$Pivot.basis = current.slerp(target, delta * turn_speed)
+	if direction != Vector3.ZERO:
+		var camera_basis = _camera.global_transform.basis
+		camera_basis = Basis(Vector3.UP, _camera.global_transform.basis.get_euler().y)
+		
+		var forward = -camera_basis.z.normalized()
+		var right = camera_basis.x.normalized()
+		direction = (right * direction.x + forward * direction.z).normalized()
+		
+		var look_direction = Vector3(direction.x, 0, direction.z)
+		var current: Basis = $Pivot.basis.orthonormalized()
+		var target: Basis = Basis.looking_at(look_direction).orthonormalized()
+		target = Basis(target.x.normalized(), Vector3.UP, target.z.normalized())
+		$Pivot.basis = current.slerp(target, delta * turn_speed)
 
 	# Ground Velocity
 	target_velocity.x = lerp(target_velocity.x, direction.x * running_speed, t)

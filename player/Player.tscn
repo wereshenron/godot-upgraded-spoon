@@ -1,14 +1,14 @@
 [gd_scene format=3 uid="uid://cuaggjrhykbyn"]
 
 [ext_resource type="Script" uid="uid://vj0hl7lhx8us" path="res://player/controller/controller.gd" id="1_xhfnw"]
-[ext_resource type="PackedScene" uid="uid://b13yu5d6guhx" path="res://player/newguy.tscn" id="2_kne1u"]
+[ext_resource type="PackedScene" uid="uid://dwtx0c8jtca5s" path="res://shrekwazowski/shrak.tscn" id="2_x8kxw"]
 [ext_resource type="Script" uid="uid://b1ltd5s3pdxhe" path="res://player/camera_capture.gd" id="3_kne1u"]
 [ext_resource type="PackedScene" uid="uid://clxoe71k1iero" path="res://hud/quit_button.tscn" id="4_83hs8"]
 [ext_resource type="Script" uid="uid://cbuqwortgp1ys" path="res://player/interaction/interactor.gd" id="5_x8kxw"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0rwas"]
-radius = 0.6225586
-height = 4.1311646
+radius = 0.50878906
+height = 1.8482472
 
 [node name="Player" type="CharacterBody3D" unique_id=5736185]
 collision_layer = 32769
@@ -18,31 +18,40 @@ tilt_limit = 1.5
 turn_speed = 5.0
 
 [node name="Pivot" type="Node3D" parent="." unique_id=1910403145]
-transform = Transform3D(-1.31, 0, 1.978045e-07, 0, 1.31, 0, -1.978045e-07, 0, -1.31, 0, 0, 0)
+transform = Transform3D(-1, 0, 1.509958e-07, 0, 1, 0, -1.509958e-07, 0, -1, 0, 0, 0)
 
-[node name="newguy2" parent="Pivot" unique_id=517916326 instance=ExtResource("2_kne1u")]
-transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
+[node name="shrak" parent="Pivot" unique_id=2135276660 instance=ExtResource("2_x8kxw")]
+transform = Transform3D(0.085, 0, 0, 0, 0.085, 0, 0, 0, 0.085, 0, 0, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1387311879]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8472595, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8977453, -0.099609256)
 shape = SubResource("CapsuleShape3D_0rwas")
 
 [node name="CameraPivot" type="Node3D" parent="." unique_id=348688890]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.145008, -0.0139734)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.85, -0.399)
 
 [node name="Camera3D" type="Camera3D" parent="CameraPivot" unique_id=804032513]
-cull_mask = 1048573
+cull_mask = 524287
 current = true
-fov = 65.0
 script = ExtResource("3_kne1u")
 
 [node name="RayCast3D" type="RayCast3D" parent="CameraPivot/Camera3D" unique_id=270234958]
 target_position = Vector3(0, 0, -4)
 collision_mask = 32769
 
+[node name="AimRaycast" type="RayCast3D" parent="CameraPivot/Camera3D" unique_id=1195360488]
+target_position = Vector3(0, 0, -100)
+collision_mask = 32769
+
 [node name="Button" parent="." unique_id=1094543307 instance=ExtResource("4_83hs8")]
 
-[node name="InteractionHandler" type="Node3D" parent="." unique_id=1228017416 node_paths=PackedStringArray("raycast", "camera")]
+[node name="Interactor" type="Node3D" parent="." unique_id=1228017416 node_paths=PackedStringArray("pickup_raycast", "aim_raycast", "camera")]
 script = ExtResource("5_x8kxw")
-raycast = NodePath("../CameraPivot/Camera3D/RayCast3D")
+pickup_raycast = NodePath("../CameraPivot/Camera3D/RayCast3D")
+aim_raycast = NodePath("../CameraPivot/Camera3D/AimRaycast")
 camera = NodePath("../CameraPivot/Camera3D")
+hold_offset = Vector3(0, 0, 2.5)
+throw_offset = Vector3(1.2, 0, 2)
+base_follow_speed = 15.0
+mass_influence = 1.0
+max_throw_force = 2500.0

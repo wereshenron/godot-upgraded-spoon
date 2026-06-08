@@ -1,34 +1,51 @@
 extends Node3D
 
-@export var raycast : RayCast3D
+@export_group("Node References")
+@export var pickup_raycast : RayCast3D
+@export var aim_raycast : RayCast3D
 @export var camera : Camera3D
-@export var hold_distance : float = 2.0       # How far in front of camera to hold object
-@export var base_follow_speed : float = 10.0  # Higher = snappier, lower = laggier
-@export var mass_influence : float = 1.5      # How much mass slows the follow speed
 
+@export_group("Object Handling")
+@export var hold_offset : Vector3
+@export var throw_offset: Vector3
+@export var base_follow_speed : float = 10.0 
+@export var aim_follow_speed : float = 20.0
+@export var mass_influence : float = 1.5
+
+@export_group("Throwing")
+@export var min_throw_force : float = 5.0
+@export var max_throw_force : float = 20.0
+@export var max_charge_time : float = 1.5
+
+var _is_aiming: bool = false
+var _charge_time: float = 0.0
 var _current_target: Node3D = null
 var _object_held: Node3D = null
 
 func _ready() -> void:
-	raycast.add_exception(owner)
+	pickup_raycast.add_exception(owner)
 	
 
 func _physics_process(delta: float) -> void:
 	if _object_held:
+		if _is_aiming:
+			_charge_time = min(_charge_time + delta, max_charge_time)
 		_update_held_object(delta)
 
 
+
 func _process(_delta: float) -> void:
-	if raycast and raycast.is_colliding():
-		var target: Node3D = raycast.get_collider()
+	if pickup_raycast.is_colliding():
+		var target = pickup_raycast.get_collider()
 		if target.is_in_group("Grabbable") and target != _current_target:
-			_clear_highlight()
-			_set_highlight(target, true)
+			if _current_target:
+				_current_target.get_node("Grabbable").looked_away.emit()
+				print('got here')
 			_current_target = target
+			_current_target.get_node("Grabbable").looked_at.emit()
 			return
-	else:
-		_clear_highlight()
-		_current_target = null
+		elif !target.is_in_group("Grabbable"): _clear_highlight()
+	else: _clear_highlight()
 
 
 func _unhandled_input(event):
@@ -38,20 +55,39 @@ func _unhandled_input(event):
 		elif _current_target:
 			_pickup(_current_target)
 
+	if _object_held:
+		if Input.is_action_just_pressed("throw"):
+			_is_aiming = true
+			_charge_time = 0.0
+		if Input.is_action_just_released("throw") and _is_aiming:
+			_throw()
+		if Input.is_action_just_pressed("let_go"):
+			_let_go()
 
+
+ 
 func _update_held_object(delta: float) -> void:
-	# Target position: a point directly in front of the camera
-	var hold_target : Vector3 = camera.global_position + (-camera.global_basis.z * hold_distance)
+	var forward = -camera.global_basis.z
+	var right = camera.global_basis.x
+	var up = camera.global_basis.y
 
-	# Read the object's mass to scale lag — falls back to 1.0 if no mass property
+	var offset = hold_offset.lerp(throw_offset, float(_is_aiming))
+
+	var hold_target : Vector3 = camera.global_position \
+		+ forward * offset.z \
+		+ right * offset.x \
+		+ up * offset.y
+
 	var mass : float = 1.0
-	if _object_held.get("mass") != null:
-		mass = _object_held.get("mass")
+	var object_mass = _object_held.get("mass")
 
-	# Heavier objects get a lower follow speed, making them feel sluggish
-	var follow_speed : float = base_follow_speed / (1.0 + mass * mass_influence)
+	if object_mass != null:
+		mass = object_mass
 
-	# Smoothly interpolate the object toward the hold point
+	var speed = aim_follow_speed if _is_aiming else base_follow_speed
+
+	var follow_speed : float = speed / (1.0 + mass * mass_influence)
+
 	_object_held.global_position = _object_held.global_position.lerp(
 		hold_target,
 		clamp(follow_speed * delta, 0.0, 1.0)
@@ -60,9 +96,11 @@ func _update_held_object(delta: float) -> void:
 
 func _clear_highlight() -> void:
 	if _current_target:
-		var grabbable = _current_target.get_node_or_null("Grabbable")
-		if grabbable and grabbable.has_method("set_highlighted"):
-			grabbable.set_highlighted(false)
+		var grabbable : Grabbable = _current_target.get_node("Grabbable")
+		if grabbable:
+			grabbable.looked_away.emit()
+		_current_target = null
+	
 
 
 func _set_highlight(target: Node3D, active: bool) -> void:
@@ -79,7 +117,6 @@ func _pickup(target: Node3D) -> void:
 	else:
 		return
 	_object_held = target
-	# No reparenting — we move it manually in _update_held_object
 
 
 func _let_go() -> void:
@@ -90,3 +127,34 @@ func _let_go() -> void:
 	else:
 		return
 	_object_held = null
+
+	_reset_throwing()
+
+
+func _throw() -> void:
+	if !_object_held:
+		return
+
+	var charge_ratio = _charge_time / max_charge_time
+	var force = lerp(min_throw_force, max_throw_force, charge_ratio)
+
+	var aim_origin = camera.global_position
+	var aim_dir = -camera.global_basis.z
+	var aim_point = aim_origin + aim_dir * 1000.0
+
+	if aim_raycast.is_colliding() and aim_raycast.get_collider() != _object_held:
+		aim_point = aim_raycast.get_collision_point()
+		print('set in statement')
+
+	var throw_direciton = (aim_point - _object_held.global_position).normalized()	
+
+	_object_held.set_freeze_enabled(false)
+	_object_held.apply_central_force(force * throw_direciton)
+
+	_reset_throwing()
+
+
+func _reset_throwing():
+	_object_held = null
+	_is_aiming = false
+	_charge_time = 0.0

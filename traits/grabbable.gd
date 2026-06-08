@@ -3,22 +3,29 @@ extends Node3D
 
 @onready var outline_shader_mat: ShaderMaterial = preload("res://materials/outline.tres")
 
+@export var geometry : GeometryInstance3D
+
 var _tween: Tween
 
-func set_highlighted(active: bool) -> void:
-	var meshes = get_parent().find_children("*", "GeometryInstance3D", true, false)
+signal looked_at
+signal looked_away
 
-	if active:
-		# Apply overlay first, then tween blend 0 -> 1
-		for mesh in meshes:
-			mesh.material_overlay = outline_shader_mat
-		_start_tween(0.0, 1.0)
-	else:
-		# Tween blend 1 -> 0, then remove overlay once done
-		_start_tween(1.0, 0.0, func():
-			for mesh in meshes:
-				mesh.material_overlay = null
-		)
+func _ready() -> void:
+	looked_at.connect(func(): set_highlighted(true))
+	looked_away.connect(func(): set_highlighted(false))
+	
+
+func set_highlighted(active: bool) -> void:
+	if geometry != null:
+		if active:
+			# Apply overlay first, then tween blend 0 -> 1
+			geometry.material_overlay = outline_shader_mat
+			_start_tween(0.0, 1.0)
+		else: 
+			var blend_val = outline_shader_mat.get_shader_parameter("blend")
+			_start_tween(blend_val, 0.0, func ():
+				geometry.material_overlay = null
+			)
 
 func _start_tween(from: float, to: float, on_complete: Callable = Callable()) -> void:
 	if _tween:
