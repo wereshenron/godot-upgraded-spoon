@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://c5qbrslff0ma8"]
+
+[ext_resource type="PackedScene" uid="uid://bvhp50pa3ln0p" path="res://shrekwazowski/shrak.glb" id="1_g6sx8"]
+
+[node name="shrak" unique_id=473750945 instance=ExtResource("1_g6sx8")]
+
+[node name="Shrekcuerpo" parent="ShrekWazowski/Skeleton3D" parent_id_path=PackedInt32Array(405905292) index="0" unique_id=195942784]
+layers = 524288
+
+[node name="Shreksowski" parent="ShrekWazowski/Skeleton3D" parent_id_path=PackedInt32Array(405905292) index="1" unique_id=352965315]
+layers = 524288

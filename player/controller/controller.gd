@@ -17,8 +17,9 @@ extends CharacterBody3D
 var target_velocity = Vector3.ZERO
 var _target_cam_x := 0.0
 var _target_cam_y := 0.0
-var _is_sprinting := false
+# var _is_sprinting := false
 
+# Commented out because this is how you can "run through" objects - keeping for testing 
 #func _process(_delta: float) -> void:
 	#print(get_real_velocity().length())
 	#if _is_sprinting:

@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://byx2616e3wcnq"]
+
+[ext_resource type="PackedScene" uid="uid://b4y0a1lv318pq" path="res://ps1_assets/GLB (recommended)/Modular Structures/floor_ceiling_3.glb" id="1_th0lv"]
+
+[node name="TestPs1" type="Node3D" unique_id=1885802042]
+
+[node name="floor_ceiling_32" parent="." unique_id=1744537714 instance=ExtResource("1_th0lv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)

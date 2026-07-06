@@ -1,10 +1,11 @@
 [gd_scene format=3 uid="uid://cuaggjrhykbyn"]
 
 [ext_resource type="Script" uid="uid://vj0hl7lhx8us" path="res://player/controller/controller.gd" id="1_xhfnw"]
-[ext_resource type="PackedScene" uid="uid://dwtx0c8jtca5s" path="res://shrekwazowski/shrak.tscn" id="2_x8kxw"]
 [ext_resource type="Script" uid="uid://b1ltd5s3pdxhe" path="res://player/camera_capture.gd" id="3_kne1u"]
-[ext_resource type="PackedScene" uid="uid://clxoe71k1iero" path="res://hud/quit_button.tscn" id="4_83hs8"]
+[ext_resource type="PackedScene" uid="uid://clxoe71k1iero" path="res://hud/buttons/quit_button.tscn" id="4_83hs8"]
+[ext_resource type="PackedScene" uid="uid://d0uimw7pk02ow" path="res://hud/hud.tscn" id="5_aqcbf"]
 [ext_resource type="Script" uid="uid://cbuqwortgp1ys" path="res://player/interaction/interactor.gd" id="5_x8kxw"]
+[ext_resource type="PackedScene" uid="uid://c5qbrslff0ma8" path="res://shrekwazowski/player_shrak.tscn" id="6_gskgj"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0rwas"]
 radius = 0.50878906
@@ -20,15 +21,12 @@ turn_speed = 5.0
 [node name="Pivot" type="Node3D" parent="." unique_id=1910403145]
 transform = Transform3D(-1, 0, 1.509958e-07, 0, 1, 0, -1.509958e-07, 0, -1, 0, 0, 0)
 
-[node name="shrak" parent="Pivot" unique_id=2135276660 instance=ExtResource("2_x8kxw")]
-transform = Transform3D(0.085, 0, 0, 0, 0.085, 0, 0, 0, 0.085, 0, 0, 0)
-
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1387311879]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8977453, -0.099609256)
 shape = SubResource("CapsuleShape3D_0rwas")
 
 [node name="CameraPivot" type="Node3D" parent="." unique_id=348688890]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.85, -0.399)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.85, 0)
 
 [node name="Camera3D" type="Camera3D" parent="CameraPivot" unique_id=804032513]
 cull_mask = 524287
@@ -54,4 +52,9 @@ hold_offset = Vector3(0, 0, 2.5)
 throw_offset = Vector3(1.2, 0, 2)
 base_follow_speed = 15.0
 mass_influence = 1.0
-max_throw_force = 2500.0
+max_throw_force = 5000.0
+
+[node name="HUD" parent="." unique_id=1932376309 instance=ExtResource("5_aqcbf")]
+
+[node name="shrak" parent="." unique_id=473750945 instance=ExtResource("6_gskgj")]
+transform = Transform3D(-0.1, 0, -8.742278e-09, 0, 0.1, 0, 8.742278e-09, 0, -0.1, 0, 0, 0)

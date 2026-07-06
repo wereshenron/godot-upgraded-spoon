@@ -1,12 +1,11 @@
 [gd_scene format=3 uid="uid://brcd0l3ocimxd"]
 
+[ext_resource type="PackedScene" uid="uid://d0uimw7pk02ow" path="res://hud/hud.tscn" id="1_4c57u"]
 [ext_resource type="PackedScene" uid="uid://cuaggjrhykbyn" path="res://player/Player.tscn" id="1_ig7tw"]
 [ext_resource type="PackedScene" uid="uid://bnhe67cs8n21v" path="res://ducky/ducky.tscn" id="2_kek77"]
 [ext_resource type="PackedScene" uid="uid://daokd5re032ms" path="res://teleporter.tscn" id="5_lquwl"]
 [ext_resource type="PackedScene" uid="uid://du5l53os6i5pi" path="res://playground/block.tscn" id="6_5vw27"]
-[ext_resource type="PackedScene" uid="uid://clxoe71k1iero" path="res://hud/quit_button.tscn" id="6_272bh"]
 [ext_resource type="Material" uid="uid://bum44pixae6ee" path="res://textures/prototype_med.tres" id="7_4c57u"]
-[ext_resource type="Script" uid="uid://6l167k8ap4cr" path="res://hud/fps.gd" id="8_5vw27"]
 [ext_resource type="PackedScene" uid="uid://cvsto14uodglk" path="res://chunks/corridor/test_hallway.tscn" id="10_4c57u"]
 [ext_resource type="PackedScene" uid="uid://d0kdn6jxbcn2y" path="res://playground/house.tscn" id="10_dg77c"]
 [ext_resource type="PackedScene" uid="uid://dhm5g3q5q5voa" path="res://playground/wall_of_blocks.tscn" id="10_efxa6"]
@@ -49,13 +48,6 @@ fog_height = 462.45
 volumetric_fog_density = 0.0289
 volumetric_fog_emission_energy = 166.16
 
-[sub_resource type="SystemFont" id="SystemFont_272bh"]
-subpixel_positioning = 0
-
-[sub_resource type="Theme" id="Theme_5vw27"]
-default_font = SubResource("SystemFont_272bh")
-default_font_size = 13
-
 [sub_resource type="BoxShape3D" id="BoxShape3D_ig7tw"]
 size = Vector3(50, 1, 50)
 
@@ -63,6 +55,8 @@ size = Vector3(50, 1, 50)
 lightmap_size_hint = Vector2i(14, 21)
 
 [node name="Main" type="Node3D" unique_id=1451496822]
+
+[node name="HUD" parent="." unique_id=1932376309 instance=ExtResource("1_4c57u")]
 
 [node name="Player" parent="." unique_id=198879016 instance=ExtResource("1_ig7tw")]
 transform = Transform3D(-0.997826, 0, -0.0659082, 0, 1, 0, 0.0659082, 0, -0.997826, 0, 0, 0)
@@ -89,53 +83,6 @@ monitorable = false
 location = Vector3(0, 5, 0)
 collider_x = 10000
 collider_z = 10000
-
-[node name="Button" parent="." unique_id=950579551 instance=ExtResource("6_272bh")]
-
-[node name="Control" type="Control" parent="." unique_id=1899943639]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-mouse_behavior_recursive = 1
-theme = SubResource("Theme_5vw27")
-
-[node name="CenterContainer" type="CenterContainer" parent="Control" unique_id=902096962]
-clip_contents = true
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 4
-size_flags_vertical = 0
-
-[node name="RichTextLabel" type="RichTextLabel" parent="Control/CenterContainer" unique_id=1554934538]
-layout_mode = 2
-theme = SubResource("Theme_5vw27")
-text = "*"
-fit_content = true
-autowrap_mode = 0
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="FPS" type="RichTextLabel" parent="Control" unique_id=932697073]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -40.0
-offset_bottom = 40.0
-grow_horizontal = 0
-theme_override_colors/default_color = Color(0.40784314, 1, 0.37254903, 1)
-text = "300"
-autowrap_mode = 0
-horizontal_alignment = 1
-script = ExtResource("8_5vw27")
 
 [node name="Block" parent="." unique_id=1541687413 instance=ExtResource("6_5vw27")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5402012, 0, 0)
