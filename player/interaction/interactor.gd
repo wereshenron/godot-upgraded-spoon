@@ -166,13 +166,12 @@ func _throw() -> void:
 
 	if aim_raycast.is_colliding() and aim_raycast.get_collider() != _object_held.body:
 		aim_point = aim_raycast.get_collision_point()
-		print('set in statement')
 
-	var throw_direciton = (aim_point - _object_held.body.global_position).normalized()	
+	var throw_direction = (aim_point - _object_held.body.global_position).normalized()	
 
 	_object_held.body.continuous_cd = true
 	_object_held.body.set_freeze_enabled(false)
-	_object_held.body.apply_central_impulse(force * throw_direciton)
+	_object_held.body.apply_central_impulse(force * throw_direction)
 	_object_held.body.angular_velocity = Vector3(randf(), randf(), randf())
 	
 	_reset_throwing()

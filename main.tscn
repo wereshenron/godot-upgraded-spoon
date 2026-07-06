@@ -1,13 +1,14 @@
 [gd_scene format=3 uid="uid://brcd0l3ocimxd"]
 
-[ext_resource type="PackedScene" uid="uid://cuaggjrhykbyn" path="res://player/Player.tscn" id="1_ig7tw"]
 [ext_resource type="PackedScene" uid="uid://bnhe67cs8n21v" path="res://ducky/ducky.tscn" id="2_kek77"]
-[ext_resource type="PackedScene" uid="uid://daokd5re032ms" path="res://teleporter.tscn" id="5_lquwl"]
+[ext_resource type="PackedScene" uid="uid://daokd5re032ms" path="res://world/teleporter.tscn" id="5_lquwl"]
 [ext_resource type="PackedScene" uid="uid://du5l53os6i5pi" path="res://playground/block.tscn" id="6_5vw27"]
 [ext_resource type="Material" uid="uid://bum44pixae6ee" path="res://textures/prototype_med.tres" id="7_4c57u"]
+[ext_resource type="PackedScene" uid="uid://dwtx0c8jtca5s" path="res://shrekwazowski/shrak.tscn" id="9_kek77"]
 [ext_resource type="PackedScene" uid="uid://cvsto14uodglk" path="res://chunks/corridor/test_hallway.tscn" id="10_4c57u"]
 [ext_resource type="PackedScene" uid="uid://d0kdn6jxbcn2y" path="res://playground/house.tscn" id="10_dg77c"]
 [ext_resource type="PackedScene" uid="uid://dhm5g3q5q5voa" path="res://playground/wall_of_blocks.tscn" id="10_efxa6"]
+[ext_resource type="PackedScene" uid="uid://cys78sp5v0cs6" path="res://world/spawn_point.tscn" id="10_w48qg"]
 [ext_resource type="PackedScene" uid="uid://yvip4y5vt1fd" path="res://playground/ball.tscn" id="10_ycdy4"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ig7tw"]
@@ -56,20 +57,14 @@ lightmap_size_hint = Vector2i(14, 21)
 
 [node name="Main" type="Node3D" unique_id=1451496822]
 
-[node name="Player" parent="." unique_id=198879016 instance=ExtResource("1_ig7tw")]
-transform = Transform3D(-0.997826, 0, -0.0659082, 0, 1, 0, 0.0659082, 0, -0.997826, 0, 0, 0)
-mouse_sensitivity = 0.005
-jump_force = 8.209
-sprint_multiplier = 2.0
-camera_smoothing = 0.2
-turn_speed = 4.87
-speed = 8.0
-
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1569142963]
 environment = SubResource("Environment_h2yge")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=994105193]
 transform = Transform3D(1, 0, 0, 0, 0.8660254, 0.5, 0, -0.5, 0.8660254, 0, 12.9325, 10)
+light_color = Color(0.5989117, 0.4853422, 0.3358973, 1)
+light_energy = 4.625
+light_specular = 0.0
 shadow_enabled = true
 
 [node name="Ducky" parent="." unique_id=1171132693 instance=ExtResource("2_kek77")]
@@ -426,3 +421,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.0111217, -2.5572898, -6.560
 
 [node name="Ball3" parent="." unique_id=2042044913 instance=ExtResource("10_ycdy4")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.1850443, -2.5572903, -6.6963468)
+
+[node name="shrak" parent="." unique_id=2135276660 instance=ExtResource("9_kek77")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.24937749, 0.93843293, 43.584198)
+
+[node name="SpawnPoint" parent="." unique_id=1025493340 instance=ExtResource("10_w48qg")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -2.70267, -0.34203148, 0)
+gizmo_extents = 2.73
