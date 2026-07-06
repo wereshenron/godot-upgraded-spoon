@@ -20,6 +20,7 @@ corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
 
 [node name="Button" type="Button" unique_id=1170712381]
+anchors_preset = -1
 offset_left = 11.0
 offset_top = 11.0
 offset_right = 103.0

@@ -23,10 +23,12 @@ config/icon="res://icon.svg"
 [autoload]
 
 SignalBus="*uid://4jcaioyos8vs"
+GameManager="*uid://vs0kmu50pup0"
 
 [display]
 
 window/size/borderless=true
+window/stretch/mode="canvas_items"
 
 [editor_plugins]
 

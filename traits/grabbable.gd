@@ -5,8 +5,11 @@ extends Node3D
 @onready var body: RigidBody3D = get_parent()
 
 @export var geometry : GeometryInstance3D
+@export var _movement_lower_threshold : float = 0.33
 
 var _tween: Tween
+var _movement: float
+var _has_spiked: bool = false
 
 signal looked_at(target)
 signal looked_away
@@ -14,6 +17,20 @@ signal looked_away
 func _ready() -> void:
 	looked_at.connect(_look_at)
 	looked_away.connect(func(): set_highlighted(false))
+	
+func _process(_delta: float) -> void:
+	if body.continuous_cd == false:
+		_has_spiked = false
+		return
+		
+	_movement = clampf(body.linear_velocity.length(), 0.0, 1.0)
+	
+	if _movement > _movement_lower_threshold:
+		_has_spiked = true
+	elif _has_spiked:
+		print('saving lives')
+		body.continuous_cd = false
+		_has_spiked = false
 
 func _look_at(target) -> void:
 	set_highlighted(true)

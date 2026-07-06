@@ -2,10 +2,21 @@
 
 [ext_resource type="Script" uid="uid://bje23tj3ictas" path="res://traits/grabbable.gd" id="1_hkcee"]
 
-[node name="Ball" type="Node3D" unique_id=5116112]
+[sub_resource type="SphereShape3D" id="SphereShape3D_hkcee"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_i6dl8"]
+
+[node name="Ball" type="RigidBody3D" unique_id=214637512 groups=["Grabbable"]]
 
 [node name="Grabbable" type="Node3D" parent="." unique_id=1357851722 node_paths=PackedStringArray("geometry")]
 script = ExtResource("1_hkcee")
-geometry = NodePath("")
+geometry = NodePath("../MeshInstance3D")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=428247965]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+shape = SubResource("SphereShape3D_hkcee")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=486211810]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+mesh = SubResource("SphereMesh_i6dl8")
+skeleton = NodePath("../..")

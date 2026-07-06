@@ -10,6 +10,7 @@ extends Node3D
 @export var throw_offset: Vector3
 @export var base_follow_speed : float = 10.0 
 @export var aim_follow_speed : float = 20.0
+## How much influence mass has over following
 @export var mass_influence : float = 1.5
 
 @export_group("Timing")
@@ -21,7 +22,7 @@ extends Node3D
 @export var max_throw_force : float = 20.0
 @export var max_charge_time : float = 1.5
 
-var _is_aiming: bool = false
+var _is_aiming: bool  = false
 var _charge_time: float = 0.0
 var _current_target: Node3D = null
 var _object_held: Node3D = null
@@ -169,8 +170,10 @@ func _throw() -> void:
 
 	var throw_direciton = (aim_point - _object_held.body.global_position).normalized()	
 
+	_object_held.body.continuous_cd = true
 	_object_held.body.set_freeze_enabled(false)
-	_object_held.body.apply_central_force(force * throw_direciton)
+	_object_held.body.apply_central_impulse(force * throw_direciton)
+	_object_held.body.angular_velocity = Vector3(randf(), randf(), randf())
 	
 	_reset_throwing()
 

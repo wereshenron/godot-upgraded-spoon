@@ -1,12 +1,7 @@
 [gd_scene format=3 uid="uid://d0uimw7pk02ow"]
 
 [ext_resource type="Script" uid="uid://k5oc5tstujfa" path="res://hud/hud_controller.gd" id="1_6ca3a"]
-
-[sub_resource type="FontVariation" id="FontVariation_x8kxw"]
-
-[sub_resource type="Theme" id="Theme_gskgj"]
-default_font = SubResource("FontVariation_x8kxw")
-default_font_size = 29
+[ext_resource type="PackedScene" uid="uid://clxoe71k1iero" path="res://hud/buttons/quit_button.tscn" id="2_2gk58"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aqcbf"]
 content_margin_left = 10.0
@@ -24,7 +19,10 @@ subpixel_positioning = 0
 [sub_resource type="FontVariation" id="FontVariation_aqcbf"]
 base_font = SubResource("SystemFont_x8kxw")
 
-[node name="HUD" type="Control" unique_id=1932376309]
+[node name="HUD" type="CanvasLayer" unique_id=1673316801]
+script = ExtResource("1_6ca3a")
+
+[node name="Root" type="Control" parent="." unique_id=298577074]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -32,63 +30,36 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-mouse_behavior_recursive = 1
-theme = SubResource("Theme_gskgj")
-script = ExtResource("1_6ca3a")
 
-[node name="CenterContainer" type="CenterContainer" parent="." unique_id=535587804]
-clip_contents = true
+[node name="HBoxContainer" type="HBoxContainer" parent="Root" unique_id=336569750]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 6.0
-offset_top = 4.0
-offset_right = 6.0
-offset_bottom = 4.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 4
-size_flags_vertical = 0
-
-[node name="RichTextLabel" type="RichTextLabel" parent="CenterContainer" unique_id=249453341]
-layout_mode = 2
-text = "+"
-fit_content = true
-autowrap_mode = 0
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=336569750]
-layout_mode = 1
-anchors_preset = 8
+anchors_preset = -1
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = 19.0
-offset_right = 20.0
-offset_bottom = 59.0
+offset_top = 12.0
 grow_horizontal = 2
-grow_vertical = 2
+mouse_filter = 2
 theme_override_constants/separation = 10
 
-[node name="PressLabel" type="Label" parent="HBoxContainer" unique_id=135006189]
+[node name="PressLabel" type="Label" parent="Root/HBoxContainer" unique_id=135006189]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Press"
 
-[node name="Keybadge" type="MarginContainer" parent="HBoxContainer" unique_id=1746068431]
+[node name="Keybadge" type="MarginContainer" parent="Root/HBoxContainer" unique_id=1746068431]
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/margin_top = 4
 theme_override_constants/margin_bottom = 4
 
-[node name="Background" type="PanelContainer" parent="HBoxContainer/Keybadge" unique_id=2129924592]
+[node name="Background" type="PanelContainer" parent="Root/HBoxContainer/Keybadge" unique_id=2129924592]
 layout_mode = 2
+mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_aqcbf")
 
-[node name="Letter" type="Label" parent="HBoxContainer/Keybadge/Background" unique_id=1508386102]
+[node name="Letter" type="Label" parent="Root/HBoxContainer/Keybadge/Background" unique_id=1508386102]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = SubResource("FontVariation_aqcbf")
@@ -97,9 +68,28 @@ text = "E"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ActionLabel" type="Label" parent="HBoxContainer" unique_id=300018078]
+[node name="ActionLabel" type="Label" parent="Root/HBoxContainer" unique_id=300018078]
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "To Pick Up"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Root" unique_id=249453341]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+text = "+"
+fit_content = true
+autowrap_mode = 0
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button" parent="Root" unique_id=1170712381 instance=ExtResource("2_2gk58")]
+layout_mode = 1

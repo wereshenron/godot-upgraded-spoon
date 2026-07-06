@@ -1,3 +1,15 @@
 [gd_scene format=3 uid="uid://sd6k06dqwiii"]
 
+[ext_resource type="PackedScene" uid="uid://du5l53os6i5pi" path="res://playground/block.tscn" id="1_r2goa"]
+
 [node name="PersonOfBlocks" type="Node3D" unique_id=1158392414]
+
+[node name="Legs" type="Node3D" parent="." unique_id=2074091874]
+
+[node name="Block" parent="Legs" unique_id=1541687413 instance=ExtResource("1_r2goa")]
+
+[node name="Block2" parent="Legs" unique_id=940958182 instance=ExtResource("1_r2goa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="Block3" parent="Legs" unique_id=1763949234 instance=ExtResource("1_r2goa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)

@@ -2,8 +2,6 @@
 
 [ext_resource type="Script" uid="uid://vj0hl7lhx8us" path="res://player/controller/controller.gd" id="1_xhfnw"]
 [ext_resource type="Script" uid="uid://b1ltd5s3pdxhe" path="res://player/camera_capture.gd" id="3_kne1u"]
-[ext_resource type="PackedScene" uid="uid://clxoe71k1iero" path="res://hud/buttons/quit_button.tscn" id="4_83hs8"]
-[ext_resource type="PackedScene" uid="uid://d0uimw7pk02ow" path="res://hud/hud.tscn" id="5_aqcbf"]
 [ext_resource type="Script" uid="uid://cbuqwortgp1ys" path="res://player/interaction/interactor.gd" id="5_x8kxw"]
 [ext_resource type="PackedScene" uid="uid://c5qbrslff0ma8" path="res://shrekwazowski/player_shrak.tscn" id="6_gskgj"]
 
@@ -41,8 +39,6 @@ collision_mask = 32769
 target_position = Vector3(0, 0, -100)
 collision_mask = 32769
 
-[node name="Button" parent="." unique_id=1094543307 instance=ExtResource("4_83hs8")]
-
 [node name="Interactor" type="Node3D" parent="." unique_id=1228017416 node_paths=PackedStringArray("pickup_raycast", "aim_raycast", "camera")]
 script = ExtResource("5_x8kxw")
 pickup_raycast = NodePath("../CameraPivot/Camera3D/RayCast3D")
@@ -51,10 +47,10 @@ camera = NodePath("../CameraPivot/Camera3D")
 hold_offset = Vector3(0, 0, 2.5)
 throw_offset = Vector3(1.2, 0, 2)
 base_follow_speed = 15.0
-mass_influence = 1.0
-max_throw_force = 5000.0
-
-[node name="HUD" parent="." unique_id=1932376309 instance=ExtResource("5_aqcbf")]
+mass_influence = 0.66
+throw_cooldown = 0.25
+max_throw_force = 2500.0
+max_charge_time = 1.0
 
 [node name="shrak" parent="." unique_id=473750945 instance=ExtResource("6_gskgj")]
 transform = Transform3D(-0.1, 0, -8.742278e-09, 0, 0.1, 0, 8.742278e-09, 0, -0.1, 0, 0, 0)
