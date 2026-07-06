@@ -4,7 +4,6 @@
 [ext_resource type="PackedScene" uid="uid://daokd5re032ms" path="res://world/teleporter.tscn" id="5_lquwl"]
 [ext_resource type="PackedScene" uid="uid://du5l53os6i5pi" path="res://playground/block.tscn" id="6_5vw27"]
 [ext_resource type="Material" uid="uid://bum44pixae6ee" path="res://textures/prototype_med.tres" id="7_4c57u"]
-[ext_resource type="PackedScene" uid="uid://dwtx0c8jtca5s" path="res://shrekwazowski/shrak.tscn" id="9_kek77"]
 [ext_resource type="PackedScene" uid="uid://cvsto14uodglk" path="res://chunks/corridor/test_hallway.tscn" id="10_4c57u"]
 [ext_resource type="PackedScene" uid="uid://d0kdn6jxbcn2y" path="res://playground/house.tscn" id="10_dg77c"]
 [ext_resource type="PackedScene" uid="uid://dhm5g3q5q5voa" path="res://playground/wall_of_blocks.tscn" id="10_efxa6"]
@@ -422,9 +421,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.0111217, -2.5572898, -6.560
 [node name="Ball3" parent="." unique_id=2042044913 instance=ExtResource("10_ycdy4")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.1850443, -2.5572903, -6.6963468)
 
-[node name="shrak" parent="." unique_id=2135276660 instance=ExtResource("9_kek77")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.24937749, 0.93843293, 43.584198)
-
 [node name="SpawnPoint" parent="." unique_id=1025493340 instance=ExtResource("10_w48qg")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -2.70267, -0.34203148, 0)
-gizmo_extents = 2.73
+gizmo_extents = 2.59

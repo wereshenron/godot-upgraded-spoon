@@ -21,3 +21,5 @@ mesh = SubResource("BoxMesh_j7rbv")
 [node name="Grabbable" type="Node3D" parent="." unique_id=1075988873 node_paths=PackedStringArray("geometry")]
 script = ExtResource("2_j7rbv")
 geometry = NodePath("../MeshInstance3D")
+min_throw_force = 50.0
+max_throw_force = 250.0

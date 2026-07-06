@@ -1,8 +1,7 @@
 extends Node
 
 @onready var _global_scenes : Array[PackedScene] = [
-	preload("res://hud/hud.tscn"),
-	preload("res://player/Player.tscn")
+	preload("res://hud/hud.tscn")
 ]
 
 @onready var _player_scene : PackedScene = preload("res://player/Player.tscn")

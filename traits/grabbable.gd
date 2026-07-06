@@ -5,7 +5,12 @@ extends Node3D
 @onready var body: RigidBody3D = get_parent()
 
 @export var geometry : GeometryInstance3D
+## Threshold to decide when to turn off continuous collision detection
 @export var _movement_lower_threshold : float = 0.33
+
+@export_group("Throwing")
+@export var min_throw_force : float
+@export var max_throw_force : float
 
 var _tween: Tween
 var _movement: float
@@ -31,6 +36,16 @@ func _process(_delta: float) -> void:
 		print('saving lives')
 		body.continuous_cd = false
 		_has_spiked = false
+
+func throw(direction: Vector3, charge_ratio: float, strength_mult: float = 1.0) -> void:
+	if not body.has_method("set_freeze_enabled"):
+		return
+	
+	var force = lerp(min_throw_force, max_throw_force, charge_ratio) * strength_mult
+	body.continuous_cd = true
+	body.set_freeze_enabled(false)
+	body.apply_central_impulse(force * direction)
+	body.angular_velocity = Vector3(randf(), randf(), randf())
 
 func _look_at(target) -> void:
 	set_highlighted(true)

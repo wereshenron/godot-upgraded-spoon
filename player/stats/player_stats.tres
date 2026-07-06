@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="PlayerStats" format=3 uid="uid://6pv4r2p1wrn1"]
+
+[ext_resource type="Script" uid="uid://bvf7p6jdmx86b" path="res://player/stats/player_stats.gd" id="1_fggyr"]
+
+[resource]
+script = ExtResource("1_fggyr")
+strength_multiplier = 1.5

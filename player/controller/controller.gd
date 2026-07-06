@@ -8,16 +8,22 @@ extends CharacterBody3D
 @export_range(1.0, 2.0) var sprint_multiplier : float = 1.6
 @export_range(0.01, 1.0) var camera_smoothing : float = 0.12
 
+@export var player_stats : PlayerStats = preload("res://player/stats/player_stats.tres")
 @export var tilt_limit : float = deg_to_rad(75)
 @export var turn_speed : float = 4.8
 @export var speed : float = 8.0
 @export var fall_acceleration : float = 75.0
 @export var push_force : float = 5.0
 
+@onready var interactor: Interactor = $Interactor
+
 var target_velocity = Vector3.ZERO
 var _target_cam_x := 0.0
 var _target_cam_y := 0.0
 # var _is_sprinting := false
+
+func _ready() -> void:
+	interactor.player_stats = player_stats
 
 # Commented out because this is how you can "run through" objects - keeping for testing 
 #func _process(_delta: float) -> void:

@@ -1,33 +1,36 @@
 extends Node3D
+class_name Interactor
 
 @export_group("Node References")
-@export var pickup_raycast : RayCast3D
-@export var aim_raycast : RayCast3D
-@export var camera : Camera3D
+@export var pickup_raycast: RayCast3D
+@export var aim_raycast: RayCast3D
+@export var camera: Camera3D
 
 @export_group("Object Handling")
-@export var hold_offset : Vector3
+@export var hold_offset: Vector3
 @export var throw_offset: Vector3
-@export var base_follow_speed : float = 10.0 
-@export var aim_follow_speed : float = 20.0
+@export var base_follow_speed: float = 10.0
+@export var aim_follow_speed: float = 20.0
 ## How much influence mass has over following
-@export var mass_influence : float = 1.5
+@export var mass_influence: float = 1.5
 
 @export_group("Timing")
-@export var pickup_cooldown : float = 0.25
-@export var throw_cooldown : float = 0.33
+@export var pickup_cooldown: float = 0.25
+@export var throw_cooldown: float = 0.33
 
 @export_group("Throwing")
-@export var min_throw_force : float = 5.0
-@export var max_throw_force : float = 20.0
-@export var max_charge_time : float = 1.5
+@export var min_throw_force: float = 5.0
+@export var max_throw_force: float = 20.0
+@export var max_charge_time: float = 1.5
 
-var _is_aiming: bool  = false
+var player_stats: PlayerStats
+
+var _is_aiming: bool = false
 var _charge_time: float = 0.0
 var _current_target: Node3D = null
 var _object_held: Node3D = null
-var _pickup_locked_until_msec : int = 0
-var _min_to_throw_msec : int = 0
+var _pickup_locked_until_msec: int = 0
+var _min_to_throw_msec: int = 0
 
 func _ready() -> void:
 	pickup_raycast.add_exception(owner)
@@ -81,18 +84,18 @@ func _unhandled_input(event):
 
 
 func _update_held_object(delta: float) -> void:
-	var forward = -camera.global_basis.z
+	var forward = - camera.global_basis.z
 	var right = camera.global_basis.x
 	var up = camera.global_basis.y
 
 	var offset = hold_offset.lerp(throw_offset, float(_is_aiming))
 
-	var hold_target : Vector3 = camera.global_position \
+	var hold_target: Vector3 = camera.global_position \
 		+ forward * offset.z \
 		+ right * offset.x \
 		+ up * offset.y
 
-	var mass : float = 1.0
+	var mass: float = 1.0
 	var object_mass = _object_held.body.get("mass")
 
 	if object_mass != null:
@@ -100,7 +103,7 @@ func _update_held_object(delta: float) -> void:
 
 	var speed = aim_follow_speed if _is_aiming else base_follow_speed
 
-	var follow_speed : float = speed / (1.0 + mass * mass_influence)
+	var follow_speed: float = speed / (1.0 + mass * mass_influence)
 
 	_object_held.body.global_position = _object_held.body.global_position.lerp(
 		hold_target,
@@ -161,19 +164,15 @@ func _throw() -> void:
 	var force = lerp(min_throw_force, max_throw_force, charge_ratio)
 
 	var aim_origin = camera.global_position
-	var aim_dir = -camera.global_basis.z
+	var aim_dir = - camera.global_basis.z
 	var aim_point = aim_origin + aim_dir * 1000.0
 
 	if aim_raycast.is_colliding() and aim_raycast.get_collider() != _object_held.body:
 		aim_point = aim_raycast.get_collision_point()
 
-	var throw_direction = (aim_point - _object_held.body.global_position).normalized()	
-
-	_object_held.body.continuous_cd = true
-	_object_held.body.set_freeze_enabled(false)
-	_object_held.body.apply_central_impulse(force * throw_direction)
-	_object_held.body.angular_velocity = Vector3(randf(), randf(), randf())
+	var throw_direction = (aim_point - _object_held.body.global_position).normalized()
 	
+	_object_held.throw(throw_direction, charge_ratio, player_stats.strength_multiplier)
 	_reset_throwing()
 
 
