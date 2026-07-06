@@ -11,7 +11,10 @@ extends Node3D
 @export var base_follow_speed : float = 10.0 
 @export var aim_follow_speed : float = 20.0
 @export var mass_influence : float = 1.5
+
+@export_group("Timing")
 @export var pickup_cooldown : float = 0.25
+@export var throw_cooldown : float = 0.33
 
 @export_group("Throwing")
 @export var min_throw_force : float = 5.0
@@ -23,6 +26,7 @@ var _charge_time: float = 0.0
 var _current_target: Node3D = null
 var _object_held: Node3D = null
 var _pickup_locked_until_msec : int = 0
+var _min_to_throw_msec : int = 0
 
 func _ready() -> void:
 	pickup_raycast.add_exception(owner)
@@ -35,6 +39,7 @@ func _physics_process(delta: float) -> void:
 		_update_held_object(delta)
 
 
+# Main raycast "seeing the thing initially" logic
 func _process(_delta: float) -> void:
 	if pickup_raycast.is_colliding() and _can_pickup():
 		var body = pickup_raycast.get_collider()
@@ -43,6 +48,10 @@ func _process(_delta: float) -> void:
 			if grabbable != _current_target:
 				_clear_highlight()
 				_current_target = grabbable
+				
+				if grabbable == _object_held:
+					return
+					
 				grabbable.looked_at.emit(grabbable)
 		else:
 			_clear_highlight()
@@ -58,8 +67,12 @@ func _unhandled_input(event):
 
 	if _object_held:
 		if Input.is_action_just_pressed("throw"):
-			_is_aiming = true
+			_start_throw_cooldown()
+			#_is_aiming = true
 			_charge_time = 0.0
+		if Input.is_action_pressed("throw") and _can_throw():
+			_is_aiming = true
+			#_charge_time = 0.0
 		if Input.is_action_just_released("throw") and _is_aiming:
 			_throw()
 		if Input.is_action_just_pressed("let_go"):
@@ -127,9 +140,6 @@ func _let_go() -> void:
 		return
 	if !_object_held.body.has_method("set_freeze_enabled"):
 		return
-		#_object_held.set_freeze_enabled(false)
-		#_object_held.reparent(get_tree().current_scene)
-		
 		
 	_object_held.body.set_freeze_enabled(false)
 	_object_held.body.reparent(get_tree().current_scene)
@@ -174,6 +184,12 @@ func _reset_throwing():
 
 func _can_pickup() -> bool:
 	return Time.get_ticks_msec() >= _pickup_locked_until_msec
+	
+func _can_throw() -> bool:
+	return Time.get_ticks_msec() >= _min_to_throw_msec
 
 func _start_pickup_cooldown() -> void:
 	_pickup_locked_until_msec = Time.get_ticks_msec() + int(pickup_cooldown * 1000)
+	
+func _start_throw_cooldown() -> void:
+	_min_to_throw_msec = Time.get_ticks_msec() + int(throw_cooldown * 1000)
