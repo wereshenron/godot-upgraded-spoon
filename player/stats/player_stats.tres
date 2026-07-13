@@ -4,4 +4,5 @@
 
 [resource]
 script = ExtResource("1_fggyr")
-strength_multiplier = 1.5
+speed = 8.0
+strength_multiplier = 1.25

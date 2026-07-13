@@ -1,7 +1,6 @@
 [gd_scene format=3 uid="uid://cuaggjrhykbyn"]
 
 [ext_resource type="Script" uid="uid://vj0hl7lhx8us" path="res://player/controller/controller.gd" id="1_xhfnw"]
-[ext_resource type="Resource" uid="uid://6pv4r2p1wrn1" path="res://player/stats/player_stats.tres" id="2_x8kxw"]
 [ext_resource type="Script" uid="uid://b1ltd5s3pdxhe" path="res://player/camera_capture.gd" id="3_kne1u"]
 [ext_resource type="Script" uid="uid://cbuqwortgp1ys" path="res://player/interaction/interactor.gd" id="5_x8kxw"]
 [ext_resource type="PackedScene" uid="uid://c5qbrslff0ma8" path="res://shrekwazowski/player_shrak.tscn" id="6_gskgj"]
@@ -11,18 +10,11 @@ radius = 0.50878906
 height = 1.8482472
 
 [node name="Player" type="CharacterBody3D" unique_id=5736185 groups=["SpawnPoints"]]
-collision_layer = 32769
 script = ExtResource("1_xhfnw")
 mouse_sensitivity = 0.005
-jump_force = null
-sprint_multiplier = null
 camera_smoothing = 0.245
-player_stats = ExtResource("2_x8kxw")
 tilt_limit = 1.5
 turn_speed = 5.0
-speed = null
-fall_acceleration = null
-push_force = null
 
 [node name="Pivot" type="Node3D" parent="." unique_id=1910403145]
 transform = Transform3D(-1, 0, 1.509958e-07, 0, 1, 0, -1.509958e-07, 0, -1, 0, 0, 0)
@@ -54,12 +46,12 @@ aim_raycast = NodePath("../CameraPivot/Camera3D/AimRaycast")
 camera = NodePath("../CameraPivot/Camera3D")
 hold_offset = Vector3(0, 0, 2.5)
 throw_offset = Vector3(1.2, 0, 2)
-base_follow_speed = 15.0
-aim_follow_speed = 50.0
+base_follow_speed = 50.0
+aim_follow_speed = 75.0
 mass_influence = 0.66
 throw_cooldown = 0.25
-max_throw_force = 2500.0
-max_charge_time = 1.0
+_min_to_throw_msec = 250
+max_charge_time = 2.0
 
 [node name="shrak" parent="." unique_id=473750945 instance=ExtResource("6_gskgj")]
 transform = Transform3D(-0.1, 0, -8.742278e-09, 0, 0.1, 0, 8.742278e-09, 0, -0.1, 0, 0, 0)

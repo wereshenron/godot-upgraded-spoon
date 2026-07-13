@@ -3,11 +3,11 @@
 [ext_resource type="Script" uid="uid://b72rfp2piolaq" path="res://world/teleporter.gd" id="1_eumkw"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_tuehi"]
+size = Vector3(1000000, 1, 1000000)
 
-[node name="Teleporter" type="Area3D" unique_id=47569724 node_paths=PackedStringArray("collider")]
+[node name="Teleporter" type="Area3D" unique_id=47569724]
+collision_mask = 32769
 script = ExtResource("1_eumkw")
-location = Vector3(0, 20, 0)
-collider = NodePath("CollisionShape3D")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=963326453]
 shape = SubResource("BoxShape3D_tuehi")

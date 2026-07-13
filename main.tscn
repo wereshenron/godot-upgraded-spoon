@@ -69,10 +69,10 @@ shadow_enabled = true
 [node name="Ducky" parent="." unique_id=1171132693 instance=ExtResource("2_kek77")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.3957, 1.44006, 0)
 
-[node name="Teleporter" parent="." unique_id=617189033 instance=ExtResource("5_lquwl")]
+[node name="Teleporter" parent="." unique_id=617189033 node_paths=PackedStringArray("spawn_point") instance=ExtResource("5_lquwl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -9.51279, 0)
 monitorable = false
-location = Vector3(0, 5, 0)
+spawn_point = NodePath("../SpawnPoint")
 collider_x = 10000
 collider_z = 10000
 
@@ -424,3 +424,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.1850443, -2.5572903, -6.69
 [node name="SpawnPoint" parent="." unique_id=1025493340 instance=ExtResource("10_w48qg")]
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -2.70267, -0.34203148, 0)
 gizmo_extents = 2.59
+
+[node name="Teleporter2" parent="." unique_id=47569724 node_paths=PackedStringArray("spawn_point") instance=ExtResource("5_lquwl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 339.7759, 0)
+monitorable = false
+spawn_point = NodePath("../SpawnPoint")
+collider_x = 10000
+collider_z = 10000

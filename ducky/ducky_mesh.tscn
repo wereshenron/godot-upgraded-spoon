@@ -1,0 +1,5 @@
+[gd_scene format=3 uid="uid://lxwflmf4rcan"]
+
+[ext_resource type="PackedScene" uid="uid://spsfcd2qh6wa" path="res://ducky/rubber_duck_toy_4k.glb" id="1_ko0s8"]
+
+[node name="Mesh" unique_id=1945137073 instance=ExtResource("1_ko0s8")]

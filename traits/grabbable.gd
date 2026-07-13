@@ -11,17 +11,18 @@ extends Node3D
 @export_group("Throwing")
 @export var min_throw_force : float
 @export var max_throw_force : float
+@export var angular_velocity_scale : float
+@export_range(-180.0, 180.0, 1.0, "degrees") var spin_twist_degrees : float = 0.0
 
 var _tween: Tween
 var _movement: float
 var _has_spiked: bool = false
 
-signal looked_at(target)
-signal looked_away
-
 func _ready() -> void:
-	looked_at.connect(_look_at)
-	looked_away.connect(func(): set_highlighted(false))
+	if geometry == null:
+		var found_geometry = body.find_child("GeometryInstance3D")
+		if found_geometry:
+			geometry = found_geometry
 	
 func _process(_delta: float) -> void:
 	if body.continuous_cd == false:
@@ -33,37 +34,26 @@ func _process(_delta: float) -> void:
 	if _movement > _movement_lower_threshold:
 		_has_spiked = true
 	elif _has_spiked:
-		print('saving lives')
 		body.continuous_cd = false
 		_has_spiked = false
 
-func throw(direction: Vector3, charge_ratio: float, strength_mult: float = 1.0) -> void:
-	if not body.has_method("set_freeze_enabled"):
-		return
-	
-	var force = lerp(min_throw_force, max_throw_force, charge_ratio) * strength_mult
-	body.continuous_cd = true
-	body.set_freeze_enabled(false)
-	body.apply_central_impulse(force * direction)
-	body.angular_velocity = Vector3(randf(), randf(), randf())
+#### UI Interactions ####
 
 func _look_at(target) -> void:
 	set_highlighted(true)
 	SignalBus.interactable_seen.emit(target)
 
 func set_highlighted(active: bool) -> void:
-	if geometry != null:
-		if active:
-			# print('setting active')
-			# Apply overlay first, then tween blend 0 -> 1
-			geometry.material_overlay = outline_shader_mat
-			_start_tween(0.0, 1.0)
-		else: 
-			# print('setting inactive')
-			var blend_val = outline_shader_mat.get_shader_parameter("blend")
-			_start_tween(blend_val, 0.0, func ():
-				geometry.material_overlay = null
-			)
+	if geometry == null:
+		return
+	if active:
+		geometry.material_overlay = outline_shader_mat
+		_start_tween(0.0, 1.0)
+	else: 
+		var blend_val = outline_shader_mat.get_shader_parameter("blend")
+		_start_tween(blend_val, 0.0, func ():
+			geometry.material_overlay = null
+		)
 
 func _start_tween(from: float, to: float, on_complete: Callable = Callable()) -> void:
 	if _tween:
@@ -75,3 +65,31 @@ func _start_tween(from: float, to: float, on_complete: Callable = Callable()) ->
 
 func _set_blend(value: float) -> void:
 	outline_shader_mat.set_shader_parameter("blend", value)
+
+#### Physics Interactions ####
+
+## Grabbable's throw() handles the actual physics actions on the body
+func throw(direction: Vector3, charge_ratio: float, strength_mult: float = 1.0) -> void:
+	var force = lerp(min_throw_force, max_throw_force, charge_ratio) * strength_mult
+	var relative_angular_velocity = _get_relative_angular_velocity(direction)
+	#print(relative_angular_velocity)
+	var charged_angular_velocity = Vector3.ZERO.lerp(relative_angular_velocity, charge_ratio)
+	
+	body.continuous_cd = true
+	body.axis_lock_linear_y = false
+	body.apply_central_impulse(force * direction)
+	body.angular_velocity = charged_angular_velocity
+
+func set_should_hover(is_hovering: bool) -> void:
+	body.axis_lock_linear_y = is_hovering
+	
+	
+#### Helpers #### 
+
+## Thrown objects "forward-down" angular velocity rotation is relative to 
+## the thrown direction - it is scaled directly related to whichever axis 
+## is closest to 0.
+func _get_relative_angular_velocity(direction: Vector3) -> Vector3:
+	var spin_axis = -direction.cross(Vector3.UP).normalized()
+	print(spin_axis)
+	return spin_axis * angular_velocity_scale

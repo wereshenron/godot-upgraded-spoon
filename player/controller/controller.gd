@@ -11,29 +11,24 @@ extends CharacterBody3D
 @export var player_stats : PlayerStats = preload("res://player/stats/player_stats.tres")
 @export var tilt_limit : float = deg_to_rad(75)
 @export var turn_speed : float = 4.8
-@export var speed : float = 8.0
+
 @export var fall_acceleration : float = 75.0
 @export var push_force : float = 5.0
 
+@onready var speed : float = player_stats.speed
 @onready var interactor: Interactor = $Interactor
 
 var target_velocity = Vector3.ZERO
 var _target_cam_x := 0.0
 var _target_cam_y := 0.0
-# var _is_sprinting := false
+var _is_sprinting := false
 
 func _ready() -> void:
 	interactor.player_stats = player_stats
 
 # Commented out because this is how you can "run through" objects - keeping for testing 
-#func _process(_delta: float) -> void:
-	#print(get_real_velocity().length())
-	#if _is_sprinting:
-		#set_collision_layer_value(16, true)
-		#set_collision_mask_value(16, false)
-	#else: 
-		#set_collision_layer_value(16, false)
-		#set_collision_mask_value(16, true)
+func _process(_delta: float) -> void:
+	set_collision_mask_value(16, !_is_sprinting)
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
@@ -59,8 +54,8 @@ func _physics_process(delta):
 		direction.z += 1
 	if Input.is_action_pressed("sprint"):
 		running_speed *= sprint_multiplier
-		#_is_sprinting = true
-	#else: _is_sprinting = false
+		_is_sprinting = true
+	else: _is_sprinting = false
 
 	if direction != Vector3.ZERO:
 		var camera_basis = _camera.global_transform.basis
