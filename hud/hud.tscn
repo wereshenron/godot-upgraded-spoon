@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" uid="uid://k5oc5tstujfa" path="res://hud/hud_controller.gd" id="1_6ca3a"]
 [ext_resource type="PackedScene" uid="uid://clxoe71k1iero" path="res://hud/buttons/quit_button.tscn" id="2_2gk58"]
+[ext_resource type="FontVariation" uid="uid://bujcedphrrr72" path="res://hud/text/normal_font.tres" id="2_w8tcp"]
+[ext_resource type="FontVariation" uid="uid://dydfs7v8y0w3n" path="res://hud/text/bold_font.tres" id="3_svhta"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aqcbf"]
 content_margin_left = 10.0
@@ -12,12 +14,6 @@ corner_radius_top_right = 12
 corner_radius_bottom_right = 12
 corner_radius_bottom_left = 12
 corner_detail = 20
-
-[sub_resource type="SystemFont" id="SystemFont_x8kxw"]
-subpixel_positioning = 0
-
-[sub_resource type="FontVariation" id="FontVariation_aqcbf"]
-base_font = SubResource("SystemFont_x8kxw")
 
 [node name="HUD" type="CanvasLayer" unique_id=1673316801]
 script = ExtResource("1_6ca3a")
@@ -45,6 +41,7 @@ theme_override_constants/separation = 10
 
 [node name="PressLabel" type="Label" parent="Root/HBoxContainer" unique_id=135006189]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_w8tcp")
 theme_override_font_sizes/font_size = 24
 text = "Press"
 
@@ -62,7 +59,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_aqcbf")
 [node name="Letter" type="Label" parent="Root/HBoxContainer/Keybadge/Background" unique_id=1508386102]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = SubResource("FontVariation_aqcbf")
+theme_override_fonts/font = ExtResource("2_w8tcp")
 theme_override_font_sizes/font_size = 20
 text = "E"
 horizontal_alignment = 1
@@ -70,12 +67,13 @@ vertical_alignment = 1
 
 [node name="ActionLabel" type="Label" parent="Root/HBoxContainer" unique_id=300018078]
 layout_mode = 2
+theme_override_fonts/font = ExtResource("2_w8tcp")
 theme_override_font_sizes/font_size = 24
 text = "To Pick Up"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="RichTextLabel" type="RichTextLabel" parent="Root" unique_id=249453341]
+[node name="Cursor" type="RichTextLabel" parent="Root" unique_id=249453341]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.5
@@ -85,6 +83,24 @@ anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+text = "+"
+fit_content = true
+autowrap_mode = 0
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BoldCursor" type="RichTextLabel" parent="Root" unique_id=1154114674]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_fonts/normal_font = ExtResource("3_svhta")
+bbcode_enabled = true
 text = "+"
 fit_content = true
 autowrap_mode = 0

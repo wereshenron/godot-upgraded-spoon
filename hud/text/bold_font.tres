@@ -1,0 +1,7 @@
+[gd_resource type="FontVariation" format=3 uid="uid://dydfs7v8y0w3n"]
+
+[ext_resource type="FontVariation" uid="uid://bujcedphrrr72" path="res://hud/text/normal_font.tres" id="1_x6txd"]
+
+[resource]
+base_font = ExtResource("1_x6txd")
+variation_embolden = 1.26

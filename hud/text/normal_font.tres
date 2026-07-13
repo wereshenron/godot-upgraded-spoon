@@ -1,0 +1,6 @@
+[gd_resource type="FontVariation" format=3 uid="uid://bujcedphrrr72"]
+
+[ext_resource type="FontFile" uid="uid://ds3a1hgcw3nme" path="res://hud/text/normal_font.fontdata" id="1_htdvi"]
+
+[resource]
+base_font = ExtResource("1_htdvi")

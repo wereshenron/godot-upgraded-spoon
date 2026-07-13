@@ -1,8 +1,12 @@
 [gd_scene format=3 uid="uid://yvip4y5vt1fd"]
 
 [ext_resource type="Script" uid="uid://bje23tj3ictas" path="res://traits/grabbable.gd" id="1_hkcee"]
+[ext_resource type="Texture2D" uid="uid://r60a4l1a6w5y" path="res://prototype_textures/PNG/Light/texture_08.png" id="2_i6dl8"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_hkcee"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wgjsm"]
+albedo_texture = ExtResource("2_i6dl8")
 
 [sub_resource type="SphereMesh" id="SphereMesh_i6dl8"]
 
@@ -15,6 +19,8 @@ script = ExtResource("1_hkcee")
 geometry = NodePath("../MeshInstance3D")
 min_throw_force = 25.0
 max_throw_force = 250.0
+angular_velocity_scale = 500.0
+spin_twist_degrees = 27.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=428247965]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
@@ -22,5 +28,6 @@ shape = SubResource("SphereShape3D_hkcee")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=486211810]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_wgjsm")
 mesh = SubResource("SphereMesh_i6dl8")
 skeleton = NodePath("../..")

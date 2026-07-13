@@ -24,18 +24,8 @@ func _ready() -> void:
 		if found_geometry:
 			geometry = found_geometry
 	
-func _process(_delta: float) -> void:
-	if body.continuous_cd == false:
-		_has_spiked = false
-		return
-		
-	_movement = clampf(body.linear_velocity.length(), 0.0, 1.0)
-	
-	if _movement > _movement_lower_threshold:
-		_has_spiked = true
-	elif _has_spiked:
-		body.continuous_cd = false
-		_has_spiked = false
+func _physics_process(_delta: float) -> void:
+	_handle_ccd()
 
 #### UI Interactions ####
 
@@ -94,3 +84,16 @@ func _get_relative_angular_velocity(direction: Vector3) -> Vector3:
 	var base_axis = Vector3.UP.cross(dir_norm).normalized()
 	var spin_axis = base_axis.rotated(dir_norm, deg_to_rad(spin_twist_degrees))
 	return spin_axis * angular_velocity_scale
+	
+func _handle_ccd() -> void:
+	if body.continuous_cd == false:
+		_has_spiked = false
+		return
+		
+	_movement = clampf(body.linear_velocity.length(), 0.0, 1.0)
+	
+	if _movement > _movement_lower_threshold:
+		_has_spiked = true
+	elif _has_spiked:
+		body.continuous_cd = false
+		_has_spiked = false
