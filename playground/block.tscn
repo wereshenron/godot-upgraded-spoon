@@ -25,4 +25,5 @@ script = ExtResource("2_j7rbv")
 geometry = NodePath("../MeshInstance3D")
 min_throw_force = 25.0
 max_throw_force = 250.0
-angular_velocity_scale = 100.0
+angular_velocity_scale = 25.0
+spin_twist_degrees = 20.0

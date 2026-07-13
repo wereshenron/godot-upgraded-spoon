@@ -90,6 +90,7 @@ func set_should_hover(is_hovering: bool) -> void:
 ## the thrown direction - it is scaled directly related to whichever axis 
 ## is closest to 0.
 func _get_relative_angular_velocity(direction: Vector3) -> Vector3:
-	var spin_axis = -direction.cross(Vector3.UP).normalized()
-	print(spin_axis)
+	var dir_norm = direction.normalized()
+	var base_axis = Vector3.UP.cross(dir_norm).normalized()
+	var spin_axis = base_axis.rotated(dir_norm, deg_to_rad(spin_twist_degrees))
 	return spin_axis * angular_velocity_scale
