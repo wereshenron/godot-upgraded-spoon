@@ -4,7 +4,7 @@ extends Node3D
 @onready var outline_shader_mat: ShaderMaterial = preload("res://materials/outline.tres")
 @onready var body: RigidBody3D = get_parent()
 
-@export var geometry : GeometryInstance3D
+@export var geometry_list : Array[GeometryInstance3D]
 ## Threshold to decide when to turn off continuous collision detection
 @export var _movement_lower_threshold : float = 0.33
 
@@ -17,12 +17,11 @@ extends Node3D
 var _tween: Tween
 var _movement: float
 var _has_spiked: bool = false
+var _mesh_instances: Array[MeshInstance3D]
 
 func _ready() -> void:
-	if geometry == null:
-		var found_geometry = body.find_child("GeometryInstance3D")
-		if found_geometry:
-			geometry = found_geometry
+	var found := find_children("*", "MeshInstance3D", true, false)
+	_mesh_instances.assign(found)
 	
 func _physics_process(_delta: float) -> void:
 	_handle_ccd()
@@ -34,16 +33,17 @@ func _look_at(target) -> void:
 	SignalBus.interactable_seen.emit(target)
 
 func set_highlighted(active: bool) -> void:
-	if geometry == null:
-		return
-	if active:
-		geometry.material_overlay = outline_shader_mat
-		_start_tween(0.0, 1.0)
-	else: 
-		var blend_val = outline_shader_mat.get_shader_parameter("blend")
-		_start_tween(blend_val, 0.0, func ():
-			geometry.material_overlay = null
-		)
+	for geometry in geometry_list:
+		if geometry == null:
+			return
+		if active:
+			geometry.material_overlay = outline_shader_mat
+			_start_tween(0.0, 1.0)
+		else: 
+			var blend_val = outline_shader_mat.get_shader_parameter("blend")
+			_start_tween(blend_val, 0.0, func ():
+				geometry.material_overlay = null
+			)
 
 func _start_tween(from: float, to: float, on_complete: Callable = Callable()) -> void:
 	if _tween:

@@ -25,6 +25,10 @@ config/icon="res://icon.svg"
 SignalBus="*uid://4jcaioyos8vs"
 GameManager="*uid://vs0kmu50pup0"
 
+[debug]
+
+gdscript/warnings/unused_signal=0
+
 [display]
 
 window/size/borderless=true

@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://dopef2j8d43is"]
+
+[ext_resource type="PackedScene" uid="uid://c1yehl1opuoxy" path="res://models/guns/simple_gun/simple_gun.glb" id="3_okuyw"]
+[ext_resource type="Shape3D" uid="uid://c08enaly15nmm" path="res://models/guns/simple_gun/simple_gun_capsule_collider_1.tres" id="4_7h87b"]
+[ext_resource type="Shape3D" uid="uid://b35gwbx1qlr2g" path="res://models/guns/simple_gun/simple_gun_capsule_collider_2.tres" id="5_qpxi4"]
+[ext_resource type="Script" uid="uid://bje23tj3ictas" path="res://traits/grabbable.gd" id="8_7h87b"]
+
+[node name="SimpleGun" type="RigidBody3D" unique_id=69713160 groups=["Grabbable"]]
+collision_layer = 32769
+collision_mask = 32769
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1646874224]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.055645853, 0.051797867, 0)
+shape = ExtResource("4_7h87b")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="." unique_id=254149040]
+transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0.43744937, 0.31854898, 0)
+shape = ExtResource("5_qpxi4")
+
+[node name="Grabbable" type="Node3D" parent="." unique_id=366194383 node_paths=PackedStringArray("geometry_list")]
+script = ExtResource("8_7h87b")
+geometry_list = [NodePath("../simple_gun/service_pistol_pistol_a"), NodePath("../simple_gun/service_pistol_slide_a"), NodePath("../simple_gun/service_pistol_hammer_a"), NodePath("../simple_gun/service_pistol_trigger_a")]
+min_throw_force = 25.0
+max_throw_force = 250.0
+angular_velocity_scale = 25.0
+spin_twist_degrees = 63.0
+
+[node name="simple_gun" parent="." unique_id=1408236158 instance=ExtResource("3_okuyw")]
+
+[editable path="simple_gun"]

@@ -25,6 +25,9 @@ freeze_mode = 1
 angular_velocity = Vector3(0.017191494, 0, 0)
 script = ExtResource("1_p24vj")
 
+[node name="blend_export" parent="." unique_id=1945137073 instance=ExtResource("2_x0f5b")]
+transform = Transform3D(3.115, 0, 0, 0, 3.115, 0, 0, 0, 3.115, 0, 0, 0)
+
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="." unique_id=483749142]
 transform = Transform3D(9, 0, 0, 0, -3.934025e-07, -9, 0, 9, -3.934025e-07, -0.039485186, 0.24287683, 0.015908897)
 shape = SubResource("CapsuleShape3D_p24vj")
@@ -33,10 +36,10 @@ shape = SubResource("CapsuleShape3D_p24vj")
 transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, -0.03169799, 0.7152917, 0.14891565)
 shape = SubResource("SphereShape3D_x0f5b")
 
-[node name="blend_export" parent="." unique_id=1945137073 instance=ExtResource("2_x0f5b")]
-transform = Transform3D(3, 0, 0, 0, 3.005, 0, 0, 0, 3, 0, 0, 0)
-
-[node name="Grabbable" type="Node3D" parent="." unique_id=2078232095]
+[node name="Grabbable" type="Node3D" parent="." unique_id=2078232095 node_paths=PackedStringArray("geometry_list")]
 script = ExtResource("3_7tpbr")
+geometry_list = [NodePath("../blend_export/rubber_duck_toy")]
 min_throw_force = 25.0
 max_throw_force = 500.0
+
+[editable path="blend_export"]

@@ -14,13 +14,13 @@ albedo_texture = ExtResource("2_i6dl8")
 collision_layer = 32768
 collision_mask = 32769
 
-[node name="Grabbable" type="Node3D" parent="." unique_id=1357851722 node_paths=PackedStringArray("geometry")]
+[node name="Grabbable" type="Node3D" parent="." unique_id=1357851722 node_paths=PackedStringArray("geometry_list")]
 script = ExtResource("1_hkcee")
-geometry = NodePath("../MeshInstance3D")
+geometry_list = [NodePath("../MeshInstance3D")]
 min_throw_force = 25.0
 max_throw_force = 250.0
-angular_velocity_scale = 500.0
-spin_twist_degrees = 27.0
+angular_velocity_scale = 15.0
+spin_twist_degrees = 72.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=428247965]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
