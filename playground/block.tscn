@@ -2,13 +2,14 @@
 
 [ext_resource type="Material" uid="uid://bewi5jyknn4x8" path="res://textures/prototype.tres" id="1_275sg"]
 [ext_resource type="Script" uid="uid://bje23tj3ictas" path="res://traits/grabbable.gd" id="2_j7rbv"]
+[ext_resource type="Script" uid="uid://cm13bus1o0bdq" path="res://traits/throwable.gd" id="3_j7rbv"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_kek77"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_j7rbv"]
 material = ExtResource("1_275sg")
 
-[node name="Block" type="RigidBody3D" unique_id=1541687413 groups=["Grabbable"]]
+[node name="Block" type="RigidBody3D" unique_id=1541687413 groups=["Holdable"]]
 collision_layer = 32768
 collision_mask = 32769
 mass = 4.536
@@ -27,3 +28,15 @@ shape = SubResource("BoxShape3D_kek77")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=929182026]
 mesh = SubResource("BoxMesh_j7rbv")
+
+[node name="Throwable" type="Node3D" parent="." unique_id=601822464 node_paths=PackedStringArray("geometry_list")]
+script = ExtResource("3_j7rbv")
+min_throw_force = 25.0
+max_throw_force = 250.0
+angular_velocity_scale = 25.0
+spin_twist_degrees = 63.0
+hold_offset = Vector3(0, 0, 2.5)
+throw_offset = Vector3(1.2, 0, 2)
+base_follow_speed = 50.0
+aim_follow_speed = 75.0
+geometry_list = [NodePath("../MeshInstance3D")]

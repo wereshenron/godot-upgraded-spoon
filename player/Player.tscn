@@ -39,19 +39,19 @@ collision_mask = 32769
 target_position = Vector3(0, 0, -100)
 collision_mask = 32769
 
-[node name="Interactor" type="Node3D" parent="." unique_id=1228017416 node_paths=PackedStringArray("pickup_raycast", "aim_raycast", "camera")]
+[node name="Interactor" type="Node3D" parent="." unique_id=1228017416 node_paths=PackedStringArray("pickup_raycast", "aim_raycast", "camera", "hold_pivot")]
 script = ExtResource("5_x8kxw")
 pickup_raycast = NodePath("../CameraPivot/Camera3D/RayCast3D")
 aim_raycast = NodePath("../CameraPivot/Camera3D/AimRaycast")
 camera = NodePath("../CameraPivot/Camera3D")
 hold_offset = Vector3(0, 0, 2.5)
+hold_pivot = NodePath("../CameraPivot/Camera3D")
 throw_offset = Vector3(1.2, 0, 2)
 base_follow_speed = 50.0
 aim_follow_speed = 75.0
 mass_influence = 0.66
 throw_cooldown = 0.25
 _min_to_throw_msec = 250
-max_charge_time = 2.0
 
 [node name="shrak" parent="." unique_id=473750945 instance=ExtResource("6_gskgj")]
 transform = Transform3D(-0.1, 0, -8.742278e-09, 0, 0.1, 0, 8.742278e-09, 0, -0.1, 0, 0, 0)

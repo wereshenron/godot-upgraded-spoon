@@ -8,6 +8,7 @@ class_name Interactor
 
 @export_group("Object Handling")
 @export var hold_offset: Vector3
+@export var hold_pivot: Node3D
 @export var throw_offset: Vector3
 @export var base_follow_speed: float = 10.0
 @export var aim_follow_speed: float = 20.0
@@ -19,14 +20,10 @@ class_name Interactor
 @export var throw_cooldown: float = 0.33
 @export var _min_to_throw_msec: int = 0
 
-@export_group("Throwing")
-@export var max_charge_time: float = 1.5
-
 var player_stats: PlayerStats
 var _is_aiming: bool = false
-var _charge_time: float = 0.0
-var _current_target: Grabbable = null
-var _object_held: Grabbable = null
+var _current_target: Holdable = null
+var _object_held: Holdable = null
 var _pickup_locked_until_msec: int = 0
 
 func _ready() -> void:
@@ -35,18 +32,17 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	if _object_held:
-		if _is_aiming and _can_throw():
-			_charge_time = min(_charge_time + delta, max_charge_time)
-		_update_held_object(delta)
+		_object_held.on_use_held(delta, _get_aim_context)
+		_object_held.update_hold(hold_pivot, delta, _is_aiming)
 
 # Main raycast "seeing the thing initially" logic
 func _process(_delta: float) -> void:
-	var new_target: Grabbable = null
+	var new_target: Holdable = null
 
 	if pickup_raycast.is_colliding() and _can_pickup():
 		var body = pickup_raycast.get_collider()
-		if body.is_in_group("Grabbable"):
-			var candidate = body.get_node("Grabbable")
+		if body.is_in_group("Holdable"):
+			var candidate = _get_holdable(body)
 			if candidate != _object_held:
 				new_target = candidate
 		
@@ -73,77 +69,36 @@ func _unhandled_input(event):
 			_pickup(_current_target)
 
 	if _object_held:
-		if Input.is_action_just_pressed("throw"):
-			_start_throw_cooldown()
-			_charge_time = 0.0
+		if Input.is_action_just_pressed("use_primary"):
 			_is_aiming = true
-		if Input.is_action_just_released("throw") and _is_aiming and _can_throw():
-			_throw()
-		if Input.is_action_just_released("throw") and !_can_throw():
+			_object_held.on_use_pressed(_get_aim_context)
+		if Input.is_action_just_released("use_primary"):
+			_object_held.on_use_released(_get_aim_context)
 			_is_aiming = false
 		if Input.is_action_just_pressed("let_go"):
 			_let_go()
 
 
-func _update_held_object(delta: float) -> void:
-	var forward = - camera.global_basis.z
-	var right = camera.global_basis.x
-	var up = camera.global_basis.y
-
-	var offset = hold_offset.lerp(throw_offset, float(_is_aiming and _can_throw()))
-
-	var hold_target: Vector3 = camera.global_position \
-		+ forward * offset.z \
-		+ right * offset.x \
-		+ up * offset.y
-
-	var mass: float = 1.0
-	var object_mass = _object_held.body.get("mass")
-
-	if object_mass != null:
-		mass = object_mass
-
-	var speed = aim_follow_speed if _is_aiming and _can_throw() else base_follow_speed
-
-	var follow_speed: float = speed / (1.0 + mass * mass_influence)
-
-	_object_held.body.global_position = _object_held.body.global_position.lerp(
-		hold_target,
-		clampf(follow_speed * delta, 0.0, 1.0)
-	)
-
-
-func _pickup(grabbable: Grabbable) -> void:
-	if !grabbable or _object_held:
+func _pickup(holdable: Holdable) -> void:
+	if !holdable or _object_held:
 		return
 	
-	grabbable.set_highlighted(false)
-	grabbable.set_should_hover(true)
-	_object_held = grabbable
+	holdable.set_highlighted(false)
+	holdable.set_should_hover(true)
+	_object_held = holdable
 	_current_target = null
 	SignalBus.looked_away.emit()
+	_object_held.released.connect(_on_held_object_released)
 
 
 func _let_go() -> void:
 	if !_object_held: return
-	if !_object_held.body.has_method("set_freeze_enabled"): return
-	
+	if !_object_held.body is RigidBody3D: return
 	_object_held.set_should_hover(false)
+	_object_held.released.emit()
 	_reset_throwing()
 
-
-func _throw() -> void:
-	if !_object_held:
-		return
-		
-	if !_object_held.body.has_method("set_freeze_enabled"):
-		_reset_throwing()
-		return
-
-	var body : RigidBody3D = _object_held.body
-
-	var charge_ratio = _charge_time / max_charge_time
-
+func _get_aim_context() -> Dictionary:
 	var aim_origin = camera.global_position
 	var aim_dir = - camera.global_basis.z
 	var aim_point = aim_origin + aim_dir * 1000.0
@@ -151,10 +106,12 @@ func _throw() -> void:
 	if aim_raycast.is_colliding() and aim_raycast.get_collider() != _object_held.body:
 		aim_point = aim_raycast.get_collision_point()
 
-	var throw_direction = (aim_point - _object_held.body.global_position).normalized()
-	
-	_object_held.throw(throw_direction, charge_ratio, player_stats.strength_multiplier)
-	_reset_throwing()
+	var direction = (aim_point - _object_held.body.global_position).normalized()
+	return {
+		"direction" : direction,
+		"strength_mult" : player_stats.strength_multiplier,
+		"is_aiming": _is_aiming
+	}
 
 
 func _reset_throwing():
@@ -162,7 +119,12 @@ func _reset_throwing():
 	_object_held = null
 	_current_target = null
 	_is_aiming = false
-	_charge_time = 0.0
+
+func _on_held_object_released() -> void:
+	if !_object_held: return
+	_object_held.released.disconnect(_on_held_object_released)
+	_reset_throwing()
+
 
 func _can_pickup() -> bool:
 	return Time.get_ticks_msec() >= _pickup_locked_until_msec
@@ -175,3 +137,9 @@ func _start_pickup_cooldown() -> void:
 	
 func _start_throw_cooldown() -> void:
 	_min_to_throw_msec = Time.get_ticks_msec() + int(throw_cooldown * 1000)
+
+func _get_holdable(body: RigidBody3D) -> Holdable:
+	for child in body.get_children():
+		if child is Holdable:
+			return child
+	return null
