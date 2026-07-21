@@ -12,6 +12,7 @@ var _tween: Tween
 var _movement: float
 var _has_spiked: bool = false
 var _mesh_instances: Array[MeshInstance3D]
+var is_aiming = false
 
 signal released
 
@@ -62,25 +63,40 @@ func set_should_hover(is_hovering: bool) -> void:
 
 ## Called every physics frame while held, to compute Interactor's follow offset.
 ## Default: no offset (subclasses like Throwable override to add aim-shift).
-func get_hold_offset(_is_aiming: bool) -> Vector3:
+func get_hold_offset() -> Vector3:
 	return Vector3.ZERO
 
-func get_follow_speed(base_speed: float, _is_aiming: bool) -> float:
+func get_follow_speed(base_speed: float) -> float:
 	return base_speed
 
-func on_use_pressed(_aim_context: Callable = func(): null) -> void:
+@warning_ignore("standalone_expression")
+func primary_pressed(_aim_context: Callable = func(): null) -> void:
 	pass
 
-func on_use_held(_delta: float, _aim_context: Callable = func(): null) -> void:
+@warning_ignore("standalone_expression")
+func primary_held(_delta: float, _aim_context: Callable = func(): null) -> void:
 	pass
 
-func on_use_released(_aim_context: Callable = func(): null) -> void:
+@warning_ignore("standalone_expression")
+func primary_released(_aim_context: Callable = func(): null) -> void:
+	pass
+	
+	@warning_ignore("standalone_expression")
+func secondary_pressed(_aim_context: Callable = func(): null) -> void:
+	pass
+
+@warning_ignore("standalone_expression")
+func secondary_held(_delta: float, _aim_context: Callable = func(): null) -> void:
+	pass
+
+@warning_ignore("standalone_expression")
+func secondary_released(_aim_context: Callable = func(): null) -> void:
 	pass
 
 func can_use() -> bool:
 	return true
 
-func update_hold(_hold_pivot: Node3D, _delta: float, _is_aiming: bool) -> void:
+func update_hold(_hold_pivot: Node3D, _delta: float) -> void:
 	pass
 
 #### Helpers ####

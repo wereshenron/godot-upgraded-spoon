@@ -62,7 +62,6 @@ func _set_blend(value: float) -> void:
 func throw(direction: Vector3, charge_ratio: float, strength_mult: float = 1.0) -> void:
 	var force = lerp(min_throw_force, max_throw_force, charge_ratio) * strength_mult
 	var relative_angular_velocity = _get_relative_angular_velocity(direction)
-	#print(relative_angular_velocity)
 	var charged_angular_velocity = Vector3.ZERO.lerp(relative_angular_velocity, charge_ratio)
 	
 	body.continuous_cd = true

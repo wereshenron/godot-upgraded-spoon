@@ -13,46 +13,59 @@ extends Holdable
 @export var aim_follow_speed: float = 20.0
 @export var mass_influence: float = 1.5
 
-# var _is_aiming: bool = false
 var _charge_time: float = 0.0
 var strength_mult: float = 1.0 # set externally, e.g. from player_stats
 
 ## Holdable overrides
 
-func get_hold_offset(is_aiming: bool) -> Vector3:
-	print(is_aiming)
+func get_hold_offset() -> Vector3:
 	return hold_offset.lerp(throw_offset, float(is_aiming))
 
-func get_follow_speed(base_speed: float, is_aiming: bool) -> float:
+func get_follow_speed(base_speed: float) -> float:
 	return aim_follow_speed if is_aiming else base_speed
 
 @warning_ignore("standalone_expression")
-func on_use_pressed(_aim_context: Callable = func(): null) -> void:
-	# _is_aiming = true
-	_charge_time = 0.0
-
-@warning_ignore("standalone_expression")
-func on_use_held(delta: float, _aim_context: Callable = func(): null) -> void:
-	var context = _aim_context.call()
-	if context.is_aiming:
-		_charge_time = min(_charge_time + delta, max_charge_time)
-
-@warning_ignore("standalone_expression")
-func on_use_released(_aim_context: Callable = func(): null) -> void:
-	var context = _aim_context.call()
-	if context.is_aiming:
+func primary_pressed(_aim_context: Callable = func(): null) -> void:
+	if is_aiming:
+		var context = _aim_context.call()
 		_do_throw(context.direction, context.strength_mult)
-	# _is_aiming = false
+	is_aiming = false
 	_charge_time = 0.0
 
-func update_hold(hold_pivot: Node3D, delta: float, is_aiming: bool) -> void:
+#@warning_ignore("standalone_expression")
+#func primary_held(delta: float, _aim_context: Callable = func(): null) -> void:
+	#if is_aiming:
+		#_charge_time = min(_charge_time + delta, max_charge_time)
+#
+#@warning_ignore("standalone_expression")
+#func primary_released(_aim_context: Callable = func(): null) -> void:
+	#if is_aiming:
+		#var context = _aim_context.call()
+		#_do_throw(context.direction, context.strength_mult)
+	#is_aiming = false
+	#_charge_time = 0.0
+	
+func secondary_pressed(_aim_context: Callable = func(): null) -> void:
+	is_aiming = true
+	_charge_time = 0.0
+	
+@warning_ignore("standalone_expression")
+func secondary_held(delta: float, _aim_context: Callable = func(): null) -> void:
+	if is_aiming:
+		_charge_time = min(_charge_time + delta, max_charge_time)
+	
+@warning_ignore("standalone_expression")
+func secondary_released(_aim_context: Callable = func(): null) -> void:
+	is_aiming = false
+	_charge_time = 0.0
+
+func update_hold(hold_pivot: Node3D, delta: float) -> void:
 	if !hold_pivot: return
+	
 	var forward = - hold_pivot.global_basis.z
 	var right = hold_pivot.global_basis.x
 	var up = hold_pivot.global_basis.y
-
-	var offset = get_hold_offset(is_aiming)
-	print(offset)
+	var offset = get_hold_offset()
 
 	var hold_target: Vector3 = hold_pivot.global_position \
 		+ forward * offset.z \
@@ -65,7 +78,7 @@ func update_hold(hold_pivot: Node3D, delta: float, is_aiming: bool) -> void:
 	if object_mass != null:
 		mass = object_mass
 
-	var speed = get_follow_speed(base_follow_speed, is_aiming)
+	var speed = get_follow_speed(base_follow_speed)
 
 	var follow_speed: float = speed / (1.0 + mass * mass_influence)
 

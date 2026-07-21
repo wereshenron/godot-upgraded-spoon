@@ -21,19 +21,34 @@ class_name Interactor
 @export var _min_to_throw_msec: int = 0
 
 var player_stats: PlayerStats
-var _is_aiming: bool = false
 var _current_target: Holdable = null
 var _object_held: Holdable = null
 var _pickup_locked_until_msec: int = 0
 
 func _ready() -> void:
 	pickup_raycast.add_exception(owner)
-	
 
 func _physics_process(delta: float) -> void:
-	if _object_held:
-		_object_held.on_use_held(delta, _get_aim_context)
-		_object_held.update_hold(hold_pivot, delta, _is_aiming)
+	if !_object_held:
+		return
+		
+	_object_held.update_hold(hold_pivot, delta)
+	
+	# Primary Handling
+	if Input.is_action_just_pressed("primary_action") and _object_held:
+		_object_held.primary_pressed(_get_aim_context)
+	if Input.is_action_pressed("primary_action") and _object_held:
+		_object_held.primary_held(delta, _get_aim_context)
+	if Input.is_action_just_released("primary_action") and _object_held:
+		_object_held.primary_released(_get_aim_context)
+		
+	# Secondary Handling
+	if Input.is_action_just_pressed("secondary_action") and _object_held:
+		_object_held.secondary_pressed(_get_aim_context)
+	if Input.is_action_pressed("secondary_action") and _object_held:
+		_object_held.secondary_held(delta, _get_aim_context)
+	if Input.is_action_just_released("secondary_action") and _object_held:
+		_object_held.secondary_released(_get_aim_context)
 
 # Main raycast "seeing the thing initially" logic
 func _process(_delta: float) -> void:
@@ -54,30 +69,18 @@ func _process(_delta: float) -> void:
 
 	_current_target = new_target
 
-	if _current_target:
-		if _current_target != _object_held:
-			_current_target.set_highlighted(true)
+	if _current_target and !_object_held:
+		_current_target.set_highlighted(true)
 		SignalBus.interactable_seen.emit(_current_target)
 	else: 
 		SignalBus.looked_away.emit()
 
-func _unhandled_input(event):
-	if event is InputEventKey and Input.is_action_pressed("pick_up"):
-		if _object_held:
-			_let_go()
-		elif _current_target and _can_pickup():
+func _unhandled_input(_event):
+	if Input.is_action_pressed("pick_up"):
+		if _current_target and _can_pickup():
 			_pickup(_current_target)
-
-	if _object_held:
-		if Input.is_action_just_pressed("use_primary"):
-			_is_aiming = true
-			_object_held.on_use_pressed(_get_aim_context)
-		if Input.is_action_just_released("use_primary"):
-			_object_held.on_use_released(_get_aim_context)
-			_is_aiming = false
-		if Input.is_action_just_pressed("let_go"):
-			_let_go()
-
+	if Input.is_action_just_pressed("let_go"):
+		_object_held.released.emit()
 
 func _pickup(holdable: Holdable) -> void:
 	if !holdable or _object_held:
@@ -90,14 +93,6 @@ func _pickup(holdable: Holdable) -> void:
 	SignalBus.looked_away.emit()
 	_object_held.released.connect(_on_held_object_released)
 
-
-func _let_go() -> void:
-	if !_object_held: return
-	if !_object_held.body is RigidBody3D: return
-	_object_held.set_should_hover(false)
-	_object_held.released.emit()
-	_reset_throwing()
-
 func _get_aim_context() -> Dictionary:
 	var aim_origin = camera.global_position
 	var aim_dir = - camera.global_basis.z
@@ -109,19 +104,18 @@ func _get_aim_context() -> Dictionary:
 	var direction = (aim_point - _object_held.body.global_position).normalized()
 	return {
 		"direction" : direction,
-		"strength_mult" : player_stats.strength_multiplier,
-		"is_aiming": _is_aiming
+		"strength_mult" : player_stats.strength_multiplier
 	}
-
 
 func _reset_throwing():
 	_start_pickup_cooldown()
 	_object_held = null
 	_current_target = null
-	_is_aiming = false
 
 func _on_held_object_released() -> void:
 	if !_object_held: return
+	_object_held.set_should_hover(false)
+	_object_held.is_aiming = false
 	_object_held.released.disconnect(_on_held_object_released)
 	_reset_throwing()
 
