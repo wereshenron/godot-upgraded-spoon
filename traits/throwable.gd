@@ -1,20 +1,26 @@
 class_name Throwable
 extends Holdable
 
-@export_group("Throwing")
 @export var min_throw_force: float
 @export var max_throw_force: float
 @export var angular_velocity_scale: float
 @export_range(-180.0, 180.0, 1.0, "degrees") var spin_twist_degrees: float = 0.0
-@export var hold_offset: Vector3
 @export var throw_offset: Vector3
 @export var max_charge_time: float = 1.5
-@export var base_follow_speed: float = 15.0
-@export var aim_follow_speed: float = 20.0
-@export var mass_influence: float = 1.5
 
 var _charge_time: float = 0.0
 var strength_mult: float = 1.0 # set externally, e.g. from player_stats
+
+func _ready() -> void:
+	# Signal Connections
+	grabbed.connect(on_grabbed)
+
+
+#### Signal Handlers ####
+func on_grabbed() -> void:
+	set_should_hover(true)
+	set_highlighted(false)
+	SignalBus.looked_away.emit()
 
 ## Holdable overrides
 
@@ -31,20 +37,8 @@ func primary_pressed(_aim_context: Callable = func(): null) -> void:
 		_do_throw(context.direction, context.strength_mult)
 	is_aiming = false
 	_charge_time = 0.0
-
-#@warning_ignore("standalone_expression")
-#func primary_held(delta: float, _aim_context: Callable = func(): null) -> void:
-	#if is_aiming:
-		#_charge_time = min(_charge_time + delta, max_charge_time)
-#
-#@warning_ignore("standalone_expression")
-#func primary_released(_aim_context: Callable = func(): null) -> void:
-	#if is_aiming:
-		#var context = _aim_context.call()
-		#_do_throw(context.direction, context.strength_mult)
-	#is_aiming = false
-	#_charge_time = 0.0
 	
+@warning_ignore("standalone_expression")
 func secondary_pressed(_aim_context: Callable = func(): null) -> void:
 	is_aiming = true
 	_charge_time = 0.0

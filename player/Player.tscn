@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://cuaggjrhykbyn"]
 
 [ext_resource type="Script" uid="uid://vj0hl7lhx8us" path="res://player/controller/controller.gd" id="1_xhfnw"]
+[ext_resource type="PackedScene" uid="uid://lj273it1f0b3" path="res://player/interaction/interactor.tscn" id="3_83hs8"]
 [ext_resource type="Script" uid="uid://b1ltd5s3pdxhe" path="res://player/camera_capture.gd" id="3_kne1u"]
-[ext_resource type="Script" uid="uid://cbuqwortgp1ys" path="res://player/interaction/interactor.gd" id="5_x8kxw"]
 [ext_resource type="PackedScene" uid="uid://c5qbrslff0ma8" path="res://shrekwazowski/player_shrak.tscn" id="6_gskgj"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0rwas"]
@@ -10,6 +10,7 @@ radius = 0.50878906
 height = 1.8482472
 
 [node name="Player" type="CharacterBody3D" unique_id=5736185 groups=["SpawnPoints"]]
+collision_layer = 0
 script = ExtResource("1_xhfnw")
 mouse_sensitivity = 0.005
 camera_smoothing = 0.245
@@ -31,7 +32,7 @@ cull_mask = 524287
 current = true
 script = ExtResource("3_kne1u")
 
-[node name="RayCast3D" type="RayCast3D" parent="CameraPivot/Camera3D" unique_id=270234958]
+[node name="PickupRaycast" type="RayCast3D" parent="CameraPivot/Camera3D" unique_id=270234958]
 target_position = Vector3(0, 0, -4)
 collision_mask = 32769
 
@@ -39,19 +40,11 @@ collision_mask = 32769
 target_position = Vector3(0, 0, -100)
 collision_mask = 32769
 
-[node name="Interactor" type="Node3D" parent="." unique_id=1228017416 node_paths=PackedStringArray("pickup_raycast", "aim_raycast", "camera", "hold_pivot")]
-script = ExtResource("5_x8kxw")
-pickup_raycast = NodePath("../CameraPivot/Camera3D/RayCast3D")
-aim_raycast = NodePath("../CameraPivot/Camera3D/AimRaycast")
-camera = NodePath("../CameraPivot/Camera3D")
-hold_offset = Vector3(0, 0, 2.5)
-hold_pivot = NodePath("../CameraPivot/Camera3D")
-throw_offset = Vector3(1.2, 0, 2)
-base_follow_speed = 50.0
-aim_follow_speed = 75.0
-mass_influence = 0.66
-throw_cooldown = 0.25
-_min_to_throw_msec = 250
-
 [node name="shrak" parent="." unique_id=473750945 instance=ExtResource("6_gskgj")]
 transform = Transform3D(-0.1, 0, -8.742278e-09, 0, 0.1, 0, 8.742278e-09, 0, -0.1, 0, 0, 0)
+
+[node name="Interactor" parent="." unique_id=844431834 node_paths=PackedStringArray("pickup_raycast", "aim_raycast", "camera", "hold_pivot") instance=ExtResource("3_83hs8")]
+pickup_raycast = NodePath("../CameraPivot/Camera3D/PickupRaycast")
+aim_raycast = NodePath("../CameraPivot/Camera3D/AimRaycast")
+camera = NodePath("../CameraPivot/Camera3D")
+hold_pivot = NodePath("../CameraPivot/Camera3D")

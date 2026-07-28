@@ -1,12 +1,14 @@
 class_name Holdable
 extends Node3D
 
-@onready var outline_shader_mat: ShaderMaterial = preload("res://materials/outline.tres")
-@onready var body: RigidBody3D = get_parent()
-
+@export var hold_offset: Vector3
 @export var geometry_list: Array[GeometryInstance3D]
-## Threshold to decide when to turn off continuous collision detection
 @export var _movement_lower_threshold: float = 0.33
+@export var base_follow_speed: float = 15.0
+@export var aim_follow_speed: float = 20.0
+@export var mass_influence: float = 1.5
+@onready var outline_shader_mat: ShaderMaterial = preload("res://textures/materials/outline.tres")
+@onready var body: RigidBody3D = get_parent()
 
 var _tween: Tween
 var _movement: float
@@ -14,16 +16,25 @@ var _has_spiked: bool = false
 var _mesh_instances: Array[MeshInstance3D]
 var is_aiming = false
 
+signal grabbed
 signal released
 
 func _ready() -> void:
+	# Hook up signals
+	grabbed.connect(on_grabbed)
+	
+	# Assign parent body to Holdable if not already
 	var found := find_children("*", "MeshInstance3D", true, false)
 	_mesh_instances.assign(found)
 	body.add_to_group("Holdable")
 
 func _physics_process(_delta: float) -> void:
 	_handle_ccd()
-
+	
+func on_grabbed() -> void:
+	set_highlighted(false)
+	SignalBus.looked_away.emit()
+	
 #### UI Interactions ####
 
 func _look_at(target) -> void:

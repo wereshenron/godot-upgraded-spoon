@@ -1,7 +1,7 @@
 class_name Grabbable
 extends Node3D
 
-@onready var outline_shader_mat: ShaderMaterial = preload("res://materials/outline.tres")
+@onready var outline_shader_mat: ShaderMaterial = preload("res://textures/materials/outline.tres")
 @onready var body: RigidBody3D = get_parent()
 
 @export var geometry_list : Array[GeometryInstance3D]
@@ -19,12 +19,13 @@ var _movement: float
 var _has_spiked: bool = false
 var _mesh_instances: Array[MeshInstance3D]
 
-func _ready() -> void:
+func _ready() -> void:	
 	var found := find_children("*", "MeshInstance3D", true, false)
 	_mesh_instances.assign(found)
-	
+
 func _physics_process(_delta: float) -> void:
 	_handle_ccd()
+	
 
 #### UI Interactions ####
 
