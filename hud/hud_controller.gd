@@ -4,6 +4,7 @@ extends CanvasLayer
 @export var hide_timeout: float = 0.08
 
 @onready var _instruction_label: HBoxContainer = $Root/HBoxContainer
+@onready var _reticle: RichTextLabel = $Root/Cursor
 @onready var _bold_cursor: RichTextLabel = $Root/BoldCursor
 
 var _tween: Tween
@@ -13,6 +14,7 @@ func _ready() -> void:
 	_bold_cursor.visible = false
 	SignalBus.interactable_seen.connect(_target_seen)
 	SignalBus.looked_away.connect(hide_target)
+	SignalBus.show_reticle.connect(show_reticle)
 
 func _target_seen(_target) -> void:
 	_start_fade(1.0, show_timeout)
@@ -33,3 +35,6 @@ func _start_fade(target_alpha: float, duration: float) -> void:
 func _on_hide_tween() -> void:
 	_instruction_label.visible = false
 	_bold_cursor.visible = false
+	
+func show_reticle(state: bool) -> void:
+	_reticle.visible = state

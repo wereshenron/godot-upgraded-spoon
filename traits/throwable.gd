@@ -15,7 +15,6 @@ func _ready() -> void:
 	# Signal Connections
 	grabbed.connect(on_grabbed)
 
-
 #### Signal Handlers ####
 func on_grabbed() -> void:
 	set_should_hover(true)

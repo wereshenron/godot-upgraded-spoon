@@ -1,5 +1,5 @@
-extends Node3D
 class_name Interactor
+extends Node3D
 
 @export_group("Node References")
 @export var pickup_raycast: RayCast3D
@@ -8,17 +8,8 @@ class_name Interactor
 @export var hold_pivot: Node3D
 @export var state_machine: StateMachine
 
-@export_group("Object Handling")
-@export var hold_offset: Vector3
-@export var throw_offset: Vector3
-@export var base_follow_speed: float = 10.0
-@export var aim_follow_speed: float = 20.0
-## How much influence mass has over following
-@export var mass_influence: float = 1.5
-
 @export_group("Timing")
 @export var pickup_cooldown: float = 0.25
-@export var throw_cooldown: float = 0.33
 
 var player_stats: PlayerStats
 

@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://xrymkvqoj1sg"]
+
+[ext_resource type="Script" uid="uid://ihwlm0e1quie" path="res://traits/shootable/shootable.gd" id="1_1orxs"]
+[ext_resource type="Script" uid="uid://dpfxlagk737um" path="res://state/state_machine.gd" id="2_eh873"]
+
+[node name="Shootable" type="Node3D" unique_id=321872780 node_paths=PackedStringArray("state_machine")]
+script = ExtResource("1_1orxs")
+state_machine = NodePath("StateMachine")
+aim_offset = Vector3(0, 0, 1.215)
+aim_transition_time = 0.1
+hold_offset = Vector3(0.695, -0.44, 0.8)
+base_follow_speed = 150.0
+aim_follow_speed = 150.0
+
+[node name="StateMachine" type="Node3D" parent="." unique_id=476835594 node_paths=PackedStringArray("actor")]
+script = ExtResource("2_eh873")
+actor = NodePath("..")

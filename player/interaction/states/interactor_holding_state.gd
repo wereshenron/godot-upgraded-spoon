@@ -12,6 +12,7 @@ func enter(message: Dictionary = {}) -> void:
 		push_warning("HoldingState entered without a 'holdable' in message")
 		transitioned.emit(self, &"Idle", {})
 		return
+
 	_object_held.grabbed.emit()
 	_object_held.released.connect(_on_released)
 

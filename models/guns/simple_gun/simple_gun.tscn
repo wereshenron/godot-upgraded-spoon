@@ -3,10 +3,9 @@
 [ext_resource type="PackedScene" uid="uid://c1yehl1opuoxy" path="res://models/guns/simple_gun/simple_gun.glb" id="3_okuyw"]
 [ext_resource type="Shape3D" uid="uid://c08enaly15nmm" path="res://models/guns/simple_gun/simple_gun_capsule_collider_1.tres" id="4_7h87b"]
 [ext_resource type="Shape3D" uid="uid://b35gwbx1qlr2g" path="res://models/guns/simple_gun/simple_gun_capsule_collider_2.tres" id="5_qpxi4"]
-[ext_resource type="Script" uid="uid://ihwlm0e1quie" path="res://traits/shootable.gd" id="5_wl1ro"]
-[ext_resource type="Script" uid="uid://bje23tj3ictas" path="res://traits/grabbable.gd" id="8_7h87b"]
+[ext_resource type="PackedScene" uid="uid://xrymkvqoj1sg" path="res://traits/shootable/shootable.tscn" id="5_wl1ro"]
 
-[node name="SimpleGun" type="RigidBody3D" unique_id=69713160 groups=["Grabbable"]]
+[node name="SimpleGun" type="RigidBody3D" unique_id=69713160 groups=["Holdable"]]
 collision_layer = 32769
 collision_mask = 32769
 
@@ -15,27 +14,16 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.055645853, 0.051797867, 0)
 shape = ExtResource("4_7h87b")
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="." unique_id=254149040]
-transform = Transform3D(-4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0, 1, 0.43744937, 0.31854898, 0)
+transform = Transform3D(1.9106855e-15, 4.371139e-08, 1, 1, -4.371139e-08, 0, 4.371139e-08, 1, -4.371139e-08, -0.018971473, 0.31854898, -0.47031727)
 shape = ExtResource("5_qpxi4")
 
-[node name="Grabbable" type="Node3D" parent="." unique_id=366194383 node_paths=PackedStringArray("geometry_list")]
-script = ExtResource("8_7h87b")
-geometry_list = [NodePath("../simple_gun/service_pistol_pistol_a"), NodePath("../simple_gun/service_pistol_slide_a"), NodePath("../simple_gun/service_pistol_hammer_a"), NodePath("../simple_gun/service_pistol_trigger_a")]
-_movement_lower_threshold = null
-min_throw_force = 25.0
-max_throw_force = 250.0
-angular_velocity_scale = 25.0
-spin_twist_degrees = 63.0
-
 [node name="simple_gun" parent="." unique_id=1408236158 instance=ExtResource("3_okuyw")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, 0)
 
-[node name="Shootable" type="Node3D" parent="." unique_id=1630502243 node_paths=PackedStringArray("geometry_list")]
-script = ExtResource("5_wl1ro")
-aim_offset = Vector3(0, 0, 1.215)
-aim_transition_time = 0.1
-hold_offset = Vector3(0.695, -0.44, 0.8)
-geometry_list = [null]
-base_follow_speed = 150.0
-aim_follow_speed = 150.0
+[node name="Shootable" parent="." unique_id=321872780 instance=ExtResource("5_wl1ro")]
+aim_offset = Vector3(0, -0.4, 0.525)
+aim_transition_time = 0.056
+base_follow_speed = 100.0
+aim_follow_speed = 125.0
 
 [editable path="simple_gun"]

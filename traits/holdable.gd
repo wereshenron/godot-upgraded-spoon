@@ -92,7 +92,7 @@ func primary_held(_delta: float, _aim_context: Callable = func(): null) -> void:
 func primary_released(_aim_context: Callable = func(): null) -> void:
 	pass
 	
-	@warning_ignore("standalone_expression")
+@warning_ignore("standalone_expression")
 func secondary_pressed(_aim_context: Callable = func(): null) -> void:
 	pass
 

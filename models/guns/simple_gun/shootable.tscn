@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://dvbbseu5aj14o"]
+
+[ext_resource type="Script" uid="uid://ihwlm0e1quie" path="res://traits/shootable/shootable.gd" id="1_1orxs"]
+
+[node name="Shootable" type="Node3D" unique_id=321872780 node_paths=PackedStringArray("geometry_list")]
+script = ExtResource("1_1orxs")
+aim_offset = Vector3(0, 0, 1.215)
+aim_transition_time = 0.1
+hold_offset = Vector3(0.695, -0.44, 0.8)
+geometry_list = [null]
+base_follow_speed = 150.0
+aim_follow_speed = 150.0

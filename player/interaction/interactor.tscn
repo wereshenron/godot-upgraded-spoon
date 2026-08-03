@@ -6,12 +6,6 @@
 [node name="Interactor" type="Node3D" unique_id=844431834 node_paths=PackedStringArray("state_machine")]
 script = ExtResource("1_ux4hp")
 state_machine = NodePath("StateMachine")
-hold_offset = Vector3(0, 0, 2.5)
-throw_offset = Vector3(1.2, 0, 2)
-base_follow_speed = 50.0
-aim_follow_speed = 75.0
-mass_influence = 0.66
-throw_cooldown = 0.25
 
 [node name="StateMachine" type="Node3D" parent="." unique_id=1051484361 node_paths=PackedStringArray("actor")]
 script = ExtResource("2_5bqu1")

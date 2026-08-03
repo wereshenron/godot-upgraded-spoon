@@ -6,7 +6,7 @@ class_name State
 signal transitioned(state: State, new_state_id: StringName, msg: Dictionary)
 
 ## Set by StateMachine.add_state() - the object this state is driving.
-var actor: Node
+var actor: Node3D
 
 func enter(_msg: Dictionary = {}) -> void:
 	pass
