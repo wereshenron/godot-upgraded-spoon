@@ -15,6 +15,7 @@ mouse_sensitivity = 0.005
 camera_smoothing = 0.245
 tilt_limit = 1.5
 turn_speed = 5.0
+recoil_snap = 4.045
 
 [node name="Pivot" type="Node3D" parent="." unique_id=1910403145]
 transform = Transform3D(-1, 0, 1.509958e-07, 0, 1, 0, -1.509958e-07, 0, -1, 0, 0, 0)

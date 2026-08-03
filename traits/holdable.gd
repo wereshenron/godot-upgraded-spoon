@@ -124,3 +124,4 @@ func _handle_ccd() -> void:
 	elif _has_spiked:
 		body.continuous_cd = false
 		_has_spiked = false
+		print('saving a life')
