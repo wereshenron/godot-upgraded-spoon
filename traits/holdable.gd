@@ -1,31 +1,29 @@
 class_name Holdable
-extends Node3D
+extends Interactable
 
 @export var hold_offset: Vector3
-@export var geometry_list: Array[GeometryInstance3D]
+# @export var geometry_list: Array[GeometryInstance3D]
 @export var _movement_lower_threshold: float = 0.33
 @export var base_follow_speed: float = 15.0
 @export var aim_follow_speed: float = 20.0
 @export var mass_influence: float = 1.5
-@onready var outline_shader_mat: ShaderMaterial = preload("res://textures/materials/outline.tres")
 @onready var body: RigidBody3D = get_parent()
 
-var _tween: Tween
 var _movement: float
 var _has_spiked: bool = false
-var _mesh_instances: Array[MeshInstance3D]
 var is_aiming = false
 
 signal grabbed
 signal released
 
 func _ready() -> void:
+	super._ready()
 	# Hook up signals
 	grabbed.connect(on_grabbed)
 	
 	# Assign parent body to Holdable if not already
-	var found := find_children("*", "MeshInstance3D", true, false)
-	_mesh_instances.assign(found)
+	# var found := find_children("*", "MeshInstance3D", true, false)
+	# _mesh_instances.assign(found)
 	body.add_to_group("Holdable")
 
 func _physics_process(_delta: float) -> void:
@@ -34,32 +32,12 @@ func _physics_process(_delta: float) -> void:
 func on_grabbed() -> void:
 	set_highlighted(false)
 	SignalBus.looked_away.emit()
-	
-#### UI Interactions ####
 
-func set_highlighted(active: bool) -> void:
-	for geometry in geometry_list:
-		if geometry == null:
-			return
-		if active:
-			geometry.material_overlay = outline_shader_mat
-			_start_tween(0.0, 1.0)
-		else:
-			var blend_val = outline_shader_mat.get_shader_parameter("blend")
-			_start_tween(blend_val, 0.0, func():
-				geometry.material_overlay = null
-			)
-
-func _start_tween(from: float, to: float, on_complete: Callable = Callable()) -> void:
-	if _tween:
-		_tween.kill()
-	_tween = create_tween()
-	_tween.tween_method(_set_blend, from, to, 0.3)
-	if on_complete.is_valid():
-		_tween.tween_callback(on_complete)
-
-func _set_blend(value: float) -> void:
-	outline_shader_mat.set_shader_parameter("blend", value)
+func interact(interactor: Interactor, message: Dictionary = {}) -> void:
+	var target: Interactable = message.get("target")
+	if !target or interactor.state_machine.current_state is InteractorHoldingState:
+		return
+	interactor.state_machine.transition_to(&"Holding", {"holdable": target})
 
 #### Physics Interactions ####
 
@@ -120,4 +98,3 @@ func _handle_ccd() -> void:
 	elif _has_spiked:
 		body.continuous_cd = false
 		_has_spiked = false
-		print('saving a life')

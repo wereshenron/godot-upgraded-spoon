@@ -17,7 +17,6 @@ func _ready() -> void:
 	SignalBus.show_reticle.connect(show_reticle)
 
 func _target_seen(_target) -> void:
-	print(_target)
 	_start_fade(1.0, show_timeout)
 	_instruction_label.visible = true
 	_bold_cursor.visible = true

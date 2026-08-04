@@ -12,11 +12,13 @@ var _charge_time: float = 0.0
 var strength_mult: float = 1.0 # set externally, e.g. from player_stats
 
 func _ready() -> void:
+	super._ready()
 	# Signal Connections
-	grabbed.connect(on_grabbed)
+	grabbed.connect(_on_grabbed)
+	add_to_group("Throwable")
 
 #### Signal Handlers ####
-func on_grabbed() -> void:
+func _on_grabbed() -> void:
 	set_should_hover(true)
 	set_highlighted(false)
 	SignalBus.looked_away.emit()

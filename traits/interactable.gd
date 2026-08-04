@@ -1,6 +1,15 @@
 extends Node3D
 class_name Interactable
 
+@export var geometry_list: Array[GeometryInstance3D]
+@onready var outline_shader_mat: ShaderMaterial = preload("res://textures/materials/outline.tres").duplicate()
+
+var _tween: Tween
+
+func _ready() -> void:
+	get_parent().add_to_group("Interactable")
+	SignalBus.looked_away.connect(func(): set_highlighted(false))
+
 func set_highlighted(active: bool) -> void:
 	for geometry in geometry_list:
 		if geometry == null:
@@ -24,3 +33,9 @@ func _start_tween(from: float, to: float, on_complete: Callable = Callable()) ->
 
 func _set_blend(value: float) -> void:
 	outline_shader_mat.set_shader_parameter("blend", value)
+
+func can_interact(_interactor: Interactor) -> bool:
+	return true
+
+func interact(_interactor: Interactor, _message: Dictionary = {}) -> void:
+	pass

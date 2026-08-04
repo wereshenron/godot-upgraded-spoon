@@ -26,6 +26,7 @@ var initial_mask
 var current_recoil_offset: Vector3 = Vector3.ZERO
 var target_recoil_offset: Vector3 = Vector3.ZERO
 var direction: Vector3 = Vector3.ZERO
+var shoot_aim_point: Vector3 = Vector3.ZERO
 
 func _ready() -> void:
 	super._ready()
@@ -79,6 +80,11 @@ func update_hold(hold_pivot: Node3D, delta: float) -> void:
 	var aim_origin = aim_raycast.global_position
 	var aim_dir = -aim_raycast.global_basis.z
 	var aim_point = aim_origin + aim_dir * 1000
+
+	if aim_raycast.is_colliding() and aim_raycast.get_collider() != body:
+		shoot_aim_point = aim_raycast.get_collision_point()
+	else: shoot_aim_point = Vector3.ZERO
+
 	direction = (aim_point - body.global_position).normalized()
 	var target_basis = Basis.looking_at(direction, hold_pivot.global_basis.y)
 	var yaw_basis := Basis(Vector3.UP, current_recoil_offset.y)
@@ -111,6 +117,7 @@ func _on_grabbed() -> void:
 	body.freeze = true
 	body.collision_layer = 0
 	body.collision_mask = 0
+	SignalBus.looked_away.emit()
 	
 func _on_released() -> void:
 	state_machine.start(&"Idle")
@@ -118,6 +125,7 @@ func _on_released() -> void:
 	body.freeze = false
 	body.collision_layer = initial_layer
 	body.collision_mask = initial_mask
+	SignalBus.looked_away.emit()
 	
 ### Helpers ###
 func get_hold_offset() -> Vector3:
@@ -130,13 +138,16 @@ func get_follow_speed(base_speed: float) -> float:
 	return base_speed
 	
 func shoot() -> void:
+	var shoot_direction = direction if shoot_aim_point == Vector3.ZERO \
+		else (shoot_aim_point - body.global_position).normalized()
 	apply_recoil_kick()
+
 	var new_bullet: RigidBody3D = bullet.instantiate()
 	get_tree().root.add_child(new_bullet)
 
 	new_bullet.continuous_cd = true
 	new_bullet.global_position = bullet_pivot.global_position
-	new_bullet.apply_central_impulse(direction * fire_velocity)
+	new_bullet.apply_central_impulse(shoot_direction * fire_velocity)
 	
 func apply_recoil_kick() -> void:
 	var recoil_applied = Vector3(

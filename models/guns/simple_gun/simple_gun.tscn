@@ -28,9 +28,9 @@ snap = 15.0
 recoil_speed = 15.0
 fire_rate = 0.12
 fire_velocity = 800.0
-geometry_list = [NodePath("../simple_gun/service_pistol_pistol_a"), NodePath("../simple_gun/service_pistol_slide_a"), NodePath("../simple_gun/service_pistol_magazine_loaded"), NodePath("../simple_gun/service_pistol_hammer_a"), NodePath("../simple_gun/service_pistol_trigger_a")]
 base_follow_speed = 100.0
 aim_follow_speed = 139.84
+geometry_list = [NodePath("../simple_gun/service_pistol_pistol_a"), NodePath("../simple_gun/service_pistol_slide_a"), NodePath("../simple_gun/service_pistol_magazine_loaded"), NodePath("../simple_gun/service_pistol_hammer_a"), NodePath("../simple_gun/service_pistol_trigger_a")]
 
 [node name="BulletPivot" type="Node3D" parent="." unique_id=1188980346]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.30226475, -0.9142979)

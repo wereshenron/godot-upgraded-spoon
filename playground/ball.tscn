@@ -24,7 +24,7 @@ material_override = SubResource("StandardMaterial3D_wgjsm")
 mesh = SubResource("SphereMesh_i6dl8")
 skeleton = NodePath("../..")
 
-[node name="Throwable" type="Node3D" parent="." unique_id=39042322]
+[node name="Throwable" type="Node3D" parent="." unique_id=39042322 node_paths=PackedStringArray("geometry_list")]
 script = ExtResource("3_wgjsm")
 min_throw_force = 25.0
 max_throw_force = 250.0
@@ -34,3 +34,4 @@ throw_offset = Vector3(1.5, 0, 2)
 hold_offset = Vector3(0, 0, 2.5)
 base_follow_speed = 1000.0
 aim_follow_speed = 100.0
+geometry_list = [NodePath("../MeshInstance3D")]
