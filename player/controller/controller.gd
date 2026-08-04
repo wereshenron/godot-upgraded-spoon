@@ -15,6 +15,7 @@ extends CharacterBody3D
 @export var fall_acceleration : float = 75.0
 @export var push_force : float = 5.0
 
+@export var max_camera_recoil: Vector3 = Vector3(0.25, 0.25, 0.05)
 @export var recoil_recover_speed: float = 4.0
 @export var recoil_snap: float = 12.0
 
@@ -34,6 +35,9 @@ func _ready() -> void:
 
 func _on_recoil_kicked(amount: Vector3) -> void:
 	camera_recoil_target += amount
+	camera_recoil_target.x = clampf(camera_recoil_target.x, 0.0, max_camera_recoil.x)
+	camera_recoil_target.y = clampf(camera_recoil_target.y, 0.0, max_camera_recoil.y)
+	camera_recoil_target.z = clampf(camera_recoil_target.z, 0.0, max_camera_recoil.z)
 
 # Commented out because this is how you can "run through" objects - keeping for testing 
 # func _process(_delta: float) -> void:

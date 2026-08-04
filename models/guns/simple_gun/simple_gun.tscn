@@ -20,13 +20,15 @@ shape = ExtResource("5_qpxi4")
 [node name="simple_gun" parent="." unique_id=1408236158 instance=ExtResource("3_okuyw")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, 0)
 
-[node name="Shootable" parent="." unique_id=321872780 instance=ExtResource("5_wl1ro")]
+[node name="Shootable" parent="." unique_id=321872780 node_paths=PackedStringArray("geometry_list") instance=ExtResource("5_wl1ro")]
 aim_offset = Vector3(0, -0.4, 0.525)
 aim_transition_time = 0.056
-recoil_amount = Vector3(1.005, 0.39, 0.18)
-snap = 10.62
-recoil_speed = 10.48
-fire_rate = 0.09
+recoil_amount = Vector3(1, 0.39, 20)
+snap = 15.0
+recoil_speed = 15.0
+fire_rate = 0.12
+fire_velocity = 800.0
+geometry_list = [NodePath("../simple_gun/service_pistol_pistol_a"), NodePath("../simple_gun/service_pistol_slide_a"), NodePath("../simple_gun/service_pistol_magazine_loaded"), NodePath("../simple_gun/service_pistol_hammer_a"), NodePath("../simple_gun/service_pistol_trigger_a")]
 base_follow_speed = 100.0
 aim_follow_speed = 139.84
 

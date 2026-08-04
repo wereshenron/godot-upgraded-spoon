@@ -9,6 +9,7 @@ extends Holdable
 @export var aim_transition_time: float = 0.15  # seconds to fully reach aim_offset
 
 @export_category("Firing")
+@export var max_recoil_offset: Vector3 = Vector3(0.3, 0.3, 0.1)
 @export var recoil_amount: Vector3
 @export var snap: float
 @export var recoil_speed: float
@@ -16,7 +17,7 @@ extends Holdable
 @export var fire_velocity: float = 200.0
 
 @onready var aim_raycast: RayCast3D = get_viewport().get_camera_3d().get_node("AimRaycast")
-@onready var bullet: PackedScene = preload("res://playground/ball.tscn")
+@onready var bullet: PackedScene = preload("res://ducky/ducky.tscn")
 @onready var bullet_pivot: Node3D = body.get_node('BulletPivot')
 
 var aim_blend: float = 0.0  # 0 = hold_offset, 1 = aim_offset
@@ -132,7 +133,7 @@ func shoot() -> void:
 	apply_recoil_kick()
 	var new_bullet: RigidBody3D = bullet.instantiate()
 	get_tree().root.add_child(new_bullet)
-	
+
 	new_bullet.continuous_cd = true
 	new_bullet.global_position = bullet_pivot.global_position
 	new_bullet.apply_central_impulse(direction * fire_velocity)
@@ -146,3 +147,6 @@ func apply_recoil_kick() -> void:
 
 	SignalBus.recoil_kicked.emit(recoil_applied)
 	target_recoil_offset += recoil_applied
+	target_recoil_offset.x = clampf(target_recoil_offset.x, 0.0, max_recoil_offset.x)
+	target_recoil_offset.y = clampf(target_recoil_offset.y, 0.0, max_recoil_offset.y)
+	target_recoil_offset.z = clampf(target_recoil_offset.z, 0.0, max_recoil_offset.z)

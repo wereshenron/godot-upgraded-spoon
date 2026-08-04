@@ -37,10 +37,6 @@ func on_grabbed() -> void:
 	
 #### UI Interactions ####
 
-func _look_at(target) -> void:
-	set_highlighted(true)
-	SignalBus.interactable_seen.emit(target)
-
 func set_highlighted(active: bool) -> void:
 	for geometry in geometry_list:
 		if geometry == null:
