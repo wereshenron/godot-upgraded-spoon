@@ -15,6 +15,7 @@ extends Holdable
 @export var recoil_speed: float
 @export var fire_rate: float
 @export var fire_velocity: float = 200.0
+@export var full_auto: bool = false
 
 @onready var aim_raycast: RayCast3D = get_viewport().get_camera_3d().get_node("AimRaycast")
 @onready var bullet: PackedScene = preload("res://ducky/ducky.tscn")
@@ -45,6 +46,14 @@ func _ready() -> void:
 @warning_ignore("standalone_expression")
 func primary_pressed(_aim_context: Callable = func(): null) -> void:
 	state_machine.current_state.primary_pressed(_aim_context)
+	
+@warning_ignore("standalone_expression")
+func primary_held(_delta: float, _aim_context: Callable = func(): null) -> void:
+	state_machine.current_state.primary_held(_delta, _aim_context)
+	
+@warning_ignore("standalone_expression")
+func primary_released(_aim_context: Callable = func(): null) -> void:
+	state_machine.current_state.primary_released(_aim_context)
 
 @warning_ignore("standalone_expression")
 func secondary_pressed(_aim_context: Callable = func(): null) -> void:

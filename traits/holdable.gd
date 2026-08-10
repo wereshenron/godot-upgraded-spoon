@@ -2,11 +2,12 @@ class_name Holdable
 extends Interactable
 
 @export var hold_offset: Vector3
-# @export var geometry_list: Array[GeometryInstance3D]
-@export var _movement_lower_threshold: float = 0.33
+@export var movement_lower_threshold: float = 0.33
 @export var base_follow_speed: float = 15.0
 @export var aim_follow_speed: float = 20.0
 @export var mass_influence: float = 1.5
+@export var title: String = ''
+
 @onready var body: RigidBody3D = get_parent()
 
 var _movement: float
@@ -93,7 +94,7 @@ func _handle_ccd() -> void:
 
 	_movement = clampf(body.linear_velocity.length(), 0.0, 1.0)
 
-	if _movement > _movement_lower_threshold:
+	if _movement > movement_lower_threshold:
 		_has_spiked = true
 	elif _has_spiked:
 		body.continuous_cd = false

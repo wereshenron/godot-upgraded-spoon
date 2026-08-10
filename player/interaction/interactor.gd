@@ -13,6 +13,8 @@ extends Node3D
 
 var player_stats: PlayerStats
 var current_target: Interactable = null
+var new_target: Interactable = null
+var object_held: Holdable = null
 
 func _ready() -> void:
 	pickup_raycast.add_exception(owner)
@@ -22,28 +24,32 @@ func _ready() -> void:
 	state_machine.start(&"Idle")
 
 func _physics_process(_delta: float) -> void:
-	var new_target: Interactable = null
+	object_held = state_machine.current_state.get("_object_held")
+	new_target = null
 
 	if pickup_raycast.is_colliding():
 		var body = pickup_raycast.get_collider()
 		if body.is_in_group("Interactable"):
-			new_target = get_holdable(body)
+			new_target = get_interactable(body)
 
-	if new_target == current_target:
+	# Return early if the "new target" and current target are not null, and either
+	#	a. new target IS the current target
+	#	b. new target is currently held
+	if (new_target && current_target) && \
+		(new_target == current_target or new_target == object_held):
 		return
 
-	if current_target:
-		current_target.set_highlighted(false)
-		SignalBus.looked_away.emit()
+	#if current_target:
+		#current_target.set_highlighted(false)
+		#SignalBus.looked_away.emit()
 
 	current_target = new_target
 
 	if current_target:
+		if object_held and current_target.body.is_in_group("Holdable"):
+			return
+		
 		current_target.set_highlighted(true)
-		print(current_target.get_groups())
-		if state_machine.current_state is InteractorHoldingState \
-			and current_target.is_in_group("Holdable"):
-				return
 		SignalBus.interactable_seen.emit(current_target)
 	else:
 		SignalBus.looked_away.emit()
@@ -52,8 +58,8 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("interact") and current_target:
 		current_target.interact(self, {"target": current_target})
 
-func get_holdable(body: RigidBody3D) -> Holdable:
+func get_interactable(body: RigidBody3D) -> Interactable:
 	for child in body.get_children():
-		if child is Holdable:
+		if child is Interactable:
 			return child
 	return null
