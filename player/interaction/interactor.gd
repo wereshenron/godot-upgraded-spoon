@@ -33,15 +33,11 @@ func _physics_process(_delta: float) -> void:
 			new_target = get_interactable(body)
 
 	# Return early if the "new target" and current target are not null, and either
-	#	a. new target IS the current target
-	#	b. new target is currently held
+	# a. new target IS the current target
+	# b. new target is currently held
 	if (new_target && current_target) && \
 		(new_target == current_target or new_target == object_held):
 		return
-
-	#if current_target:
-		#current_target.set_highlighted(false)
-		#SignalBus.looked_away.emit()
 
 	current_target = new_target
 

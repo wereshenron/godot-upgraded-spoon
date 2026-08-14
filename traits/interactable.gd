@@ -2,6 +2,9 @@ extends Node3D
 class_name Interactable
 
 @export var geometry_list: Array[GeometryInstance3D]
+@export var action: String
+@export var title: String = ''
+
 @onready var outline_shader_mat: ShaderMaterial = preload("res://textures/materials/outline.tres").duplicate()
 
 var _tween: Tween

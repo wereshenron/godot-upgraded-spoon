@@ -10,10 +10,10 @@ radius = 0.50878906
 height = 1.8482472
 
 [node name="Player" type="CharacterBody3D" unique_id=5736185 groups=["SpawnPoints"]]
-collision_layer = 0
+collision_layer = 32768
 collision_mask = 32769
 script = ExtResource("1_xhfnw")
-mouse_sensitivity = 0.005
+mouse_sensitivity = 0.001
 camera_smoothing = 0.245
 tilt_limit = 1.5
 turn_speed = 5.0

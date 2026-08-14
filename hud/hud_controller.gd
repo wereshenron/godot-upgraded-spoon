@@ -6,20 +6,37 @@ extends CanvasLayer
 @onready var _instruction_label: HBoxContainer = $Root/HBoxContainer
 @onready var _reticle: RichTextLabel = $Root/Cursor
 @onready var _bold_cursor: RichTextLabel = $Root/BoldCursor
+@onready var _action_label: Label = $Root/HBoxContainer/ActionLabel
+@onready var _item_label: Label = $Root/HBoxContainer/ItemLabel
 
 var _tween: Tween
+var _target_action: String = ''
+var _target_title: String = ''
 
 func _ready() -> void:
 	_instruction_label.visible = false
 	_bold_cursor.visible = false
+	_item_label.visible = false
+	
 	SignalBus.interactable_seen.connect(_target_seen)
 	SignalBus.looked_away.connect(hide_target)
 	SignalBus.show_reticle.connect(show_reticle)
 
 func _target_seen(_target) -> void:
 	_start_fade(1.0, show_timeout)
+	
+	_target_title = _target.get("title")
+	_target_action = _target.get("action")
+		
+	_item_label.text = _target_title
+	_action_label.text = _target_action
+	
 	_instruction_label.visible = true
 	_bold_cursor.visible = true
+	
+	if _item_label.text != '':
+		_item_label.visible = true
+	
 
 func hide_target() -> void:
 	_start_fade(0.0, hide_timeout)

@@ -8,17 +8,22 @@ extends Holdable
 @export var aim_offset: Vector3
 @export var aim_transition_time: float = 0.15  # seconds to fully reach aim_offset
 
-@export_category("Firing")
-@export var max_recoil_offset: Vector3 = Vector3(0.3, 0.3, 0.1)
-@export var recoil_amount: Vector3
-@export var snap: float
-@export var recoil_speed: float
-@export var fire_rate: float
-@export var fire_velocity: float = 200.0
-@export var full_auto: bool = false
+@export var gun_settings: GunSettings
+#@export_category("Firing")
+#@export var recoil_amount: Vector3
+#@export var min_recoil_amount: Vector3
+#@export var max_recoil_offset: Vector3 = Vector3(0.3, 0.3, 0.1)
+#@export var snap: float
+#@export var recoil_speed: float
+#@export var fire_rate: float
+#@export var fire_velocity: float = 200.0
+#@export var reference_bullet_mass: float = 1.0
+#@export var full_auto: bool = false
+#@export var bullet_scene: PackedScene
+
 
 @onready var aim_raycast: RayCast3D = get_viewport().get_camera_3d().get_node("AimRaycast")
-@onready var bullet: PackedScene = preload("res://ducky/ducky.tscn")
+@onready var bullet: PackedScene = gun_settings.bullet_scene.duplicate()
 @onready var bullet_pivot: Node3D = body.get_node('BulletPivot')
 
 var aim_blend: float = 0.0  # 0 = hold_offset, 1 = aim_offset
@@ -72,8 +77,8 @@ func update_hold(hold_pivot: Node3D, delta: float) -> void:
 	aim_blend = move_toward(aim_blend, is_aiming, delta / aim_transition_time)
 	
 	# advance the recoil transition
-	target_recoil_offset = target_recoil_offset.move_toward(Vector3.ZERO, recoil_speed * delta)
-	current_recoil_offset = current_recoil_offset.lerp(target_recoil_offset, snap * delta)
+	target_recoil_offset = target_recoil_offset.move_toward(Vector3.ZERO, gun_settings.recoil_speed * delta)
+	current_recoil_offset = current_recoil_offset.lerp(target_recoil_offset, gun_settings.snap * delta)
 
 	var forward = -hold_pivot.global_basis.z
 	var right = hold_pivot.global_basis.x
@@ -89,9 +94,13 @@ func update_hold(hold_pivot: Node3D, delta: float) -> void:
 	var aim_origin = aim_raycast.global_position
 	var aim_dir = -aim_raycast.global_basis.z
 	var aim_point = aim_origin + aim_dir * 1000
+	
 
-	if aim_raycast.is_colliding() and aim_raycast.get_collider() != body:
+	#if aim_raycast.is_colliding() and aim_raycast.get_collider() != body:
+	if aim_raycast.is_colliding():
 		shoot_aim_point = aim_raycast.get_collision_point()
+		print("collision point: ")
+		print(shoot_aim_point)
 	else: shoot_aim_point = Vector3.ZERO
 
 	direction = (aim_point - body.global_position).normalized()
@@ -147,8 +156,13 @@ func get_follow_speed(base_speed: float) -> float:
 	return base_speed
 	
 func shoot() -> void:
+	# The shoot direction will just be literally where we're looking if 
 	var shoot_direction = direction if shoot_aim_point == Vector3.ZERO \
-		else (shoot_aim_point - body.global_position).normalized()
+		else (shoot_aim_point - body.global_position)
+		
+	#print("direction used: ")
+	#print(shoot_direction)
+		
 	apply_recoil_kick()
 
 	var new_bullet: RigidBody3D = bullet.instantiate()
@@ -156,17 +170,21 @@ func shoot() -> void:
 
 	new_bullet.continuous_cd = true
 	new_bullet.global_position = bullet_pivot.global_position
-	new_bullet.apply_central_impulse(shoot_direction * fire_velocity)
+	
+	var bullet_mass: float = maxf(new_bullet.mass, 0.01)
+	var scaled_velocity = gun_settings.fire_velocity * sqrt(gun_settings.reference_bullet_mass / bullet_mass)
+	
+	new_bullet.apply_central_impulse(shoot_direction * scaled_velocity * bullet_mass)
 	
 func apply_recoil_kick() -> void:
 	var recoil_applied = Vector3(
-		randf_range(recoil_amount.x / 2, recoil_amount.x),
-		randf_range(recoil_amount.y / 2, recoil_amount.y),
-		randf_range(recoil_amount.z / 2, recoil_amount.z),
+		randf_range(gun_settings.min_recoil_amount.x, gun_settings.min_recoil_amount.x),
+		randf_range(gun_settings.min_recoil_amount.y, gun_settings.min_recoil_amount.y),
+		randf_range(gun_settings.min_recoil_amount.z, gun_settings.min_recoil_amount.z),
 	)
 
-	SignalBus.recoil_kicked.emit(recoil_applied)
+	SignalBus.recoil_kicked.emit(recoil_applied, gun_settings.max_recoil_offset)
 	target_recoil_offset += recoil_applied
-	target_recoil_offset.x = clampf(target_recoil_offset.x, 0.0, max_recoil_offset.x)
-	target_recoil_offset.y = clampf(target_recoil_offset.y, 0.0, max_recoil_offset.y)
-	target_recoil_offset.z = clampf(target_recoil_offset.z, 0.0, max_recoil_offset.z)
+	target_recoil_offset.x = clampf(target_recoil_offset.x, -recoil_applied.x, recoil_applied.x)
+	target_recoil_offset.y = clampf(target_recoil_offset.y, -recoil_applied.y, recoil_applied.y)
+	target_recoil_offset.z = clampf(target_recoil_offset.z, 0.0, recoil_applied.z)

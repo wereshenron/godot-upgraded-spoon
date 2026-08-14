@@ -6,7 +6,6 @@ extends Interactable
 @export var base_follow_speed: float = 15.0
 @export var aim_follow_speed: float = 20.0
 @export var mass_influence: float = 1.5
-@export var title: String = ''
 
 @onready var body: RigidBody3D = get_parent()
 
@@ -23,9 +22,9 @@ func _ready() -> void:
 	grabbed.connect(on_grabbed)
 	
 	# Assign parent body to Holdable if not already
-	# var found := find_children("*", "MeshInstance3D", true, false)
-	# _mesh_instances.assign(found)
 	body.add_to_group("Holdable")
+	
+	action = "Hold"
 
 func _physics_process(_delta: float) -> void:
 	_handle_ccd()

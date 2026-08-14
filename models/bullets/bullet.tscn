@@ -1,6 +1,8 @@
 [gd_scene format=4 uid="uid://dojmqfepqscc4"]
 
 [ext_resource type="Material" uid="uid://bnn633wn1htch" path="res://models/guns/simple_gun/shared_mat.res" id="1_07hyc"]
+[ext_resource type="Script" uid="uid://b2bhja66w7ak5" path="res://models/bullets/bullet.gd" id="1_8tb6y"]
+[ext_resource type="Material" uid="uid://ddnrq2m63gjyh" path="res://textures/materials/trail.tres" id="2_8tb6y"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_6um7j"]
 _surfaces = [{
@@ -37,16 +39,45 @@ blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_6um7j")
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_3ea33"]
-radius = 0.0068359375
-height = 0.031544648
+radius = 0.029785156
+height = 0.1645957
+
+[sub_resource type="Curve" id="Curve_pueu7"]
+_data = [Vector2(0.5060729, 0.51111114), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 1]
+point_count = 2
+
+[sub_resource type="RibbonTrailMesh" id="RibbonTrailMesh_3ea33"]
+material = ExtResource("2_8tb6y")
+size = 0.2
+sections = 12
+curve = SubResource("Curve_pueu7")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_vkf3g"]
+lifetime_randomness = 0.11
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_6t3g5"]
+
+[sub_resource type="Skin" id="Skin_mbyp8"]
 
 [node name="Bullet" type="RigidBody3D" unique_id=1322728350]
 mass = 0.007
+script = ExtResource("1_8tb6y")
 
 [node name="service_pistol_bullet" type="MeshInstance3D" parent="." unique_id=907308666]
+transform = Transform3D(5, 0, 0, 0, -2.1855695e-07, 5, 0, -5, -2.1855695e-07, 0, 0, 0)
 mesh = SubResource("ArrayMesh_l4r4c")
 skeleton = NodePath("")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1570095730]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.00154474, 0)
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, -0.0066331215, 0)
 shape = SubResource("CapsuleShape3D_3ea33")
+
+[node name="Trail" type="MeshInstance3D" parent="." unique_id=1120903851]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 1.1707171)
+visible = false
+mesh = SubResource("RibbonTrailMesh_3ea33")
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="." unique_id=655291340]
+process_material = SubResource("ParticleProcessMaterial_vkf3g")
+draw_pass_1 = SubResource("ArrayMesh_6t3g5")
+draw_skin = SubResource("Skin_mbyp8")

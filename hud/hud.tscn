@@ -73,11 +73,18 @@ text = "To"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ActionLabel2" type="Label" parent="Root/HBoxContainer" unique_id=923652993]
+[node name="ActionLabel" type="Label" parent="Root/HBoxContainer" unique_id=923652993]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_w8tcp")
 theme_override_font_sizes/font_size = 24
 text = "Pick Up"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ItemLabel" type="Label" parent="Root/HBoxContainer" unique_id=1607500840]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_w8tcp")
+theme_override_font_sizes/font_size = 24
 horizontal_alignment = 1
 vertical_alignment = 1
 

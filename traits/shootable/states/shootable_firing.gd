@@ -10,14 +10,14 @@ func enter(_msg: Dictionary = {}) -> void:
 	
 func physics_update(_delta: float) -> void:
 	time_since_shot += _delta
-	if (time_since_shot >= actor.fire_rate):
+	if (time_since_shot >= actor.gun_settings.fire_rate):
 		if !next_shot_queued:
 			transitioned.emit(self, &"Idle", {})
 		else:
 			transitioned.emit(self, &"Idle", {"next_shot_queued": true})
 		
 func primary_held(_delta: float, _aim_context: Callable) -> void:
-	if !actor.full_auto:
+	if !actor.gun_settings.full_auto:
 		return
 	next_shot_queued = true
 		

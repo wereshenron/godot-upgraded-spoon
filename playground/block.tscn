@@ -30,5 +30,5 @@ throw_offset = Vector3(1.2, 0, 2)
 hold_offset = Vector3(0, 0, 2.5)
 base_follow_speed = 150.0
 aim_follow_speed = 150.0
-title = "Box"
 geometry_list = [NodePath("../MeshInstance3D")]
+title = "Box"

@@ -44,8 +44,8 @@ angular_velocity_scale = 25.0
 spin_twist_degrees = 63.0
 throw_offset = Vector3(1.5, 0, 2)
 hold_offset = Vector3(0, 0, 2.5)
-geometry_list = [NodePath("../blend_export/rubber_duck_toy")]
 base_follow_speed = 1000.0
 aim_follow_speed = 100.0
+geometry_list = [NodePath("../blend_export/rubber_duck_toy")]
 
 [editable path="blend_export"]

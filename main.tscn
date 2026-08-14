@@ -5,7 +5,6 @@
 [ext_resource type="PackedScene" uid="uid://daokd5re032ms" path="res://world/teleporter.tscn" id="5_lquwl"]
 [ext_resource type="PackedScene" uid="uid://du5l53os6i5pi" path="res://playground/block.tscn" id="6_5vw27"]
 [ext_resource type="PackedScene" uid="uid://dopef2j8d43is" path="res://models/guns/simple_gun/simple_gun.tscn" id="9_kek77"]
-[ext_resource type="PackedScene" uid="uid://cvsto14uodglk" path="res://chunks/corridor/test_hallway.tscn" id="10_4c57u"]
 [ext_resource type="PackedScene" uid="uid://dhm5g3q5q5voa" path="res://playground/wall_of_blocks.tscn" id="10_efxa6"]
 [ext_resource type="PackedScene" uid="uid://cys78sp5v0cs6" path="res://world/spawn_point.tscn" id="10_w48qg"]
 [ext_resource type="PackedScene" uid="uid://yvip4y5vt1fd" path="res://playground/ball.tscn" id="10_ycdy4"]
@@ -67,79 +66,228 @@ light_specular = 0.0
 shadow_enabled = true
 
 [node name="Ducky" parent="." unique_id=1171132693 instance=ExtResource("2_kek77")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.3957, 1.44006, 17.827648)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6043, 213.44006, 3.8276482)
 
 [node name="Block" parent="." unique_id=1541687413 instance=ExtResource("6_5vw27")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5402012, 0, 0)
-
-[node name="TestHallway" parent="." unique_id=6855709 instance=ExtResource("10_4c57u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17, -1, 5)
-
-[node name="WallzOfBlocks" type="Node3D" parent="." unique_id=770109192]
-
-[node name="WallOfBlocks" parent="WallzOfBlocks" unique_id=932241229 instance=ExtResource("10_efxa6")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, -3, 6)
-
-[node name="WallOfBlocks2" parent="WallzOfBlocks" unique_id=441388893 instance=ExtResource("10_efxa6")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 1, 6)
-
-[node name="WallOfBlocks3" parent="WallzOfBlocks" unique_id=1345882777 instance=ExtResource("10_efxa6")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, -3, 1)
-
-[node name="WallOfBlocks4" parent="WallzOfBlocks" unique_id=1517196289 instance=ExtResource("10_efxa6")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 1, 1)
-
-[node name="WallOfBlocks5" parent="WallzOfBlocks" unique_id=370085052 instance=ExtResource("10_efxa6")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, -3, -4)
-
-[node name="WallOfBlocks6" parent="WallzOfBlocks" unique_id=1498429503 instance=ExtResource("10_efxa6")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 1, -4)
-
-[node name="WallOfBlocks7" parent="WallzOfBlocks" unique_id=753339364 instance=ExtResource("10_efxa6")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, -3, -9)
-
-[node name="WallOfBlocks8" parent="WallzOfBlocks" unique_id=1833304238 instance=ExtResource("10_efxa6")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 1, -9)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5402012, 213, 0)
 
 [node name="Ground" type="Node3D" parent="." unique_id=2067741177]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.42309475, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 212.5769, 0)
 
 [node name="LargeFloor" type="Node3D" parent="Ground" unique_id=249322325]
 
 [node name="TexturedFloor" parent="Ground/LargeFloor" unique_id=730796673 instance=ExtResource("5_kek77")]
 
+[node name="LargeFloor2" type="Node3D" parent="Ground" unique_id=691381919]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -101, 48)
+
+[node name="TexturedFloor" parent="Ground/LargeFloor2" unique_id=890745564 instance=ExtResource("5_kek77")]
+
+[node name="LargeFloor3" type="Node3D" parent="Ground" unique_id=1567653420]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 48, 0, 0)
+
+[node name="TexturedFloor" parent="Ground/LargeFloor3" unique_id=702173249 instance=ExtResource("5_kek77")]
+
+[node name="LargeFloor4" type="Node3D" parent="Ground" unique_id=834695523]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -48, 0, 0)
+
+[node name="TexturedFloor" parent="Ground/LargeFloor4" unique_id=1926101199 instance=ExtResource("5_kek77")]
+
 [node name="Ball" parent="." unique_id=214637512 instance=ExtResource("10_ycdy4")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.4884014, -2.5572903, -2.799387)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.4884014, 210.4427, -2.799387)
 
 [node name="Ball2" parent="." unique_id=1732292566 instance=ExtResource("10_ycdy4")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.0111217, -2.5572898, -6.560218)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.0111217, 210.4427, -6.560218)
 
 [node name="Ball3" parent="." unique_id=2042044913 instance=ExtResource("10_ycdy4")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.1850443, -2.5572903, -6.6963468)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.1850443, 210.4427, -6.6963468)
 
 [node name="SpawnPoint" parent="." unique_id=1025493340 instance=ExtResource("10_w48qg")]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -2.70267, -0.34203148, 0)
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, -2.70267, 212.65797, 0)
 gizmo_extents = 2.59
 
 [node name="Teleporter" parent="." unique_id=617189033 node_paths=PackedStringArray("spawn_point") instance=ExtResource("5_lquwl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -9.51279, 0)
+collision_layer = 32769
 monitorable = false
 spawn_point = NodePath("../SpawnPoint")
 collider_x = 1000000
 collider_z = 1000000
 
 [node name="Teleporter2" parent="." unique_id=47569724 node_paths=PackedStringArray("spawn_point") instance=ExtResource("5_lquwl")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 339.7759, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 529.7759, 0)
 monitorable = false
 spawn_point = NodePath("../SpawnPoint")
 collider_x = 1000000
 collider_z = 1000000
 
 [node name="SimpleGun" parent="." unique_id=69713160 instance=ExtResource("9_kek77")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.887945, -2.3471434, -2.2244039)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.887945, 210.65286, -2.2244039)
 
 [node name="Restart" type="Node3D" parent="." unique_id=1407339596]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.290948, 0, 8.954027)
+visible = false
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Restart" unique_id=1510795904]
 mesh = SubResource("BoxMesh_3ea33")
+
+[node name="BigolCubeOfBlocks" type="Node3D" parent="." unique_id=770109192]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 213, 0)
+
+[node name="WallOfBlocks" parent="BigolCubeOfBlocks" unique_id=932241229 instance=ExtResource("10_efxa6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, -3, 6)
+
+[node name="WallOfBlocks2" parent="BigolCubeOfBlocks" unique_id=441388893 instance=ExtResource("10_efxa6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, -3, 6)
+
+[node name="WallOfBlocks3" parent="BigolCubeOfBlocks" unique_id=1345882777 instance=ExtResource("10_efxa6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, -3, 6)
+
+[node name="WallOfBlocks4" parent="BigolCubeOfBlocks" unique_id=1517196289 instance=ExtResource("10_efxa6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, -3, 6)
+
+[node name="WallOfBlocks5" parent="BigolCubeOfBlocks" unique_id=370085052 instance=ExtResource("10_efxa6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, -3, 6)
+
+[node name="WallOfBlocks6" parent="BigolCubeOfBlocks" unique_id=1498429503 instance=ExtResource("10_efxa6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, -3, 6)
+
+[node name="BigolCubeOfBlocks2" type="Node3D" parent="." unique_id=1300435411]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 213, -12)
+
+[node name="WallOfBlocks" type="Node3D" parent="BigolCubeOfBlocks2" unique_id=1473454380]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, -3, 6)
+
+[node name="Row" type="Node3D" parent="BigolCubeOfBlocks2/WallOfBlocks" unique_id=1081800215]
+
+[node name="Block" parent="BigolCubeOfBlocks2/WallOfBlocks/Row" unique_id=889180174 instance=ExtResource("6_5vw27")]
+
+[node name="Block2" parent="BigolCubeOfBlocks2/WallOfBlocks/Row" unique_id=831263993 instance=ExtResource("6_5vw27")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+
+[node name="Block3" parent="BigolCubeOfBlocks2/WallOfBlocks/Row" unique_id=542915138 instance=ExtResource("6_5vw27")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+
+[node name="Block4" parent="BigolCubeOfBlocks2/WallOfBlocks/Row" unique_id=968846382 instance=ExtResource("6_5vw27")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
+
+[node name="Block5" parent="BigolCubeOfBlocks2/WallOfBlocks/Row" unique_id=902576640 instance=ExtResource("6_5vw27")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Block6" parent="BigolCubeOfBlocks2/WallOfBlocks/Row" unique_id=539665575 instance=ExtResource("6_5vw27")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Row2" type="Node3D" parent="BigolCubeOfBlocks2/WallOfBlocks" unique_id=1520867348]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="Block" parent="BigolCubeOfBlocks2/WallOfBlocks/Row2" unique_id=205161133 instance=ExtResource("6_5vw27")]
+
+[node name="Block2" parent="BigolCubeOfBlocks2/WallOfBlocks/Row2" unique_id=1445178594 instance=ExtResource("6_5vw27")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+
+[node name="Block3" parent="BigolCubeOfBlocks2/WallOfBlocks/Row2" unique_id=372878683 instance=ExtResource("6_5vw27")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+
+[node name="Block4" parent="BigolCubeOfBlocks2/WallOfBlocks/Row2" unique_id=959083571 instance=ExtResource("6_5vw27")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
+
+[node name="Block5" parent="BigolCubeOfBlocks2/WallOfBlocks/Row2" unique_id=2137324123 instance=ExtResource("6_5vw27")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Block6" parent="BigolCubeOfBlocks2/WallOfBlocks/Row2" unique_id=797586593 instance=ExtResource("6_5vw27")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Row3" type="Node3D" parent="BigolCubeOfBlocks2/WallOfBlocks" unique_id=1335123682]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+
+[node name="Block" parent="BigolCubeOfBlocks2/WallOfBlocks/Row3" unique_id=1172824156 instance=ExtResource("6_5vw27")]
+
+[node name="Block2" parent="BigolCubeOfBlocks2/WallOfBlocks/Row3" unique_id=224069863 instance=ExtResource("6_5vw27")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+
+[node name="Block3" parent="BigolCubeOfBlocks2/WallOfBlocks/Row3" unique_id=954533998 instance=ExtResource("6_5vw27")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+
+[node name="Block4" parent="BigolCubeOfBlocks2/WallOfBlocks/Row3" unique_id=1197231372 instance=ExtResource("6_5vw27")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
+
+[node name="Block5" parent="BigolCubeOfBlocks2/WallOfBlocks/Row3" unique_id=2085490766 instance=ExtResource("6_5vw27")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Block6" parent="BigolCubeOfBlocks2/WallOfBlocks/Row3" unique_id=1833760805 instance=ExtResource("6_5vw27")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Row4" type="Node3D" parent="BigolCubeOfBlocks2/WallOfBlocks" unique_id=394282049]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+
+[node name="Block" parent="BigolCubeOfBlocks2/WallOfBlocks/Row4" unique_id=1221421522 instance=ExtResource("6_5vw27")]
+
+[node name="Block2" parent="BigolCubeOfBlocks2/WallOfBlocks/Row4" unique_id=474947986 instance=ExtResource("6_5vw27")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+
+[node name="Block3" parent="BigolCubeOfBlocks2/WallOfBlocks/Row4" unique_id=25500876 instance=ExtResource("6_5vw27")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+
+[node name="Block4" parent="BigolCubeOfBlocks2/WallOfBlocks/Row4" unique_id=1426107942 instance=ExtResource("6_5vw27")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
+
+[node name="Block5" parent="BigolCubeOfBlocks2/WallOfBlocks/Row4" unique_id=1481777379 instance=ExtResource("6_5vw27")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Block6" parent="BigolCubeOfBlocks2/WallOfBlocks/Row4" unique_id=231637108 instance=ExtResource("6_5vw27")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Row5" type="Node3D" parent="BigolCubeOfBlocks2/WallOfBlocks" unique_id=1695157067]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
+
+[node name="Block" parent="BigolCubeOfBlocks2/WallOfBlocks/Row5" unique_id=1842466665 instance=ExtResource("6_5vw27")]
+
+[node name="Block2" parent="BigolCubeOfBlocks2/WallOfBlocks/Row5" unique_id=327587733 instance=ExtResource("6_5vw27")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+
+[node name="Block3" parent="BigolCubeOfBlocks2/WallOfBlocks/Row5" unique_id=149267691 instance=ExtResource("6_5vw27")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+
+[node name="Block4" parent="BigolCubeOfBlocks2/WallOfBlocks/Row5" unique_id=877121589 instance=ExtResource("6_5vw27")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
+
+[node name="Block5" parent="BigolCubeOfBlocks2/WallOfBlocks/Row5" unique_id=1638442260 instance=ExtResource("6_5vw27")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Block6" parent="BigolCubeOfBlocks2/WallOfBlocks/Row5" unique_id=575732136 instance=ExtResource("6_5vw27")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="Row6" type="Node3D" parent="BigolCubeOfBlocks2/WallOfBlocks" unique_id=460727764]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+
+[node name="Block" parent="BigolCubeOfBlocks2/WallOfBlocks/Row6" unique_id=1431663014 instance=ExtResource("6_5vw27")]
+
+[node name="Block2" parent="BigolCubeOfBlocks2/WallOfBlocks/Row6" unique_id=1526685403 instance=ExtResource("6_5vw27")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
+
+[node name="Block3" parent="BigolCubeOfBlocks2/WallOfBlocks/Row6" unique_id=1142488741 instance=ExtResource("6_5vw27")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+
+[node name="Block4" parent="BigolCubeOfBlocks2/WallOfBlocks/Row6" unique_id=1419897286 instance=ExtResource("6_5vw27")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
+
+[node name="Block5" parent="BigolCubeOfBlocks2/WallOfBlocks/Row6" unique_id=1133537914 instance=ExtResource("6_5vw27")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+
+[node name="Block6" parent="BigolCubeOfBlocks2/WallOfBlocks/Row6" unique_id=1778081858 instance=ExtResource("6_5vw27")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+
+[node name="WallOfBlocks2" parent="BigolCubeOfBlocks2" unique_id=1330332192 instance=ExtResource("10_efxa6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13, -3, 6)
+
+[node name="WallOfBlocks3" parent="BigolCubeOfBlocks2" unique_id=1581667058 instance=ExtResource("10_efxa6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, -3, 6)
+
+[node name="WallOfBlocks4" parent="BigolCubeOfBlocks2" unique_id=894843761 instance=ExtResource("10_efxa6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, -3, 6)
+
+[node name="WallOfBlocks5" parent="BigolCubeOfBlocks2" unique_id=1895975398 instance=ExtResource("10_efxa6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, -3, 6)
+
+[node name="WallOfBlocks6" parent="BigolCubeOfBlocks2" unique_id=2070396558 instance=ExtResource("10_efxa6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, -3, 6)

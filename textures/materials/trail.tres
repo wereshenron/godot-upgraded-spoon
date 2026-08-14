@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://ddnrq2m63gjyh"]
+
+[ext_resource type="Shader" uid="uid://dsyu6itlp2ssf" path="res://textures/materials/trail.gdshader" id="1_rbt1j"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_rbt1j")
+shader_parameter/trail_color = Color(1, 0.85, 0.4, 1)
+shader_parameter/fade_power = 2.99500013900262
