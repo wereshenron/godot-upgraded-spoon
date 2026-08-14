@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://corg8c2403rhj"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_j06g4"]
+albedo_color = Color(0.0837121, 0.5370987, 0.31260636, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_3ea33"]
+
+[node name="Marker" type="Node3D" unique_id=545574305]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1165960194]
+transform = Transform3D(0.43, 0, 0, 0, 0.43, 0, 0, 0, 0.43, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_j06g4")
+mesh = SubResource("SphereMesh_3ea33")

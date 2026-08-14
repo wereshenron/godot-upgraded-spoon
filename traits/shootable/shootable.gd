@@ -9,18 +9,8 @@ extends Holdable
 @export var aim_transition_time: float = 0.15  # seconds to fully reach aim_offset
 
 @export var gun_settings: GunSettings
-#@export_category("Firing")
-#@export var recoil_amount: Vector3
-#@export var min_recoil_amount: Vector3
-#@export var max_recoil_offset: Vector3 = Vector3(0.3, 0.3, 0.1)
-#@export var snap: float
-#@export var recoil_speed: float
-#@export var fire_rate: float
-#@export var fire_velocity: float = 200.0
-#@export var reference_bullet_mass: float = 1.0
-#@export var full_auto: bool = false
-#@export var bullet_scene: PackedScene
 
+@onready var marker: PackedScene = preload("res://playground/marker.tscn")
 
 @onready var aim_raycast: RayCast3D = get_viewport().get_camera_3d().get_node("AimRaycast")
 @onready var bullet: PackedScene = gun_settings.bullet_scene.duplicate()
@@ -157,14 +147,30 @@ func get_follow_speed(base_speed: float) -> float:
 	
 func shoot() -> void:
 	# The shoot direction will just be literally where we're looking if 
-	var shoot_direction = direction if shoot_aim_point == Vector3.ZERO \
+	var shoot_direction: Vector3 = direction if shoot_aim_point == Vector3.ZERO \
 		else (shoot_aim_point - body.global_position)
 		
-	#print("direction used: ")
-	#print(shoot_direction)
+	#var marker_instance: Node3D = marker.duplicate().instantiate()
+	#get_tree().root.add_child(marker_instance)
+	#marker_instance.global_position = shoot_aim_point
 		
 	apply_recoil_kick()
+	launch_bullet(shoot_direction)
+	
+func apply_recoil_kick() -> void:
+	var recoil_applied = Vector3(
+		randf_range(gun_settings.min_recoil_amount.x, gun_settings.recoil_amount.x),
+		randf_range(gun_settings.min_recoil_amount.y, gun_settings.recoil_amount.y),
+		randf_range(gun_settings.min_recoil_amount.z, gun_settings.recoil_amount.z),
+	)
 
+	SignalBus.recoil_kicked.emit(recoil_applied, gun_settings.max_recoil_offset)
+	target_recoil_offset += recoil_applied
+	target_recoil_offset.x = clampf(target_recoil_offset.x, -recoil_applied.x, recoil_applied.x)
+	target_recoil_offset.y = clampf(target_recoil_offset.y, -recoil_applied.y, recoil_applied.y)
+	target_recoil_offset.z = clampf(target_recoil_offset.z, 0.0, recoil_applied.z)
+	
+func launch_bullet(launch_direction: Vector3) -> void: 
 	var new_bullet: RigidBody3D = bullet.instantiate()
 	get_tree().root.add_child(new_bullet)
 
@@ -174,17 +180,4 @@ func shoot() -> void:
 	var bullet_mass: float = maxf(new_bullet.mass, 0.01)
 	var scaled_velocity = gun_settings.fire_velocity * sqrt(gun_settings.reference_bullet_mass / bullet_mass)
 	
-	new_bullet.apply_central_impulse(shoot_direction * scaled_velocity * bullet_mass)
-	
-func apply_recoil_kick() -> void:
-	var recoil_applied = Vector3(
-		randf_range(gun_settings.min_recoil_amount.x, gun_settings.min_recoil_amount.x),
-		randf_range(gun_settings.min_recoil_amount.y, gun_settings.min_recoil_amount.y),
-		randf_range(gun_settings.min_recoil_amount.z, gun_settings.min_recoil_amount.z),
-	)
-
-	SignalBus.recoil_kicked.emit(recoil_applied, gun_settings.max_recoil_offset)
-	target_recoil_offset += recoil_applied
-	target_recoil_offset.x = clampf(target_recoil_offset.x, -recoil_applied.x, recoil_applied.x)
-	target_recoil_offset.y = clampf(target_recoil_offset.y, -recoil_applied.y, recoil_applied.y)
-	target_recoil_offset.z = clampf(target_recoil_offset.z, 0.0, recoil_applied.z)
+	new_bullet.apply_central_impulse(launch_direction * scaled_velocity * bullet_mass)
