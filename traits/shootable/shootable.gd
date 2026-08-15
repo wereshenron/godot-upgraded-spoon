@@ -148,7 +148,8 @@ func get_follow_speed(base_speed: float) -> float:
 func shoot() -> void:
 	# The shoot direction will just be literally where we're looking if 
 	var shoot_direction: Vector3 = direction if shoot_aim_point == Vector3.ZERO \
-		else (shoot_aim_point - body.global_position)
+		#else (shoot_aim_point - body.global_position).normalized()
+		else (shoot_aim_point - aim_raycast.global_position).normalized()
 		
 	#var marker_instance: Node3D = marker.duplicate().instantiate()
 	#get_tree().root.add_child(marker_instance)
