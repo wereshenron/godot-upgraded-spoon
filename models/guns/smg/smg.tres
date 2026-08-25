@@ -1,0 +1,12 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://chp8juqxfvi6j"]
+
+[ext_resource type="Texture2D" uid="uid://b48hvr7uvwpoo" path="res://models/guns/smg/albedo.jpg" id="1_gm4vw"]
+[ext_resource type="Texture2D" uid="uid://bsa66n4sa6y43" path="res://models/guns/smg/rough.jpg" id="2_sdh80"]
+[ext_resource type="Texture2D" uid="uid://u0bey111ka38" path="res://models/guns/smg/normal.jpg" id="3_poyi0"]
+
+[resource]
+albedo_texture = ExtResource("1_gm4vw")
+metallic = 1.0
+metallic_texture = ExtResource("2_sdh80")
+normal_enabled = true
+normal_texture = ExtResource("3_poyi0")

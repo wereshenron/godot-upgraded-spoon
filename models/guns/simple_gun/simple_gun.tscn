@@ -2,9 +2,10 @@
 
 [ext_resource type="PackedScene" uid="uid://c1yehl1opuoxy" path="res://models/guns/simple_gun/simple_gun.glb" id="3_okuyw"]
 [ext_resource type="Shape3D" uid="uid://c08enaly15nmm" path="res://models/guns/simple_gun/simple_gun_capsule_collider_1.tres" id="4_7h87b"]
-[ext_resource type="Resource" uid="uid://44c486ne7m17" path="res://traits/shootable/gun_settings/smg.tres" id="5_eko8r"]
+[ext_resource type="Material" uid="uid://ddnrq2m63gjyh" path="res://textures/materials/trail.tres" id="5_3w8vd"]
 [ext_resource type="Shape3D" uid="uid://b35gwbx1qlr2g" path="res://models/guns/simple_gun/simple_gun_capsule_collider_2.tres" id="5_qpxi4"]
 [ext_resource type="PackedScene" uid="uid://xrymkvqoj1sg" path="res://traits/shootable/shootable.tscn" id="5_wl1ro"]
+[ext_resource type="Resource" uid="uid://bhyinapxfjnu3" path="res://traits/shootable/gun_settings/deagle.tres" id="6_eko8r"]
 
 [node name="SimpleGun" type="RigidBody3D" unique_id=69713160 groups=["Holdable"]]
 collision_layer = 32769
@@ -22,12 +23,15 @@ shape = ExtResource("5_qpxi4")
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, 0)
 
 [node name="Shootable" parent="." unique_id=321872780 node_paths=PackedStringArray("geometry_list") instance=ExtResource("5_wl1ro")]
+tracer_material = ExtResource("5_3w8vd")
 aim_offset = Vector3(0, -0.395, 0.505)
 aim_transition_time = 0.056
-gun_settings = ExtResource("5_eko8r")
+gun_settings = ExtResource("6_eko8r")
+hold_offset = Vector3(0.695, -0.575, 0.8)
 base_follow_speed = 125.0
 aim_follow_speed = 139.84
 geometry_list = [NodePath("../simple_gun/service_pistol_pistol_a"), NodePath("../simple_gun/service_pistol_slide_a"), NodePath("../simple_gun/service_pistol_magazine_loaded"), NodePath("../simple_gun/service_pistol_hammer_a"), NodePath("../simple_gun/service_pistol_trigger_a")]
+title = "Pistol"
 
 [node name="BulletPivot" type="Node3D" parent="." unique_id=1188980346]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.31388742, -0.9142979)

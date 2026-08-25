@@ -31,6 +31,7 @@ var camera_recoil_target: Vector3 = Vector3.ZERO
 func _ready() -> void:
 	interactor.player_stats = player_stats
 	SignalBus.recoil_kicked.connect(_on_recoil_kicked)
+	$CameraPivot/Camera3D/AimRaycast.add_exception(self)
 
 func _on_recoil_kicked(amount: Vector3, max_offset: Vector3) -> void:
 	camera_recoil_target += amount

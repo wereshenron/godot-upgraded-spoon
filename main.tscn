@@ -4,7 +4,9 @@
 [ext_resource type="PackedScene" uid="uid://o53nipo7lg7a" path="res://playground/textured_floor.tscn" id="5_kek77"]
 [ext_resource type="PackedScene" uid="uid://daokd5re032ms" path="res://world/teleporter.tscn" id="5_lquwl"]
 [ext_resource type="PackedScene" uid="uid://du5l53os6i5pi" path="res://playground/block.tscn" id="6_5vw27"]
+[ext_resource type="PackedScene" uid="uid://cmbqqhgbt7ihh" path="res://models/guns/smg/smg.tscn" id="9_4c57u"]
 [ext_resource type="PackedScene" uid="uid://dopef2j8d43is" path="res://models/guns/simple_gun/simple_gun.tscn" id="9_kek77"]
+[ext_resource type="PackedScene" uid="uid://ju8lupldb30h" path="res://playground/ragdoll/mannequiny_ragdoll.tscn" id="10_4c57u"]
 [ext_resource type="PackedScene" uid="uid://dhm5g3q5q5voa" path="res://playground/wall_of_blocks.tscn" id="10_efxa6"]
 [ext_resource type="PackedScene" uid="uid://cys78sp5v0cs6" path="res://world/spawn_point.tscn" id="10_w48qg"]
 [ext_resource type="PackedScene" uid="uid://yvip4y5vt1fd" path="res://playground/ball.tscn" id="10_ycdy4"]
@@ -103,7 +105,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.0111217, 210.4427, -6.56021
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.1850443, 210.4427, -6.6963468)
 
 [node name="SpawnPoint" parent="." unique_id=1025493340 instance=ExtResource("10_w48qg")]
-transform = Transform3D(1.3113416e-07, 0, -1, 0, 1, 0, 1, 0, 1.3113416e-07, -2.70267, 212.65797, 0)
+transform = Transform3D(1.3113416e-07, 0, -1, 0, 1, 0, 1, 0, 1.3113416e-07, -2.70267, 215.65797, 0)
 gizmo_extents = 2.59
 
 [node name="Teleporter" parent="." unique_id=617189033 node_paths=PackedStringArray("spawn_point") instance=ExtResource("5_lquwl")]
@@ -291,3 +293,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, -3, 6)
 
 [node name="WallOfBlocks6" parent="BigolCubeOfBlocks2" unique_id=2070396558 instance=ExtResource("10_efxa6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17, -3, 6)
+
+[node name="Smg" parent="." unique_id=376674517 instance=ExtResource("9_4c57u")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 1, 212, -5)
+
+[node name="Mannequiny" parent="." unique_id=545167796 instance=ExtResource("10_4c57u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 210, -14)

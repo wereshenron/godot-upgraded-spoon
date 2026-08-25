@@ -1,15 +1,94 @@
 [gd_scene format=3 uid="uid://sd6k06dqwiii"]
 
-[ext_resource type="PackedScene" uid="uid://du5l53os6i5pi" path="res://playground/block.tscn" id="1_r2goa"]
+[ext_resource type="Material" uid="uid://bewi5jyknn4x8" path="res://textures/prototype.tres" id="1_u72py"]
+[ext_resource type="Script" uid="uid://cm13bus1o0bdq" path="res://traits/throwable.gd" id="2_sgmgm"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_e3e0j"]
+size = Vector3(0.25, 0.25, 0.25)
+
+[sub_resource type="BoxMesh" id="BoxMesh_j7rbv"]
+material = ExtResource("1_u72py")
 
 [node name="PersonOfBlocks" type="Node3D" unique_id=1158392414]
 
-[node name="Legs" type="Node3D" parent="." unique_id=2074091874]
+[node name="Head" type="Node3D" parent="." unique_id=2074091874]
 
-[node name="Block" parent="Legs" unique_id=1541687413 instance=ExtResource("1_r2goa")]
+[node name="Block" type="RigidBody3D" parent="Head" unique_id=1541687413 groups=["Holdable"]]
+collision_layer = 32768
+collision_mask = 32769
+mass = 4.536
+freeze_mode = 1
 
-[node name="Block2" parent="Legs" unique_id=940958182 instance=ExtResource("1_r2goa")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Head/Block" unique_id=1341274789]
+shape = SubResource("BoxShape3D_e3e0j")
 
-[node name="Block3" parent="Legs" unique_id=1763949234 instance=ExtResource("1_r2goa")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Head/Block" unique_id=929182026]
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, 0, 0)
+mesh = SubResource("BoxMesh_j7rbv")
+
+[node name="Throwable" type="Node3D" parent="Head/Block" unique_id=601822464 node_paths=PackedStringArray("geometry_list")]
+script = ExtResource("2_sgmgm")
+min_throw_force = 25.0
+max_throw_force = 150.0
+angular_velocity_scale = 25.0
+spin_twist_degrees = 63.0
+throw_offset = Vector3(1.2, 0, 2)
+hold_offset = Vector3(0, 0, 2.5)
+base_follow_speed = 150.0
+aim_follow_speed = 150.0
+geometry_list = [NodePath("../MeshInstance3D")]
+title = "Box"
+
+[node name="Block2" type="RigidBody3D" parent="Head" unique_id=339706327 groups=["Holdable"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 0, 0)
+collision_layer = 32768
+collision_mask = 32769
+mass = 4.536
+freeze_mode = 1
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Head/Block2" unique_id=815846291]
+shape = SubResource("BoxShape3D_e3e0j")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Head/Block2" unique_id=75513272]
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, 0, 0)
+mesh = SubResource("BoxMesh_j7rbv")
+
+[node name="Throwable" type="Node3D" parent="Head/Block2" unique_id=928673715 node_paths=PackedStringArray("geometry_list")]
+script = ExtResource("2_sgmgm")
+min_throw_force = 25.0
+max_throw_force = 150.0
+angular_velocity_scale = 25.0
+spin_twist_degrees = 63.0
+throw_offset = Vector3(1.2, 0, 2)
+hold_offset = Vector3(0, 0, 2.5)
+base_follow_speed = 150.0
+aim_follow_speed = 150.0
+geometry_list = [NodePath("../MeshInstance3D")]
+title = "Box"
+
+[node name="Block3" type="RigidBody3D" parent="Head" unique_id=1725725357 groups=["Holdable"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 0, 0)
+collision_layer = 32768
+collision_mask = 32769
+mass = 4.536
+freeze_mode = 1
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Head/Block3" unique_id=326801291]
+shape = SubResource("BoxShape3D_e3e0j")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Head/Block3" unique_id=811966125]
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, 0, 0)
+mesh = SubResource("BoxMesh_j7rbv")
+
+[node name="Throwable" type="Node3D" parent="Head/Block3" unique_id=1940450475 node_paths=PackedStringArray("geometry_list")]
+script = ExtResource("2_sgmgm")
+min_throw_force = 25.0
+max_throw_force = 150.0
+angular_velocity_scale = 25.0
+spin_twist_degrees = 63.0
+throw_offset = Vector3(1.2, 0, 2)
+hold_offset = Vector3(0, 0, 2.5)
+base_follow_speed = 150.0
+aim_follow_speed = 150.0
+geometry_list = [NodePath("../MeshInstance3D")]
+title = "Box"

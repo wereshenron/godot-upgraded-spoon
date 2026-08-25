@@ -12,3 +12,4 @@ extends Resource
 @export var reference_bullet_mass: float = 1.0
 @export var full_auto: bool = false
 @export var bullet_scene: PackedScene
+@export var damage: float = 20.0

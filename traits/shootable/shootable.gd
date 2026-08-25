@@ -3,11 +3,13 @@ extends Holdable
 
 @export_category("Node References")
 @export var state_machine: StateMachine
+@export var tracer_material: Material
 
 @export_category("Aiming")
 @export var aim_offset: Vector3
 @export var aim_transition_time: float = 0.15  # seconds to fully reach aim_offset
 
+@export_category("Gun Settings")
 @export var gun_settings: GunSettings
 
 @onready var marker: PackedScene = preload("res://playground/marker.tscn")
@@ -37,6 +39,9 @@ func _ready() -> void:
 	# Set up signal handlers
 	grabbed.connect(_on_grabbed)
 	released.connect(_on_released)
+	
+	aim_raycast.add_exception(body)
+	
 	
 @warning_ignore("standalone_expression")
 func primary_pressed(_aim_context: Callable = func(): null) -> void:
@@ -89,8 +94,6 @@ func update_hold(hold_pivot: Node3D, delta: float) -> void:
 	#if aim_raycast.is_colliding() and aim_raycast.get_collider() != body:
 	if aim_raycast.is_colliding():
 		shoot_aim_point = aim_raycast.get_collision_point()
-		print("collision point: ")
-		print(shoot_aim_point)
 	else: shoot_aim_point = Vector3.ZERO
 
 	direction = (aim_point - body.global_position).normalized()
@@ -146,14 +149,9 @@ func get_follow_speed(base_speed: float) -> float:
 	return base_speed
 	
 func shoot() -> void:
-	# The shoot direction will just be literally where we're looking if 
-	var shoot_direction: Vector3 = direction if shoot_aim_point == Vector3.ZERO \
-		#else (shoot_aim_point - body.global_position).normalized()
+	# 'direction' == general direction, just wherever you're pointing
+	var shoot_direction: Vector3 = direction.normalized() if shoot_aim_point == Vector3.ZERO \
 		else (shoot_aim_point - aim_raycast.global_position).normalized()
-		
-	#var marker_instance: Node3D = marker.duplicate().instantiate()
-	#get_tree().root.add_child(marker_instance)
-	#marker_instance.global_position = shoot_aim_point
 		
 	apply_recoil_kick()
 	launch_bullet(shoot_direction)
@@ -171,14 +169,26 @@ func apply_recoil_kick() -> void:
 	target_recoil_offset.y = clampf(target_recoil_offset.y, -recoil_applied.y, recoil_applied.y)
 	target_recoil_offset.z = clampf(target_recoil_offset.z, 0.0, recoil_applied.z)
 	
-func launch_bullet(launch_direction: Vector3) -> void: 
-	var new_bullet: RigidBody3D = bullet.instantiate()
-	get_tree().root.add_child(new_bullet)
-
-	new_bullet.continuous_cd = true
-	new_bullet.global_position = bullet_pivot.global_position
+func launch_bullet(launch_direction: Vector3) -> void:	
+	var b := Bullet.new()
+	get_tree().root.add_child(b)
+	b.global_position = bullet_pivot.global_position
+	b.velocity = launch_direction * gun_settings.fire_velocity
+	b.damage = gun_settings.damage
+	#b.on_hit.connect(func(result): spawn_marker(result.get("position")))
 	
-	var bullet_mass: float = maxf(new_bullet.mass, 0.01)
-	var scaled_velocity = gun_settings.fire_velocity * sqrt(gun_settings.reference_bullet_mass / bullet_mass)
+	# Actually spawn a RB bullet 
+	#var new_bullet: RigidBody3D = bullet.instantiate()
+	#get_tree().root.add_child(new_bullet)
+	#new_bullet.continuous_cd = true
+	#new_bullet.global_position = bullet_pivot.global_position
+	#new_bullet.global_rotation = bullet_pivot.global_rotation
+	#var bullet_mass: float = maxf(new_bullet.mass, 0.01)
+	#var scaled_velocity: float = gun_settings.fire_velocity * sqrt(gun_settings.reference_bullet_mass / bullet_mass)
+	#new_bullet.apply_central_impulse(launch_direction * scaled_velocity * bullet_mass)
 	
-	new_bullet.apply_central_impulse(launch_direction * scaled_velocity * bullet_mass)
+func spawn_marker(end_point: Vector3) -> void:
+	# Spawn a marker where aimed
+	var marker_instance = marker.instantiate()
+	get_tree().root.add_child(marker_instance)
+	marker_instance.global_position = end_point

@@ -11,6 +11,6 @@ max_recoil_offset = Vector3(0.29, 0.805, 0.705)
 snap = 15.0
 recoil_speed = 50.0
 fire_rate = 0.12
-fire_velocity = 100.0
 bullet_scene = ExtResource("1_12sn5")
+damage = 200.0
 metadata/_custom_type_script = "uid://b051airyryypb"

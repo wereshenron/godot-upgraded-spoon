@@ -1,0 +1,44 @@
+[gd_scene format=3 uid="uid://cmbqqhgbt7ihh"]
+
+[ext_resource type="PackedScene" uid="uid://xrymkvqoj1sg" path="res://traits/shootable/shootable.tscn" id="2_1x5rg"]
+[ext_resource type="ArrayMesh" uid="uid://kwbs57vxnklu" path="res://models/guns/smg/smg_mesh.res" id="2_fetfw"]
+[ext_resource type="Material" uid="uid://ddnrq2m63gjyh" path="res://textures/materials/trail.tres" id="3_fetfw"]
+[ext_resource type="Resource" uid="uid://44c486ne7m17" path="res://traits/shootable/gun_settings/smg.tres" id="4_jsheq"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_3ea33"]
+radius = 0.14648438
+height = 1.5950146
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_6t3g5"]
+radius = 0.15966797
+height = 0.8757858
+
+[node name="Smg" type="RigidBody3D" unique_id=376674517]
+collision_layer = 32769
+collision_mask = 32769
+
+[node name="Mesh" type="MeshInstance3D" parent="." unique_id=1588413474]
+transform = Transform3D(-0.18, 0, -1.57361e-08, 0, 0.18, 0, 1.57361e-08, 0, -0.18, 0, 0, 0)
+mesh = ExtResource("2_fetfw")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=667038983]
+transform = Transform3D(1, 0, 0, 0, -0.023443501, -0.99972516, 0, 0.99972516, -0.023443501, -1.5124309e-07, 0.08930071, -0.1253241)
+shape = SubResource("CapsuleShape3D_3ea33")
+
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="." unique_id=542645951]
+transform = Transform3D(1, 0, 0, 0, -0.022013817, -0.9997577, 0, 0.9997577, -0.022013817, 2.4170214e-07, -0.13268992, -0.2800768)
+shape = SubResource("CapsuleShape3D_6t3g5")
+
+[node name="Shootable" parent="." unique_id=321872780 node_paths=PackedStringArray("geometry_list") instance=ExtResource("2_1x5rg")]
+tracer_material = ExtResource("3_fetfw")
+aim_offset = Vector3(-0.005, -0.305, 0.3)
+aim_transition_time = 0.056
+gun_settings = ExtResource("4_jsheq")
+hold_offset = Vector3(0.53, -0.44, 0.44)
+base_follow_speed = 125.0
+aim_follow_speed = 139.84
+geometry_list = [NodePath("../Mesh")]
+title = "Pistol"
+
+[node name="BulletPivot" type="Node3D" parent="." unique_id=10606882]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.166291e-07, 0.16749431, -0.91926885)

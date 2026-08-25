@@ -23,7 +23,7 @@ mesh = SubResource("BoxMesh_j7rbv")
 [node name="Throwable" type="Node3D" parent="." unique_id=601822464 node_paths=PackedStringArray("geometry_list")]
 script = ExtResource("3_j7rbv")
 min_throw_force = 25.0
-max_throw_force = 250.0
+max_throw_force = 150.0
 angular_velocity_scale = 25.0
 spin_twist_degrees = 63.0
 throw_offset = Vector3(1.2, 0, 2)
