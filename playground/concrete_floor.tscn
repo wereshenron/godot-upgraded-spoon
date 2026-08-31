@@ -78,7 +78,6 @@ transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)
 
 [node name="floor_ceiling_3" type="MeshInstance3D" parent="floor_ceiling_32" unique_id=1166106640]
 mesh = SubResource("ArrayMesh_b00t8")
-skeleton = NodePath("")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1476570393]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0042985827, 0)

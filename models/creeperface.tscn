@@ -38,7 +38,7 @@ height = 1.4789591
 [node name="creeperface" unique_id=1690840674 instance=ExtResource("1_s3dbw")]
 script = ExtResource("2_ha3ru")
 
-[node name="PhysicalBoneSimulator3D" type="PhysicalBoneSimulator3D" parent="Armature/Skeleton3D" parent_id_path=PackedInt32Array(329370093) index="1" unique_id=462170889]
+[node name="PhysicalBoneSimulator3D" type="PhysicalBoneSimulator3D" parent="Armature/Skeleton3D" parent_id_path=PackedInt32Array(2053536445) index="1" unique_id=462170889]
 
 [node name="Physical Bone Bone" type="PhysicalBone3D" parent="Armature/Skeleton3D/PhysicalBoneSimulator3D" index="0" unique_id=543380379]
 transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0.5, 0)

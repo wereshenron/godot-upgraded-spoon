@@ -14,7 +14,7 @@ void vertex() {
 
 void fragment() {
 	float alpha = smoothstep(progress - fade_width, progress, v_pos)
-	            * (1.0 - smoothstep(progress, progress + fade_width, v_pos));
+				* (1.0 - smoothstep(progress, progress + fade_width, v_pos));
 	ALBEDO = tracer_color.rgb;
 	//ALPHA = tracer_color.a * alpha;
 	ALPHA = alpha;

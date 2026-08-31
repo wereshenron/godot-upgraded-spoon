@@ -78,7 +78,7 @@ height = 0.2
 [node name="Mannequiny" unique_id=545167796 instance=ExtResource("1_k1ufn")]
 script = ExtResource("2_swgnv")
 
-[node name="Skeleton3D" parent="root/root_001" parent_id_path=PackedInt32Array(1322483351) index="0" unique_id=769822963]
+[node name="Skeleton3D" parent="root/root_001" parent_id_path=PackedInt32Array(395756513) index="0" unique_id=1468493578]
 physics_interpolation_mode = 1
 bones/0/position = Vector3(-0.0073073814, 0.25549555, -0.9654906)
 bones/0/rotation = Quaternion(-0.6010748, 0.09516296, -0.10946029, 0.7859209)
@@ -248,10 +248,10 @@ transform = Transform3D(0.9987839, 0.006565829, -0.048863254, 0.036262766, 0.573
 shape = SubResource("CapsuleShape3D_63wjt")
 
 [node name="Physical Bone spine_01" type="PhysicalBone3D" parent="root/root_001/Skeleton3D/PhysicalBoneSimulator3D" index="4" unique_id=985138646]
-transform = Transform3D(0.99998116, -0.006123293, 0.0005575629, 0.006132882, 0.9997964, -0.019225968, -0.0004397232, 0.019229023, 0.99981505, -0.00052902545, 0.28435576, -1.1367805)
+transform = Transform3D(0.99998116, -0.0061232923, 0.00055756245, 0.006132881, 0.9997964, -0.019225968, -0.0004397227, 0.019229023, 0.99981505, -0.00052902824, 0.28435576, -1.1367805)
 joint_type = 2
-joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00014847437, 0.0027098565, 0.05499766)
-body_offset = Transform3D(1.0000002, 7.123174e-05, -3.9061124e-05, -3.910099e-05, 8.484535e-05, -1.0000001, -7.1251765e-05, 1.0000001, 8.488819e-05, -0.00014651916, 0.054997444, -0.0027145147)
+joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0001484772, 0.0027098565, 0.05499766)
+body_offset = Transform3D(1.0000002, 7.123267e-05, -3.9061648e-05, -3.9101506e-05, 8.484535e-05, -1.0000001, -7.1252696e-05, 1.0000001, 8.488819e-05, -0.00014652195, 0.054997444, -0.0027145147)
 friction = 0.6
 bounce = 0.8
 bone_name = "spine_01"
@@ -497,5 +497,5 @@ joint_constraints/relaxation = 1.0
 transform = Transform3D(1, 0, 0, 0, 0.6320293, 0.7749445, 0, -0.7749445, 0.6320293, 1.6763806e-08, -0.0042627603, -0.042318884)
 shape = SubResource("CapsuleShape3D_ifqtp")
 
-[node name="AnimationPlayer" parent="." index="1" unique_id=567878274]
+[node name="AnimationPlayer" parent="." index="1" unique_id=191224592]
 active = false

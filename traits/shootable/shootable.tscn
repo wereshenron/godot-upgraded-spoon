@@ -8,7 +8,6 @@ script = ExtResource("1_1orxs")
 state_machine = NodePath("StateMachine")
 aim_offset = Vector3(0, 0, 1.215)
 aim_transition_time = 0.1
-fire_velocity = 500.0
 hold_offset = Vector3(0.695, -0.44, 0.8)
 base_follow_speed = 150.0
 aim_follow_speed = 150.0
