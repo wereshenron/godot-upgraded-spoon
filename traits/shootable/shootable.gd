@@ -79,6 +79,8 @@ func update_hold(hold_pivot: Node3D, delta: float) -> void:
 	var right = hold_pivot.global_basis.x
 	var up = hold_pivot.global_basis.y
 	var offset = get_hold_offset()  # now uses aim_blend, not a hard 0/1
+	
+	#print(target_recoil_offset.z)
 
 	var hold_target: Vector3 = hold_pivot.global_position \
 		+ forward * (offset.z + current_recoil_offset.z) \
@@ -165,9 +167,10 @@ func apply_recoil_kick() -> void:
 
 	SignalBus.recoil_kicked.emit(recoil_applied, gun_settings.max_recoil_offset)
 	target_recoil_offset += recoil_applied
-	target_recoil_offset.x = clampf(target_recoil_offset.x, -recoil_applied.x, recoil_applied.x)
-	target_recoil_offset.y = clampf(target_recoil_offset.y, -recoil_applied.y, recoil_applied.y)
-	target_recoil_offset.z = clampf(target_recoil_offset.z, 0.0, recoil_applied.z)
+	#target_recoil_offset.x = clampf(target_recoil_offset.x, -recoil_applied.x, recoil_applied.x)
+	#target_recoil_offset.y = clampf(target_recoil_offset.y, -recoil_applied.y, recoil_applied.y)
+	#target_recoil_offset.z = clampf(target_recoil_offset.z, -recoil_applied.z, recoil_applied.z)
+	#print(target_recoil_offset.z)
 	
 func launch_bullet(launch_direction: Vector3) -> void:	
 	var b := Bullet.new()

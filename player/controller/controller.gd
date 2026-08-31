@@ -37,7 +37,7 @@ func _on_recoil_kicked(amount: Vector3, max_offset: Vector3) -> void:
 	camera_recoil_target += amount
 	camera_recoil_target.x = clampf(camera_recoil_target.x, -max_offset.x, max_offset.x)
 	camera_recoil_target.y = clampf(camera_recoil_target.y, -max_offset.y, max_offset.y)
-	camera_recoil_target.z = clampf(camera_recoil_target.z, 0.0, max_offset.z)
+	camera_recoil_target.z = clampf(camera_recoil_target.z, -max_offset.y, max_offset.z)
 
 # Commented out because this is how you can "run through" objects - keeping for testing 
 # func _process(_delta: float) -> void:
