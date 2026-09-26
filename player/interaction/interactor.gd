@@ -18,7 +18,7 @@ var object_held: Holdable = null
 
 func _ready() -> void:
 	pickup_raycast.add_exception(owner)
-	
+
 	state_machine.add_state(&"Idle", InteractorIdleState.new())
 	state_machine.add_state(&"Holding", InteractorHoldingState.new())
 	state_machine.start(&"Idle")
@@ -44,7 +44,7 @@ func _physics_process(_delta: float) -> void:
 	if current_target:
 		if object_held and current_target.body.is_in_group("Holdable"):
 			return
-		
+
 		current_target.set_highlighted(true)
 		SignalBus.interactable_seen.emit(current_target)
 	else:

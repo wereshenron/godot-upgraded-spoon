@@ -43,24 +43,24 @@ func _ready() -> void:
 	aim_raycast.add_exception(body)
 	
 	
-@warning_ignore("standalone_expression")
+# @warning_ignore("standalone_expression")
 func primary_pressed(_aim_context: Callable = func(): null) -> void:
 	state_machine.current_state.primary_pressed(_aim_context)
 	
-@warning_ignore("standalone_expression")
+# @warning_ignore("standalone_expression")
 func primary_held(_delta: float, _aim_context: Callable = func(): null) -> void:
 	state_machine.current_state.primary_held(_delta, _aim_context)
 	
-@warning_ignore("standalone_expression")
+# @warning_ignore("standalone_expression")
 func primary_released(_aim_context: Callable = func(): null) -> void:
 	state_machine.current_state.primary_released(_aim_context)
 
-@warning_ignore("standalone_expression")
+# @warning_ignore("standalone_expression")
 func secondary_pressed(_aim_context: Callable = func(): null) -> void:
 	is_aiming = true
 	SignalBus.show_reticle.emit(false)
 
-@warning_ignore("standalone_expression")
+# @warning_ignore("standalone_expression")
 func secondary_released(_aim_context: Callable = func(): null) -> void:
 	is_aiming = false
 	SignalBus.show_reticle.emit(true)

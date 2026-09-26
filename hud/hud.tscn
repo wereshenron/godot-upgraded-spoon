@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://d0uimw7pk02ow"]
 
-[ext_resource type="Script" uid="uid://k5oc5tstujfa" path="res://hud/hud_controller.gd" id="1_6ca3a"]
+[ext_resource type="Script" uid="uid://df5yx4eo74rmw" path="res://hud/HudController.cs" id="1_w8tcp"]
 [ext_resource type="PackedScene" uid="uid://clxoe71k1iero" path="res://hud/buttons/quit_button.tscn" id="2_2gk58"]
 [ext_resource type="FontVariation" uid="uid://bujcedphrrr72" path="res://hud/text/normal_font.tres" id="2_w8tcp"]
 [ext_resource type="FontVariation" uid="uid://dydfs7v8y0w3n" path="res://hud/text/bold_font.tres" id="3_svhta"]
@@ -16,7 +16,7 @@ corner_radius_bottom_left = 12
 corner_detail = 20
 
 [node name="HUD" type="CanvasLayer" unique_id=1673316801]
-script = ExtResource("1_6ca3a")
+script = ExtResource("1_w8tcp")
 
 [node name="Root" type="Control" parent="." unique_id=298577074]
 layout_mode = 3

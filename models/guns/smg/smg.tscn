@@ -29,15 +29,14 @@ shape = SubResource("CapsuleShape3D_3ea33")
 transform = Transform3D(1, 0, 0, 0, -0.022013817, -0.9997577, 0, 0.9997577, -0.022013817, 2.4170214e-07, -0.13268992, -0.2800768)
 shape = SubResource("CapsuleShape3D_6t3g5")
 
-[node name="Shootable" parent="." unique_id=321872780 node_paths=PackedStringArray("geometry_list") instance=ExtResource("2_1x5rg")]
-tracer_material = ExtResource("3_fetfw")
+[node name="Shootable" parent="." unique_id=321872780 instance=ExtResource("2_1x5rg")]
 aim_offset = Vector3(-0.005, -0.305, 0.3)
 aim_transition_time = 0.056
-gun_settings = ExtResource("4_jsheq")
 hold_offset = Vector3(0.53, -0.44, 0.44)
 base_follow_speed = 125.0
 aim_follow_speed = 139.84
-geometry_list = [NodePath("../Mesh")]
+tracer_material = ExtResource("3_fetfw")
+gun_settings = ExtResource("4_jsheq")
 title = "Pistol"
 
 [node name="BulletPivot" type="Node3D" parent="." unique_id=10606882]

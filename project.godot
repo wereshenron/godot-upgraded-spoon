@@ -12,14 +12,13 @@ config_version=5
 
 config/name="upgraded-spoon"
 run/main_scene="uid://brcd0l3ocimxd"
-config/features=PackedStringArray("4.8", "Forward Plus")
+config/features=PackedStringArray("4.8", "C#", "Forward Plus")
 boot_splash/show_image=false
 config/icon="res://icon.svg"
 
 [autoload]
 
-SignalBus="*uid://4jcaioyos8vs"
-GameManager="*uid://vs0kmu50pup0"
+GameManager="*uid://bsabaqc6nbkf1"
 
 [debug]
 
@@ -38,7 +37,7 @@ project/assembly_name="upgraded-spoon"
 
 [editor_plugins]
 
-enabled=PackedStringArray()
+enabled=PackedStringArray("res://addons/gdscript2all/plugin.cfg")
 
 [global_group]
 
