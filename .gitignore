@@ -4,3 +4,8 @@
 .vscode
 ps1_assets/
 builds/
+.generated/
+.idea/
+.godot/
+.git/
+*.sln.DotSettings.user
