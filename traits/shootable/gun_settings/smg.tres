@@ -1,18 +1,7 @@
 [gd_resource type="Resource" script_class="GunSettings" format=3 uid="uid://44c486ne7m17"]
 
-[ext_resource type="PackedScene" uid="uid://dojmqfepqscc4" path="res://models/bullets/bullet.tscn" id="1_ngkk0"]
-[ext_resource type="Script" uid="uid://b051airyryypb" path="res://traits/shootable/gun_settings/gun_settings.gd" id="2_0xmy5"]
+[ext_resource type="Script" uid="uid://db4fggupsqg5p" path="res://traits/shootable/gun_settings/GunSettings.cs" id="1_1f5kv"]
 
 [resource]
-script = ExtResource("2_0xmy5")
-recoil_amount = Vector3(1.06, 0.135, -1.215)
-min_recoil_amount = Vector3(0.885, -0.2, -0.68)
-max_recoil_offset = Vector3(0.065, 0.125, 3.07)
-snap = 10.0
-recoil_speed = 50.0
-fire_rate = 0.05
-fire_velocity = 175.0
-full_auto = true
-bullet_scene = ExtResource("1_ngkk0")
-damage = 150.0
+script = ExtResource("1_1f5kv")
 metadata/_custom_type_script = "uid://b051airyryypb"

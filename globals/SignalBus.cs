@@ -10,7 +10,6 @@ public class RecoilKickedArgs(Vector3 amount, Vector3 maxOffset) : EventArgs
 	public Vector3 MaxOffset { get; } = maxOffset;
 }
 
-[GlobalClass]
 public partial class SignalBus : Node
 {
 	public static SignalBus Instance { get; private set; }

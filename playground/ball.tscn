@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://yvip4y5vt1fd"]
 
 [ext_resource type="Texture2D" uid="uid://r60a4l1a6w5y" path="res://prototype_textures/PNG/Light/texture_08.png" id="2_i6dl8"]
-[ext_resource type="Script" uid="uid://cm13bus1o0bdq" path="res://traits/throwable.gd" id="3_wgjsm"]
+[ext_resource type="Script" uid="uid://cvy8v7pdt4ypx" path="res://traits/Throwable.cs" id="2_wgjsm"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_hkcee"]
 
@@ -24,14 +24,6 @@ material_override = SubResource("StandardMaterial3D_wgjsm")
 mesh = SubResource("SphereMesh_i6dl8")
 skeleton = NodePath("../..")
 
-[node name="Throwable" type="Node3D" parent="." unique_id=39042322 node_paths=PackedStringArray("geometry_list")]
-script = ExtResource("3_wgjsm")
-min_throw_force = 25.0
-max_throw_force = 250.0
-angular_velocity_scale = 25.0
-spin_twist_degrees = 63.0
-throw_offset = Vector3(1.5, 0, 2)
-hold_offset = Vector3(0, 0, 2.5)
-base_follow_speed = 1000.0
-aim_follow_speed = 100.0
-geometry_list = [NodePath("../MeshInstance3D")]
+[node name="Throwable" type="Node3D" parent="." unique_id=39042322 node_paths=PackedStringArray("GeometryList")]
+script = ExtResource("2_wgjsm")
+GeometryList = [NodePath("../MeshInstance3D")]

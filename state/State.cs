@@ -37,29 +37,29 @@ public abstract partial class State<TActor> : Node where TActor : Node3D
     }
 
     // State-specific input delegation
-    public virtual void PrimaryPressed(AimContext? aimContext = null)
-    {
-    }
-
-    public virtual void PrimaryHeld(double delta, AimContext? aimContext = null)
-    {
-    }
-
-    public virtual void PrimaryReleased(AimContext? aimContext = null)
-    {
-    }
-
-    public virtual void SecondaryPressed(AimContext? aimContext = null)
-    {
-    }
-
-    public virtual void SecondaryHeld(double delta, AimContext? aimContext = null)
-    {
-    }
-
-    public virtual void SecondaryReleased(AimContext? aimContext = null)
-    {
-    }
+    // public virtual void PrimaryPressed(AimContext aimContext)
+    // {
+    // }
+    //
+    // public virtual void PrimaryHeld(double delta, AimContext aimContext)
+    // {
+    // }
+    //
+    // public virtual void PrimaryReleased(AimContext aimContext)
+    // {
+    // }
+    //
+    // public virtual void SecondaryPressed(AimContext aimContext)
+    // {
+    // }
+    //
+    // public virtual void SecondaryHeld(double delta, AimContext aimContext)
+    // {
+    // }
+    //
+    // public virtual void SecondaryReleased(AimContext aimContext)
+    // {
+    // }
 
 
     protected virtual void OnTransitioned(State<TActor> currentState, StringName currentStateId, Dictionary message)

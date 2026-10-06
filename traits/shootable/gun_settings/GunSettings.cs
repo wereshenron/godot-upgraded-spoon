@@ -17,6 +17,7 @@ public partial class GunSettings : Resource
 	[Export] public bool FullAuto { get; set; }
 	[Export] public PackedScene BulletScene { get; set; }
 	[Export] public float Damage { get; set; }
+	[Export] public int MagazineSize { get; set; }
 	
 	public GunSettings() {}
 }

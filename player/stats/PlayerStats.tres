@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="PlayerStats" format=3 uid="uid://dc66n25skmgcs"]
+
+[ext_resource type="Script" uid="uid://4stfuty3wh7x" path="res://player/stats/PlayerStats.cs" id="1_u6527"]
+
+[resource]
+script = ExtResource("1_u6527")
+Speed = 8.0
+StrengthMultiplier = 1.25

@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dgwnhfln12odx" path="res://ducky/ducky.gd" id="1_p24vj"]
 [ext_resource type="PackedScene" uid="uid://spsfcd2qh6wa" path="res://ducky/rubber_duck_toy_4k.glb" id="2_x0f5b"]
-[ext_resource type="Script" uid="uid://cm13bus1o0bdq" path="res://traits/throwable.gd" id="3_p24vj"]
+[ext_resource type="Script" uid="uid://cvy8v7pdt4ypx" path="res://traits/Throwable.cs" id="3_p24vj"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_7mycd"]
 friction = 0.74
@@ -36,16 +36,8 @@ shape = SubResource("CapsuleShape3D_p24vj")
 transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, -0.03169799, 0.7152917, 0.14891565)
 shape = SubResource("SphereShape3D_x0f5b")
 
-[node name="Throwable" type="Node3D" parent="." unique_id=1362285386 node_paths=PackedStringArray("geometry_list")]
+[node name="Throwable" type="Node3D" parent="." unique_id=1362285386 node_paths=PackedStringArray("GeometryList")]
 script = ExtResource("3_p24vj")
-min_throw_force = 25.0
-max_throw_force = 500.0
-angular_velocity_scale = 25.0
-spin_twist_degrees = 63.0
-throw_offset = Vector3(1.5, 0, 2)
-hold_offset = Vector3(0, 0, 2.5)
-base_follow_speed = 1000.0
-aim_follow_speed = 100.0
-geometry_list = [NodePath("../blend_export/rubber_duck_toy")]
+GeometryList = [NodePath("../blend_export/rubber_duck_toy")]
 
 [editable path="blend_export"]

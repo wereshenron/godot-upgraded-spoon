@@ -4,13 +4,13 @@ namespace upgradedspoon.types;
 
 public struct AimContext
 {
-    public AimContext(Vector3 direction, double strengthMultiplier)
+    public AimContext(Vector3 direction, float strengthMultiplier)
     {
         Direction = direction;
         StrengthMultiplier = strengthMultiplier;
     }
 
-    public double StrengthMultiplier { get; set; }
+    public float StrengthMultiplier { get; set; }
 
     public Vector3 Direction { get; set; }
 }

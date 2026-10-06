@@ -13,109 +13,113 @@ public partial class Shootable : Holdable
     [Export] public ShootableStateMachine StateMachine { get; set; }
     [Export] public Material TracerMaterial { get; set; }
     [Export] public Vector3 AimOffset { get; set; }
-    [Export] public double AimTransitionTime { get; set; }
+    [Export] public double AimTransitionTime { get; set; } = 0.15;
     [Export] public GunSettings GunSettings { get; set; }
 
-    private RayCast3D _aimRayCast; // TODO - add to _ready
-    private PackedScene _bullet; // TODO - add to _ready
-    private Node3D _bulletPivot; // TODO - add to _ready
+    /// Latest aim from the interactor; states read this when firing.
+    public AimContext CurrentAim { get; private set; }
+    
+    public int Ammo { get; private set; }
+    public bool CanReload => Ammo < GunSettings.MagazineSize;
 
-    /// # 0 = hold_offset, 1 = aim_offset
+    private Node3D _bulletPivot;
+
+    /// 0 = hold_offset, 1 = aim_offset
     private float _aimBlend;
 
     private uint _initialLayer;
     private uint _initialMask;
-    private Vector3 _currentRecoilOffset;
     private Vector3 _targetRecoilOffset;
-    private Vector3 _direction = Vector3.Zero;
-    private Vector3 _shootAimPoint = Vector3.Zero;
+
+    private ShootableState CurrentState => StateMachine.CurrentState as ShootableState;
 
     public override void _Ready()
     {
         base._Ready();
 
-        // On Readies
-        _aimRayCast = GetViewport().GetCamera3D().GetNode<RayCast3D>("AimRaycast");
-        _bullet = GunSettings.BulletScene;
         _bulletPivot = Body.GetNode<Node3D>("BulletPivot");
+        _initialLayer = Body.CollisionLayer;
+        _initialMask = Body.CollisionMask;
 
-        // Initialize State
         StateMachine.AddState("Firing", new ShootableFiringState());
+        StateMachine.AddState("Idle", new ShootableIdleState());
+        StateMachine.Enter("Idle");
 
-        // Event Handlers
-        Grabbed += (_, _) => { OnGrabbed(); };
-        Released += (_, _) => { OnReleased(); };
+        Grabbed += (_, _) => OnGrabbed();
+        Released += (_, _) => OnReleased();
+    }
 
-        _aimRayCast.AddException(Body);
+    public override void _PhysicsProcess(double delta)
+    {
+        var target = IsAiming ? 1f : 0f;
+        var step = AimTransitionTime > 0 ? (float)(delta / AimTransitionTime) : 1f;
+        _aimBlend = Mathf.MoveToward(_aimBlend, target, step);
     }
 
     public void Shoot()
     {
-        var shootDirection = _shootAimPoint == Vector3.Zero ? _direction.Normalized() : (_shootAimPoint - _aimRayCast.GlobalPosition).Normalized();
+        Ammo--;
         ApplyRecoilKick();
-        LaunchBullet(shootDirection);
+        LaunchBullet(CurrentAim.Direction);
     }
+    
+    public void RefillMagazine() => Ammo = GunSettings.MagazineSize;
+
 
     private void ApplyRecoilKick()
     {
-        var minRecoil = GunSettings.MinRecoilAmount;
-        var recoil = GunSettings.RecoilAmount;
+        var min = GunSettings.MinRecoilAmount;
+        var max = GunSettings.RecoilAmount;
 
-        var recoilX = (float)Random.Shared.NextDouble() * (recoil.X - minRecoil.X) + minRecoil.X;
-        var recoilY = (float)Random.Shared.NextDouble() * (recoil.Y - minRecoil.Y) + minRecoil.Y;
-        var recoilZ = (float)Random.Shared.NextDouble() * (recoil.Z - minRecoil.Z) + minRecoil.Z;
-        var recoilApplied = new Vector3(recoilX, recoilY, recoilZ);
-        SignalBus.Instance.RaiseRecoilKicked(recoilApplied, GunSettings.MaxRecoilOffset);
-        _targetRecoilOffset += recoilApplied;
+        var applied = new Vector3(
+            (float)Random.Shared.NextDouble() * (max.X - min.X) + min.X,
+            (float)Random.Shared.NextDouble() * (max.Y - min.Y) + min.Y,
+            (float)Random.Shared.NextDouble() * (max.Z - min.Z) + min.Z);
+
+        SignalBus.Instance.RaiseRecoilKicked(applied, GunSettings.MaxRecoilOffset);
+        _targetRecoilOffset += applied;
     }
 
-    private void LaunchBullet(Vector3 launchDirection)
+    private void LaunchBullet(Vector3 direction)
     {
-        var bulletScene = GD.Load<PackedScene>(GunSettings.BulletScene.ResourcePath);
-        var bullet = bulletScene.Instantiate<RigidBody3D>();
+        var bullet = GunSettings.BulletScene.Instantiate<RigidBody3D>();
         GetTree().Root.AddChild(bullet);
-        
         bullet.GlobalPosition = _bulletPivot.GlobalPosition;
-        bullet.LinearVelocity = launchDirection * GunSettings.FireVelocity;
-        // bullet.Damage
+        bullet.LinearVelocity = direction * GunSettings.FireVelocity;
     }
 
-    // Input Event handlers
-    public override void PrimaryPressed(AimContext? aimContext = null)
+    // Input from the interactor
+    public override void OnAction(UseSlot slot, InputPhase phase, double delta, AimContext ctx)
     {
-        StateMachine.CurrentState.PrimaryPressed(aimContext);
+        CurrentAim = ctx;
+
+        if (slot == UseSlot.Secondary)
+            HandleAim(phase);
+
+        CurrentState?.OnAction(slot, phase, delta, ctx);
     }
 
-    public override void PrimaryHeld(double delta, AimContext? aimContext = null)
+    private void HandleAim(InputPhase phase)
     {
-        StateMachine.CurrentState.PrimaryHeld(delta, aimContext);
+        switch (phase)
+        {
+            case InputPhase.Pressed:
+                IsAiming = true;
+                SignalBus.Instance.RaiseShowReticle(false);
+                break;
+            case InputPhase.Released:
+                IsAiming = false;
+                SignalBus.Instance.RaiseShowReticle(true);
+                break;
+            case InputPhase.Held:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(phase), phase, null);
+        }
     }
 
-    public override void PrimaryReleased(AimContext? aimContext = null)
-    {
-        StateMachine.CurrentState.PrimaryPressed(aimContext);
-    }
+    public override Vector3 GetHoldOffset() => HoldOffset.Lerp(AimOffset, _aimBlend);
 
-    public override void SecondaryPressed(AimContext? aimContext = null)
-    {
-        IsAiming = true;
-        SignalBus.Instance.RaiseShowReticle(false);
-    }
-
-    public override void SecondaryReleased(AimContext? aimContext = null)
-    {
-        IsAiming = false;
-        SignalBus.Instance.RaiseShowReticle(true);
-    }
-
-    // Helpers
-    public override Vector3 GetHoldOffset()
-    {
-        return HoldOffset.Lerp(AimOffset, _aimBlend);
-    }
-
-
-    // Event Handler Methods
     private void OnGrabbed()
     {
         Body.Freeze = true;
@@ -126,6 +130,10 @@ public partial class Shootable : Holdable
 
     private void OnReleased()
     {
+        CurrentState?.Cancelled();
+        IsAiming = false;
+        SignalBus.Instance.RaiseShowReticle(true);
+
         Body.Freeze = false;
         Body.CollisionLayer = _initialLayer;
         Body.CollisionMask = _initialMask;
