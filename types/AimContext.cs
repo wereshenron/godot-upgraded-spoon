@@ -10,7 +10,7 @@ public struct AimContext
         StrengthMultiplier = strengthMultiplier;
     }
 
-    public float StrengthMultiplier { get; set; }
+    public float StrengthMultiplier { get; set; } = 1.0f;
 
-    public Vector3 Direction { get; set; }
+    public Vector3 Direction { get; set; } = Vector3.Forward;
 }

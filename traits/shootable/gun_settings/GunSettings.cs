@@ -18,6 +18,7 @@ public partial class GunSettings : Resource
 	[Export] public PackedScene BulletScene { get; set; }
 	[Export] public float Damage { get; set; }
 	[Export] public int MagazineSize { get; set; }
+	[Export] public float AdsTime { get; set; } = 0.15f;
 	
 	public GunSettings() {}
 }

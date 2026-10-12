@@ -1,7 +1,19 @@
 [gd_resource type="Resource" script_class="GunSettings" format=3 uid="uid://44c486ne7m17"]
 
 [ext_resource type="Script" uid="uid://db4fggupsqg5p" path="res://traits/shootable/gun_settings/GunSettings.cs" id="1_1f5kv"]
+[ext_resource type="PackedScene" uid="uid://dojmqfepqscc4" path="res://models/bullets/bullet.tscn" id="1_ngkk0"]
 
 [resource]
 script = ExtResource("1_1f5kv")
-metadata/_custom_type_script = "uid://b051airyryypb"
+RecoilAmount = Vector3(1.06, 0.135, -1.12)
+MinRecoilAmount = Vector3(0.885, -0.2, -0.68)
+MaxRecoilOffset = Vector3(0.065, 0.125, 3.07)
+Snap = 10.0
+RecoilSpeed = 50.0
+FireRate = 0.05
+FireVelocity = 175.0
+ReferenceBulletMass = 1.0
+FullAuto = true
+BulletScene = ExtResource("1_ngkk0")
+Damage = 150.0
+MagazineSize = 25

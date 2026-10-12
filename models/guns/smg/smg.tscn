@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://xrymkvqoj1sg" path="res://traits/shootable/shootable.tscn" id="2_1x5rg"]
 [ext_resource type="ArrayMesh" uid="uid://kwbs57vxnklu" path="res://models/guns/smg/smg_mesh.res" id="2_fetfw"]
+[ext_resource type="Resource" uid="uid://44c486ne7m17" path="res://traits/shootable/gun_settings/smg.tres" id="3_da1x0"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_3ea33"]
 radius = 0.14648438
@@ -28,6 +29,12 @@ transform = Transform3D(1, 0, 0, 0, -0.022013817, -0.9997577, 0, 0.9997577, -0.0
 shape = SubResource("CapsuleShape3D_6t3g5")
 
 [node name="Shootable" parent="." unique_id=321872780 node_paths=PackedStringArray("GeometryList") instance=ExtResource("2_1x5rg")]
+GunSettings = ExtResource("3_da1x0")
+HoldOffset = Vector3(0.53, -0.44, 0.44)
+MovementLowerThreshold = 0.33
+BaseFollowSpeed = 125.0
+AimFollowSpeed = 139.84
+MassInfluence = 1.5
 GeometryList = [NodePath("../Mesh")]
 
 [node name="BulletPivot" type="Node3D" parent="." unique_id=10606882]

@@ -6,6 +6,7 @@
     <RootNamespace>upgradedspoon</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Folder Include="hud\Widgets\" />
     <Folder Include="traits\shootable\gun_settings\" />
   </ItemGroup>
 </Project>

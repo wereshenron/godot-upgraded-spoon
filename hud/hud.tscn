@@ -1,19 +1,10 @@
 [gd_scene format=3 uid="uid://d0uimw7pk02ow"]
 
 [ext_resource type="Script" uid="uid://df5yx4eo74rmw" path="res://hud/HudController.cs" id="1_w8tcp"]
-[ext_resource type="PackedScene" uid="uid://clxoe71k1iero" path="res://hud/buttons/quit_button.tscn" id="2_2gk58"]
+[ext_resource type="PackedScene" uid="uid://clxoe71k1iero" path="res://hud/Widgets/Quit/quit_button.tscn" id="2_2gk58"]
+[ext_resource type="PackedScene" uid="uid://dduidl0dbs1sf" path="res://hud/Widgets/InteractionPrompt/interaction_prompt.tscn" id="2_svhta"]
 [ext_resource type="FontVariation" uid="uid://bujcedphrrr72" path="res://hud/text/normal_font.tres" id="2_w8tcp"]
 [ext_resource type="FontVariation" uid="uid://dydfs7v8y0w3n" path="res://hud/text/bold_font.tres" id="3_svhta"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aqcbf"]
-content_margin_left = 10.0
-content_margin_right = 10.0
-bg_color = Color(1, 1, 1, 1)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
-corner_detail = 20
 
 [node name="HUD" type="CanvasLayer" unique_id=1673316801]
 script = ExtResource("1_w8tcp")
@@ -27,66 +18,9 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Root" unique_id=336569750]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_top = 12.0
-grow_horizontal = 2
-mouse_filter = 2
-theme_override_constants/separation = 10
-
-[node name="PressLabel" type="Label" parent="Root/HBoxContainer" unique_id=135006189]
-layout_mode = 2
-theme_override_fonts/font = ExtResource("2_w8tcp")
-theme_override_font_sizes/font_size = 24
-text = "Press"
-
-[node name="Keybadge" type="MarginContainer" parent="Root/HBoxContainer" unique_id=1746068431]
-layout_mode = 2
-mouse_filter = 2
-theme_override_constants/margin_top = 4
-theme_override_constants/margin_bottom = 4
-
-[node name="Background" type="PanelContainer" parent="Root/HBoxContainer/Keybadge" unique_id=2129924592]
-layout_mode = 2
-mouse_filter = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_aqcbf")
-
-[node name="Letter" type="Label" parent="Root/HBoxContainer/Keybadge/Background" unique_id=1508386102]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("2_w8tcp")
-theme_override_font_sizes/font_size = 20
-text = "E"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="To" type="Label" parent="Root/HBoxContainer" unique_id=300018078]
-layout_mode = 2
-theme_override_fonts/font = ExtResource("2_w8tcp")
-theme_override_font_sizes/font_size = 24
-text = "To"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="ActionLabel" type="Label" parent="Root/HBoxContainer" unique_id=923652993]
-layout_mode = 2
-theme_override_fonts/font = ExtResource("2_w8tcp")
-theme_override_font_sizes/font_size = 24
-text = "Pick Up"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="ItemLabel" type="Label" parent="Root/HBoxContainer" unique_id=1607500840]
-layout_mode = 2
-theme_override_fonts/font = ExtResource("2_w8tcp")
-theme_override_font_sizes/font_size = 24
-horizontal_alignment = 1
-vertical_alignment = 1
+[node name="InteractionPrompt" parent="Root" unique_id=787878364 instance=ExtResource("2_svhta")]
+layout_mode = 0
+anchors_preset = 0
 
 [node name="Cursor" type="RichTextLabel" parent="Root" unique_id=249453341]
 layout_mode = 1
@@ -122,5 +56,50 @@ autowrap_mode = 0
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Button" parent="Root" unique_id=1170712381 instance=ExtResource("2_2gk58")]
+[node name="QuitButton" parent="Root" unique_id=1170712381 instance=ExtResource("2_2gk58")]
 layout_mode = 1
+
+[node name="Ammo" type="MarginContainer" parent="Root" unique_id=2027768603]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -50.40503
+offset_top = -40.0
+offset_right = -10.405029
+grow_horizontal = 0
+grow_vertical = 0
+offset_transform_enabled = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Root/Ammo" unique_id=1779887858]
+layout_mode = 2
+alignment = 1
+
+[node name="Loaded" type="RichTextLabel" parent="Root/Ammo/HBoxContainer" unique_id=163579539]
+layout_mode = 2
+size_flags_horizontal = 19
+theme_override_fonts/normal_font = ExtResource("2_w8tcp")
+text = "6"
+scroll_active = false
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DividedBy" type="RichTextLabel" parent="Root/Ammo/HBoxContainer" unique_id=1587474040]
+layout_mode = 2
+size_flags_horizontal = 19
+theme_override_font_sizes/normal_font_size = 25
+text = "/"
+scroll_active = false
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MagSize" type="RichTextLabel" parent="Root/Ammo/HBoxContainer" unique_id=692536221]
+layout_mode = 2
+size_flags_horizontal = 19
+theme_override_fonts/normal_font = ExtResource("2_w8tcp")
+text = "6"
+scroll_active = false
+horizontal_alignment = 1
+vertical_alignment = 1

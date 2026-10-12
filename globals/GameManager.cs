@@ -48,7 +48,6 @@ public partial class GameManager : Node
 			}
 		}
 
-		GD.Print("Getting to the nasty point?");
 		return new Node3D(); // Let's hope this never gets hit
 	}
 

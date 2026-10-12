@@ -10,10 +10,9 @@ public partial class HudController : CanvasLayer
 	[Export] public float HideTimeout = 0.08f;
 	[Export] public float ShowTimeout = 0.12f;
 	private Label _actionLabel;
-	private RichTextLabel _boldCursor;
-
-	private HBoxContainer _instructionLabel;
+	private HBoxContainer _interactionLabel;
 	private Label _itemLabel;
+	private RichTextLabel _boldReticle;
 	private RichTextLabel _reticle;
 	private string _targetAction = "";
 	private string _targetTitle = "";
@@ -22,14 +21,14 @@ public partial class HudController : CanvasLayer
 
 	public override void _Ready()
 	{
-		_instructionLabel = GetNode<HBoxContainer>("Root/HBoxContainer");
+		_interactionLabel = GetNode<HBoxContainer>("Root/InteractionPrompt");
 		_reticle = GetNode<RichTextLabel>("Root/Cursor");
-		_boldCursor = GetNode<RichTextLabel>("Root/BoldCursor");
-		_actionLabel = GetNode<Label>("Root/HBoxContainer/ActionLabel");
-		_itemLabel = GetNode<Label>("Root/HBoxContainer/ItemLabel");
+		_boldReticle = GetNode<RichTextLabel>("Root/BoldCursor");
+		_actionLabel = GetNode<Label>("Root/InteractionPrompt/ActionLabel");
+		_itemLabel = GetNode<Label>("Root/InteractionPrompt/ItemLabel");
 
-		_instructionLabel.Visible = false;
-		_boldCursor.Visible = false;
+		_interactionLabel.Visible = false;
+		_boldReticle.Visible = false;
 		_itemLabel.Visible = false;
 
 		SignalBus.Instance.InteractableSeen += OnTargetSeen;
@@ -47,8 +46,8 @@ public partial class HudController : CanvasLayer
 		_itemLabel.Text = _targetTitle;
 		_actionLabel.Text = _targetAction;
 
-		_instructionLabel.Visible = true;
-		_boldCursor.Visible = true;
+		_interactionLabel.Visible = true;
+		_boldReticle.Visible = true;
 
 		_itemLabel.Visible = _itemLabel.Text != "";
 	}
@@ -63,14 +62,14 @@ public partial class HudController : CanvasLayer
 	{
 		_tween?.Kill();
 		_tween = CreateTween().SetParallel();
-		_tween.TweenProperty(_instructionLabel, "modulate:a", targetAlpha, duration);
-		_tween.TweenProperty(_boldCursor, "modulate:a", targetAlpha, duration);
+		_tween.TweenProperty(_interactionLabel, "modulate:a", targetAlpha, duration);
+		_tween.TweenProperty(_boldReticle, "modulate:a", targetAlpha, duration);
 	}
 
 	private void OnHideTweenFinished()
 	{
-		_instructionLabel.Visible = false;
-		_boldCursor.Visible = false;
+		_interactionLabel.Visible = false;
+		_boldReticle.Visible = false;
 	}
 
 	private void OnShowReticle(object sender, bool state)

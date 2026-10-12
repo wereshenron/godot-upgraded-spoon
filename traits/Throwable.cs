@@ -1,5 +1,6 @@
 using System;
 using Godot;
+using upgradedspoon.globals;
 using upgradedspoon.types;
 using static Godot.PropertyHint;
 
@@ -94,7 +95,7 @@ public partial class Throwable : Holdable
 
 		var forward = -holdPivot.GlobalBasis.Z;
 		var right = holdPivot.GlobalBasis.X;
-		var up = -holdPivot.GlobalBasis.Y;
+		var up = holdPivot.GlobalBasis.Y;
 		var offset = GetHoldOffset();
 		
 		var holdTarget = holdPivot.GlobalPosition 

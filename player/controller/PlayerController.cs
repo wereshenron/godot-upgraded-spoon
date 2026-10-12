@@ -15,6 +15,9 @@ public partial class PlayerController : CharacterBody3D
 	[Export] public float JumpForce = 8.0f;
 	[Export] public float SprintMultiplier = 1.6f;
 	[Export] public float CameraSmoothing = 0.12f;
+	[Export(PropertyHint.Range, "1,3")] public float FallGravityMultiplier = 1.4f;
+	[Export] public float TerminalVelocity = 50.0f;
+	[Export(PropertyHint.Range, "0.01,1")] public float Acceleration = 0.12f;
 
 	[Export] public Resource PlayerStats = GD.Load<Resource>("res://player/stats/PlayerStats.tres");
 	[Export] public float TiltLimit = Mathf.DegToRad(75f);
@@ -54,7 +57,7 @@ public partial class PlayerController : CharacterBody3D
 		_cameraRecoilTarget += amount;
 		_cameraRecoilTarget.X = Mathf.Clamp(_cameraRecoilTarget.X, -maxOffset.X, maxOffset.X);
 		_cameraRecoilTarget.Y = Mathf.Clamp(_cameraRecoilTarget.Y, -maxOffset.Y, maxOffset.Y);
-		_cameraRecoilTarget.Z = Mathf.Clamp(_cameraRecoilTarget.Z, -maxOffset.Y, maxOffset.Z);
+		_cameraRecoilTarget.Z = Mathf.Clamp(_cameraRecoilTarget.Z, -maxOffset.Z, maxOffset.Z);
 	}
 
 	// Commented out because this is how you can "run through" objects - keeping for testing
@@ -127,8 +130,10 @@ public partial class PlayerController : CharacterBody3D
 		}
 
 		// Ground Velocity
-		_targetVelocity.X = Mathf.Lerp(_targetVelocity.X, direction.X * runningSpeed, t);
-		_targetVelocity.Z = Mathf.Lerp(_targetVelocity.Z, direction.Z * runningSpeed, t);
+		float groundT = 1.0f - Mathf.Pow(1.0f - Acceleration, delta * 60.0f);
+		_targetVelocity.X = Mathf.Lerp(_targetVelocity.X, direction.X * runningSpeed, groundT);
+		_targetVelocity.Z = Mathf.Lerp(_targetVelocity.Z, direction.Z * runningSpeed, groundT);
+
 
 		if (Input.IsActionJustPressed("jump") && IsOnFloor())
 		{
@@ -138,7 +143,11 @@ public partial class PlayerController : CharacterBody3D
 		// Vertical Velocity
 		if (!IsOnFloor())
 		{
-			_targetVelocity.Y = Mathf.Lerp(_targetVelocity.Y, _targetVelocity.Y - (FallAcceleration * delta), t);
+			_targetVelocity.Y -= FallAcceleration * delta;
+		}
+		else if (_targetVelocity.Y < 0)
+		{
+			_targetVelocity.Y = 0; // reset on landing so stale fall speed doesn't carry over
 		}
 
 		Velocity = _targetVelocity;

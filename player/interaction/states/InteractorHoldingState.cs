@@ -51,23 +51,27 @@ public partial class InteractorHoldingState : State<Interactor>
     public override void HandleInput(InputEvent @event)
     {
         if (!TryGetHeld(out var held)) return;
+        if (!@event.IsActionType()) return;
 
         var built = false;
         AimContext ctx = default!;
 
+        if (@event.IsActionReleased("LetGo"))
+        {
+            _heldObject?.RaiseReleased();
+            return;
+        }
+
         foreach (var (action, slot) in Bindings)
         {
-            InputPhase phase;
-            if (@event.IsActionPressed(action)) phase = InputPhase.Pressed;
-            else if (@event.IsActionReleased(action)) phase = InputPhase.Released;
-            else continue;
+            if (!@event.IsAction(action)) continue;
+            if (@event.IsEcho()) continue;
+
+            var phase = @event.IsPressed() ? InputPhase.Pressed : InputPhase.Released;
 
             if (!built) { ctx = BuildAimContext(held); built = true; }
 
             held.OnAction(slot, phase, 0, ctx);
-
-            // The action may have dropped the object.
-            if (!TryGetHeld(out held)) return;
         }
     }
 
@@ -111,7 +115,7 @@ public partial class InteractorHoldingState : State<Interactor>
             aimPoint = Actor.AimRaycast.GetCollisionPoint();
 
         var direction = (aimPoint - held.Body.GlobalPosition).Normalized();
-        return new AimContext(direction, 1.0f); // TODO - Replace with actor's strength mult
+        return new AimContext(direction, Actor.PlayerStats.StrengthMultiplier);
     }
 
     private void OnReleased(object? sender, EventArgs e)

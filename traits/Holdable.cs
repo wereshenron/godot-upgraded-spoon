@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Godot;
 using Godot.Collections;
+using upgradedspoon.globals;
 using upgradedspoon.player.interaction;
 using upgradedspoon.player.interaction.states;
 using upgradedspoon.types;
@@ -64,8 +65,8 @@ public abstract partial class Holdable : Interactable
 	private void OnGrabbed()
 	{
 		SetHighlight(false);
-		SetShouldHover(false);
-		globals.SignalBus.Instance.RaiseLookedAway();
+		SetShouldHover(true);
+		SignalBus.Instance.RaiseLookedAway();
 	}
 
 	// Helpers

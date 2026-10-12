@@ -45,9 +45,6 @@ public partial class Interactor : Node3D
 
 	public override void _UnhandledInput(InputEvent @event)
 	{
-		// Forward to the active state; holding translates this into gun/object verbs.
-		StateMachine.CurrentState?.HandleInput(@event);
-
 		if (@event.IsActionPressed(InteractAction) && _currentTarget is not null)
 			_currentTarget.Interact(this, new Dictionary { ["target"] = _currentTarget });
 	}
