@@ -3,8 +3,8 @@ using Godot.Collections;
 using upgradedspoon.globals;
 using upgradedspoon.player.interaction.states;
 using upgradedspoon.player.stats;
-using upgradedspoon.state;
 using upgradedspoon.traits;
+using Camera = upgradedspoon.player.camera.Camera;
 
 namespace upgradedspoon.player.interaction;
 
@@ -13,11 +13,9 @@ public partial class Interactor : Node3D
 	private static readonly StringName InteractAction = "interact";
 
 	[ExportGroup("Node References")]
-	[Export] public RayCast3D PickupRaycast;
-	[Export] public RayCast3D AimRaycast;
-	[Export] public Camera3D Camera;
 	[Export] public Node3D HoldPivot;
 	[Export] public InteractorStateMachine StateMachine;
+	[Export] public Camera Camera;
 	public PlayerStats PlayerStats;
 
 	[ExportGroup("Timing")]
@@ -33,8 +31,8 @@ public partial class Interactor : Node3D
 
 		// Assumes Owner is the player body. The old code cast a CollisionShape3D, which is
 		// not a CollisionObject3D, so it was always null.
-		if (Owner is CollisionObject3D body)
-			PickupRaycast.AddException(body);
+		// if (Owner is CollisionObject3D body)
+		// 	Camera.PickupRaycast.AddException(body);
 
 		StateMachine.AddState("Idle", new InteractorIdleState());
 		StateMachine.AddState("Holding", new InteractorHoldingState());
@@ -51,8 +49,8 @@ public partial class Interactor : Node3D
 
 	private Interactable FindTarget()
 	{
-		if (!PickupRaycast.IsColliding()) return null;
-		if (PickupRaycast.GetCollider() is not RigidBody3D body || !body.IsInGroup("Interactable")) return null;
+		if (!Camera.PickupRaycast.IsColliding()) return null;
+		if (Camera.PickupRaycast.GetCollider() is not RigidBody3D body || !body.IsInGroup("Interactable")) return null;
 
 		var target = GetInteractable(body);
 		if (target is null || target == ObjectHeld) return null;

@@ -1,0 +1,58 @@
+[gd_scene format=3 uid="uid://dfg5c6s5iqbg2"]
+
+[ext_resource type="FontVariation" uid="uid://bujcedphrrr72" path="res://hud/text/normal_font.tres" id="1_3etk5"]
+[ext_resource type="Script" uid="uid://cxnnm06rru7yj" path="res://hud/Widgets/Ammo/Ammo.cs" id="1_anu7f"]
+
+[node name="Ammo" type="MarginContainer" unique_id=1018567022 node_paths=PackedStringArray("Loaded", "MagSize")]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -50.40503
+offset_top = -40.0
+offset_right = -10.405029
+grow_horizontal = 0
+grow_vertical = 0
+offset_transform_enabled = true
+script = ExtResource("1_anu7f")
+Loaded = NodePath("HBoxContainer/Loaded")
+MagSize = NodePath("HBoxContainer/MagSize")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=2000624151]
+layout_mode = 2
+size_flags_horizontal = 17
+alignment = 1
+
+[node name="Loaded" type="RichTextLabel" parent="HBoxContainer" unique_id=105643498]
+layout_mode = 2
+size_flags_horizontal = 19
+theme_override_fonts/normal_font = ExtResource("1_3etk5")
+text = "666"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DividedBy" type="RichTextLabel" parent="HBoxContainer" unique_id=1524141527]
+layout_mode = 2
+size_flags_horizontal = 19
+theme_override_font_sizes/normal_font_size = 25
+text = "/"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MagSize" type="RichTextLabel" parent="HBoxContainer" unique_id=517805213]
+layout_mode = 2
+size_flags_horizontal = 19
+theme_override_fonts/normal_font = ExtResource("1_3etk5")
+text = "666"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+horizontal_alignment = 1
+vertical_alignment = 1

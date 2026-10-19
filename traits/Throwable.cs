@@ -37,7 +37,7 @@ public partial class Throwable : Holdable
 			case (UseSlot.Primary, InputPhase.Pressed):
 				if (IsAiming)
 				{
-					Throw(ctx.Direction, ctx.StrengthMultiplier);
+					Throw((ctx.AimPoint - ctx.Origin).Normalized());
 				}
 
 				IsAiming = false;
@@ -64,10 +64,10 @@ public partial class Throwable : Holdable
 		};
 	}
 
-	private void Throw(Vector3 direction, float strength = 1.0f)
+	private void Throw(Vector3 direction)
 	{
 		var chargeRatio = _chargeTime / MathF.Max(MaxChargeTime, 0.0001f);
-		var force = Mathf.Lerp(MinThrowForce, MaxThrowForce, chargeRatio) * strength;
+		var force = Mathf.Lerp(MinThrowForce, MaxThrowForce, chargeRatio) * GameManager.Instance.Player.PlayerStats.StrengthMultiplier;
 		var relativeAngularVelocity = GetRelativeAngularVelocity(direction);
 		var chargedAngularVelocity = Vector3.Zero.Lerp(relativeAngularVelocity, chargeRatio);
 

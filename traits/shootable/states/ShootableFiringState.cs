@@ -22,7 +22,7 @@ public partial class ShootableFiringState : ShootableState
         _timeSinceShot += delta;
         if (_timeSinceShot < Actor.GunSettings.FireRate) return;
 
-        var msg = _nextShotQueued
+        var msg = _nextShotQueued && Actor.GunSettings.FullAuto
             ? new Dictionary { ["nextShotQueued"] = true }
             : new Dictionary();
         OnTransitioned(this, "Idle", msg);

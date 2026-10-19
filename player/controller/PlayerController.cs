@@ -1,25 +1,23 @@
 using Godot;
 using upgradedspoon.player.interaction;
 using upgradedspoon.player.stats;
+using Camera = upgradedspoon.player.camera.Camera;
 
 namespace upgradedspoon.player.controller;
 
 public partial class PlayerController : CharacterBody3D
 {
-	private Camera3D _camera;
-	private Node3D _cameraPivot;
 	private Node3D _pivot;
 	private Interactor _interactor;
-
-	[Export] public float MouseSensitivity = 0.003f;
+	
+	[Export] public Camera Camera { get; set; }
 	[Export] public float JumpForce = 8.0f;
 	[Export] public float SprintMultiplier = 1.6f;
-	[Export] public float CameraSmoothing = 0.12f;
 	[Export(PropertyHint.Range, "1,3")] public float FallGravityMultiplier = 1.4f;
 	[Export] public float TerminalVelocity = 50.0f;
 	[Export(PropertyHint.Range, "0.01,1")] public float Acceleration = 0.12f;
 
-	[Export] public Resource PlayerStats = GD.Load<Resource>("res://player/stats/PlayerStats.tres");
+	[Export] public PlayerStats PlayerStats { get; set; }
 	[Export] public float TiltLimit = Mathf.DegToRad(75f);
 	[Export] public float TurnSpeed = 4.8f;
 	[Export] public float FallAcceleration = 75.0f;
@@ -29,16 +27,10 @@ public partial class PlayerController : CharacterBody3D
 
 	private float _speed;
 	private Vector3 _targetVelocity = Vector3.Zero;
-	private float _targetCamX = 0.0f;
-	private float _targetCamY = 0.0f;
-	private bool _isSprinting = false;
-	private Vector3 _cameraRecoilOffset = Vector3.Zero;
-	private Vector3 _cameraRecoilTarget = Vector3.Zero;
+	private bool _isSprinting;
 
 	public override void _Ready()
 	{
-		_camera = GetNode<Camera3D>("CameraPivot/Camera3D");
-		_cameraPivot = GetNode<Node3D>("CameraPivot");
 		_pivot = GetNode<Node3D>("Pivot");
 		_interactor = GetNode<Interactor>("Interactor");
 
@@ -48,56 +40,16 @@ public partial class PlayerController : CharacterBody3D
 			_interactor.PlayerStats = playerStats;
 		}
 
-		// GetNode<SignalBus>("/root/SignalBus").RecoilKicked += OnRecoilKicked;
-		GetNode<RayCast3D>("CameraPivot/Camera3D/AimRaycast").AddException(this);
-	}
-
-	private void OnRecoilKicked(Vector3 amount, Vector3 maxOffset)
-	{
-		_cameraRecoilTarget += amount;
-		_cameraRecoilTarget.X = Mathf.Clamp(_cameraRecoilTarget.X, -maxOffset.X, maxOffset.X);
-		_cameraRecoilTarget.Y = Mathf.Clamp(_cameraRecoilTarget.Y, -maxOffset.Y, maxOffset.Y);
-		_cameraRecoilTarget.Z = Mathf.Clamp(_cameraRecoilTarget.Z, -maxOffset.Z, maxOffset.Z);
-	}
-
-	// Commented out because this is how you can "run through" objects - keeping for testing
-	// public override void _Process(double delta)
-	// {
-	// 	SetCollisionMaskValue(16, !_isSprinting);
-	// }
-
-	public override void _Input(InputEvent @event)
-	{
-		if (@event is InputEventMouseMotion motion && Input.MouseMode == Input.MouseModeEnum.Captured)
-		{
-			_targetCamX = Mathf.Clamp(
-				_targetCamX - motion.Relative.Y * MouseSensitivity,
-				-TiltLimit,
-				TiltLimit
-			);
-			_targetCamY += -motion.Relative.X * MouseSensitivity;
-		}
+		Camera.AimRaycast.AddException(this);
+		Camera.PickupRaycast.AddException(this);
 	}
 
 	public override void _PhysicsProcess(double deltaD)
 	{
-		float delta = (float)deltaD;
+		var delta = (float)deltaD;
 
-		// Aim camera by lerp
-		float t = 1.0f - Mathf.Pow(1.0f - CameraSmoothing, delta * 60.0f);
-		Vector3 camRot = _cameraPivot.Rotation;
-		camRot.X = Mathf.Lerp(camRot.X, _targetCamX, t);
-		camRot.Y = Mathf.Lerp(camRot.Y, _targetCamY, t);
-
-		_cameraRecoilTarget = _cameraRecoilTarget.MoveToward(Vector3.Zero, RecoilRecoverSpeed * delta);
-		_cameraRecoilOffset = _cameraRecoilOffset.Lerp(_cameraRecoilTarget, RecoilSnap * delta);
-
-		camRot.X += _cameraRecoilOffset.X;
-		camRot.Y -= _cameraRecoilOffset.Y;
-		_cameraPivot.Rotation = camRot;
-
-		Vector3 direction = Vector3.Zero;
-		float runningSpeed = _speed;
+		var direction = Vector3.Zero;
+		var runningSpeed = _speed;
 
 		if (Input.IsActionPressed("move_right")) direction.X += 1;
 		if (Input.IsActionPressed("move_left")) direction.X -= 1;
@@ -116,7 +68,7 @@ public partial class PlayerController : CharacterBody3D
 
 		if (direction != Vector3.Zero)
 		{
-			Basis cameraBasis = new Basis(Vector3.Up, _camera.GlobalTransform.Basis.GetEuler().Y);
+			Basis cameraBasis = new Basis(Vector3.Up, Camera.GlobalTransform.Basis.GetEuler().Y);
 
 			Vector3 forward = -cameraBasis.Z.Normalized();
 			Vector3 right = cameraBasis.X.Normalized();

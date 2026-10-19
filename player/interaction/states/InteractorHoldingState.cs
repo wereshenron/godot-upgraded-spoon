@@ -1,6 +1,7 @@
 using System;
 using Godot;
 using Godot.Collections;
+using upgradedspoon.globals;
 using upgradedspoon.state;
 using upgradedspoon.traits;
 using upgradedspoon.types;
@@ -32,6 +33,7 @@ public partial class InteractorHoldingState : State<Interactor>
             return;
         }
 
+        holdable.Body.Freeze = true;
         _heldObject = holdable;
         Actor.ObjectHeld = holdable;
         holdable.Released += OnReleased;
@@ -43,6 +45,7 @@ public partial class InteractorHoldingState : State<Interactor>
         if (_heldObject is not null && IsInstanceValid(_heldObject))
             _heldObject.Released -= OnReleased;
 
+        Actor.ObjectHeld.Body.Freeze = false;
         _heldObject = null;
         Actor.ObjectHeld = null;
     }
@@ -109,13 +112,15 @@ public partial class InteractorHoldingState : State<Interactor>
 
     private AimContext BuildAimContext(Holdable held)
     {
-        var origin = Actor.Camera.GlobalPosition;
-        var aimPoint = origin + -Actor.Camera.GlobalBasis.Z * 1000.0f;
-        if (Actor.AimRaycast.IsColliding())
-            aimPoint = Actor.AimRaycast.GetCollisionPoint();
+        var camera = Actor.Camera;
+        var origin = camera.GlobalPosition;
+        var cameraForward = -camera.GlobalBasis.Z;
+        var aimPoint = origin + cameraForward * 1000.0f;
+        
+        if (camera.AimRaycast.IsColliding())
+            aimPoint = camera.AimRaycast.GetCollisionPoint();
 
-        var direction = (aimPoint - held.Body.GlobalPosition).Normalized();
-        return new AimContext(direction, Actor.PlayerStats.StrengthMultiplier);
+        return new AimContext(origin, cameraForward, aimPoint);
     }
 
     private void OnReleased(object? sender, EventArgs e)

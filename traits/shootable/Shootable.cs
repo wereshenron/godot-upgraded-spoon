@@ -1,6 +1,7 @@
 using System;
 using Godot;
 using upgradedspoon.globals;
+using upgradedspoon.models.bullets;
 using upgradedspoon.state;
 using upgradedspoon.traits.shootable.gun_settings;
 using upgradedspoon.traits.shootable.states;
@@ -15,6 +16,7 @@ public partial class Shootable : Holdable
 	[Export] public Vector3 AimOffset { get; set; }
 	[Export] public GunSettings GunSettings { get; set; }
 	[Export] public float AimLength { get; set; } = 1000.0f;
+	[Export] public PackedScene Marker { get; set; }
 
 	/// Latest aim from the interactor; states read this when firing.
 	public AimContext CurrentAim { get; private set; }
@@ -114,9 +116,18 @@ public partial class Shootable : Holdable
 
 	public void Shoot()
 	{
+		var spawnPos = _bulletPivot.GlobalPosition;
+		var toAim = CurrentAim.AimPoint - spawnPos;
+		var direction = toAim.LengthSquared() > 0.01f
+			? toAim.Normalized()
+			: CurrentAim.CameraForward;
+		
 		Ammo--;
+		
+		SignalBus.Instance.RaiseAmmoChanged(new AmmoState(Ammo, 0, GunSettings.MagazineSize));
 		ApplyRecoilKick();
-		LaunchBullet(CurrentAim.Direction);
+		LaunchBullet(direction, CurrentAim.AimPoint);
+		// SpawnMarker(CurrentAim.AimPoint);
 	}
 
 	public void RefillMagazine() => Ammo = GunSettings.MagazineSize;
@@ -136,12 +147,15 @@ public partial class Shootable : Holdable
 		_targetRecoilOffset += applied;
 	}
 
-	private void LaunchBullet(Vector3 direction)
+	private void LaunchBullet(Vector3 direction, Vector3 aimPoint)
 	{
-		var bullet = GunSettings.BulletScene.Instantiate<RigidBody3D>();
+		var bullet = GunSettings.BulletScene.Instantiate<Bullet>();
 		GetTree().Root.AddChild(bullet);
 		bullet.GlobalPosition = _bulletPivot.GlobalPosition;
-		bullet.LinearVelocity = direction * GunSettings.FireVelocity;
+		bullet.GlobalBasis = GlobalBasis;
+		bullet.Velocity = direction * GunSettings.FireVelocity;
+		bullet.Mass = GunSettings.ReferenceBulletMass;
+		bullet.CollisionPoint = aimPoint;
 	}
 
 	// Input from the interactor
@@ -181,7 +195,9 @@ public partial class Shootable : Holdable
 		Body.Freeze = true;
 		Body.CollisionLayer = 0;
 		Body.CollisionMask = 0;
+		
 		SignalBus.Instance.RaiseLookedAway();
+		SignalBus.Instance.RaiseAmmoShown(this, true);
 	}
 
 	private void OnReleased()
@@ -193,6 +209,18 @@ public partial class Shootable : Holdable
 		Body.Freeze = false;
 		Body.CollisionLayer = _initialLayer;
 		Body.CollisionMask = _initialMask;
+		
 		SignalBus.Instance.RaiseLookedAway();
+		SignalBus.Instance.RaiseAmmoShown(this, false);
+	}
+
+	private void SpawnMarker(Vector3? endPoint = null)
+	{
+		// Checks if it has a value and assigns it to 'pos' at the same time
+		if (endPoint is not { } pos) return;
+	
+		var instance = Marker.Instantiate<Node3D>();
+		GetTree().Root.AddChild(instance);
+		instance.GlobalPosition = pos;
 	}
 }

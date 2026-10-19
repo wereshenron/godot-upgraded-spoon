@@ -1,0 +1,84 @@
+[gd_scene format=3 uid="uid://dduidl0dbs1sf"]
+
+[ext_resource type="Script" uid="uid://c1h26yu42rgg0" path="res://hud/Widgets/InteractionPrompt/InteractionPrompt.cs" id="1_2080q"]
+[ext_resource type="FontVariation" uid="uid://bujcedphrrr72" path="res://hud/text/normal_font.tres" id="1_lwpo8"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aqcbf"]
+content_margin_left = 10.0
+content_margin_right = 10.0
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+corner_detail = 20
+
+[node name="InteractionPrompt" type="HBoxContainer" unique_id=787878364 node_paths=PackedStringArray("_actionLabel", "_itemLabel")]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -124.5
+offset_top = -18.0
+offset_right = 124.5
+offset_bottom = 18.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+offset_transform_enabled = true
+mouse_filter = 2
+theme_override_constants/separation = 10
+alignment = 1
+script = ExtResource("1_2080q")
+_actionLabel = NodePath("ActionLabel")
+_itemLabel = NodePath("ItemLabel")
+
+[node name="PressLabel" type="Label" parent="." unique_id=1958825530]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_lwpo8")
+theme_override_font_sizes/font_size = 24
+text = "Press"
+
+[node name="Keybadge" type="MarginContainer" parent="." unique_id=1005579135]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="Background" type="PanelContainer" parent="Keybadge" unique_id=412219341]
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_aqcbf")
+
+[node name="Letter" type="Label" parent="Keybadge/Background" unique_id=1574145603]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_lwpo8")
+theme_override_font_sizes/font_size = 20
+text = "E"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="To" type="Label" parent="." unique_id=305841484]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_lwpo8")
+theme_override_font_sizes/font_size = 24
+text = "To"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ActionLabel" type="Label" parent="." unique_id=900660812]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_lwpo8")
+theme_override_font_sizes/font_size = 24
+text = "Pick Up"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ItemLabel" type="Label" parent="." unique_id=342629615]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_lwpo8")
+theme_override_font_sizes/font_size = 24
+horizontal_alignment = 1
+vertical_alignment = 1

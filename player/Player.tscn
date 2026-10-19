@@ -1,19 +1,22 @@
 [gd_scene format=3 uid="uid://cuaggjrhykbyn"]
 
 [ext_resource type="Script" uid="uid://bcg7gyjlhqb5y" path="res://player/controller/PlayerController.cs" id="1_83hs8"]
+[ext_resource type="PackedScene" uid="uid://dc254awuriifw" path="res://player/camera/camera.tscn" id="2_83hs8"]
+[ext_resource type="Resource" uid="uid://dc66n25skmgcs" path="res://player/stats/PlayerStats.tres" id="2_x8kxw"]
 [ext_resource type="PackedScene" uid="uid://lj273it1f0b3" path="res://player/interaction/interactor.tscn" id="3_83hs8"]
-[ext_resource type="Script" uid="uid://b1ltd5s3pdxhe" path="res://player/camera_capture.gd" id="3_kne1u"]
 [ext_resource type="PackedScene" uid="uid://c5qbrslff0ma8" path="res://shrekwazowski/player_shrak.tscn" id="6_gskgj"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0rwas"]
 radius = 0.50878906
 height = 1.8482472
 
-[node name="Player" type="CharacterBody3D" unique_id=5736185 groups=["SpawnPoints"]]
+[node name="Player" type="CharacterBody3D" unique_id=5736185 node_paths=PackedStringArray("Camera") groups=["SpawnPoints"]]
 collision_layer = 32768
 collision_mask = 32769
 script = ExtResource("1_83hs8")
+Camera = NodePath("Camera")
 JumpForce = 9.5
+PlayerStats = ExtResource("2_x8kxw")
 FallAcceleration = 30.0
 
 [node name="Pivot" type="Node3D" parent="." unique_id=1910403145]
@@ -23,27 +26,12 @@ transform = Transform3D(-1, 0, 1.509958e-07, 0, 1, 0, -1.509958e-07, 0, -1, 0, 0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8977453, -0.099609256)
 shape = SubResource("CapsuleShape3D_0rwas")
 
-[node name="CameraPivot" type="Node3D" parent="." unique_id=348688890]
+[node name="Camera" parent="." unique_id=1468097390 instance=ExtResource("2_83hs8")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.85, 0)
-
-[node name="Camera3D" type="Camera3D" parent="CameraPivot" unique_id=804032513]
-cull_mask = 524287
-current = true
-script = ExtResource("3_kne1u")
-
-[node name="PickupRaycast" type="RayCast3D" parent="CameraPivot/Camera3D" unique_id=270234958]
-target_position = Vector3(0, 0, -4)
-collision_mask = 32769
-
-[node name="AimRaycast" type="RayCast3D" parent="CameraPivot/Camera3D" unique_id=1195360488]
-target_position = Vector3(0, 0, -100)
-collision_mask = 32769
 
 [node name="shrak" parent="." unique_id=473750945 instance=ExtResource("6_gskgj")]
 transform = Transform3D(-0.1, 0, -8.742278e-09, 0, 0.1, 0, 8.742278e-09, 0, -0.1, 0, 0, 0)
 
-[node name="Interactor" parent="." unique_id=844431834 node_paths=PackedStringArray("PickupRaycast", "AimRaycast", "Camera", "HoldPivot") instance=ExtResource("3_83hs8")]
-PickupRaycast = NodePath("../CameraPivot/Camera3D/PickupRaycast")
-AimRaycast = NodePath("../CameraPivot/Camera3D/AimRaycast")
-Camera = NodePath("../CameraPivot/Camera3D")
-HoldPivot = NodePath("../CameraPivot/Camera3D")
+[node name="Interactor" parent="." unique_id=844431834 node_paths=PackedStringArray("HoldPivot", "Camera") instance=ExtResource("3_83hs8")]
+HoldPivot = NodePath("../Camera")
+Camera = NodePath("../Camera")

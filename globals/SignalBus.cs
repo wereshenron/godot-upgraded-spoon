@@ -19,6 +19,10 @@ public partial class SignalBus : Node
 	public event EventHandler<RecoilKickedArgs> RecoilKicked;
 	public event EventHandler<Interactable> InteractableSeen;
 
+	public event EventHandler<bool> AmmoShown;
+	public event EventHandler<AmmoState> AmmoChanged;
+	// public event EventHandler<bool> PauseStarted;
+
 	public override void _Ready()
 	{
 		Instance = this;
@@ -43,5 +47,15 @@ public partial class SignalBus : Node
 	public void RaiseInteractableSeen(Interactable interactable)
 	{
 		InteractableSeen?.Invoke(this, interactable);
+	}
+
+	public void RaiseAmmoShown(object sender, bool e)
+	{
+		AmmoShown?.Invoke(sender, e);
+	}
+
+	public void RaiseAmmoChanged(AmmoState e)
+	{
+		AmmoChanged?.Invoke(this, e);
 	}
 }

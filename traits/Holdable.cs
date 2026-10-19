@@ -65,14 +65,14 @@ public abstract partial class Holdable : Interactable
 	private void OnGrabbed()
 	{
 		SetHighlight(false);
-		SetShouldHover(true);
+		// SetShouldHover(true);
 		SignalBus.Instance.RaiseLookedAway();
 	}
 
 	// Helpers
 	private void HandleCcd()
 	{
-		if (Body.ContinuousCd)
+		if (!Body.ContinuousCd)
 		{
 			HasSpiked = false;
 			return;
@@ -83,9 +83,9 @@ public abstract partial class Holdable : Interactable
 		if (Movement > MovementLowerThreshold)
 		{
 			HasSpiked = true;
-			return;
 		}
 
+		if (!HasSpiked) return;
 		Body.ContinuousCd = false;
 		HasSpiked = false;
 	}

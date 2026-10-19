@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://dc254awuriifw"]
+
+[ext_resource type="Script" uid="uid://c000mqcqone04" path="res://player/camera/Camera.cs" id="1_lw1ob"]
+
+[node name="Camera" type="Camera3D" unique_id=1299159829 node_paths=PackedStringArray("PickupRaycast", "AimRaycast")]
+cull_mask = 524287
+current = true
+script = ExtResource("1_lw1ob")
+CameraSmoothing = 20.0
+PickupRaycast = NodePath("PickupRaycast")
+AimRaycast = NodePath("AimRaycast")
+
+[node name="PickupRaycast" type="RayCast3D" parent="." unique_id=2095988848]
+target_position = Vector3(0, 0, -4)
+collision_mask = 32769
+
+[node name="AimRaycast" type="RayCast3D" parent="." unique_id=640394829]
+target_position = Vector3(0, 0, -100)
+collision_mask = 32769

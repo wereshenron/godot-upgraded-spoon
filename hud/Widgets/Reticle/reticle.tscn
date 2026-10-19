@@ -1,0 +1,53 @@
+[gd_scene format=3 uid="uid://de3uw40m7q37l"]
+
+[ext_resource type="Script" uid="uid://dxxdaxviqxrok" path="res://hud/Widgets/Reticle/Reticle.cs" id="1_2c0is"]
+[ext_resource type="FontVariation" uid="uid://dydfs7v8y0w3n" path="res://hud/text/bold_font.tres" id="2_7cxll"]
+
+[node name="Root" type="Control" unique_id=1299542176]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_2c0is")
+
+[node name="Reticle" type="RichTextLabel" parent="." unique_id=1110350058]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -5.0
+offset_top = -11.5
+offset_right = 5.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+text = "+"
+fit_content = true
+autowrap_mode = 0
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BoldReticle" type="RichTextLabel" parent="." unique_id=1271790193]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -5.0
+offset_top = -11.5
+offset_right = 5.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_fonts/normal_font = ExtResource("2_7cxll")
+bbcode_enabled = true
+text = "+"
+fit_content = true
+autowrap_mode = 0
+horizontal_alignment = 1
+vertical_alignment = 1

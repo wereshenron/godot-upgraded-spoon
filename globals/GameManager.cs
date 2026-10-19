@@ -1,4 +1,5 @@
 using Godot;
+using upgradedspoon.player.controller;
 using upgradedspoon.world;
 
 namespace upgradedspoon.globals;
@@ -7,7 +8,7 @@ public partial class GameManager : Node
 {
 	private PackedScene _playerScene = GD.Load<PackedScene>("res://player/Player.tscn");
 	private PackedScene[] _globalScenes;
-	private Node3D _player;
+	public PlayerController Player;
 	
 	public static GameManager Instance { get; private set; }
 
@@ -28,14 +29,14 @@ public partial class GameManager : Node
 
 	public void SpawnPlayer(string spawnId)
 	{
-		_player = _playerScene.Instantiate<Node3D>();
-		AddChild(_player);
+		Player = _playerScene.Instantiate<PlayerController>();
+		AddChild(Player);
 
 		var target = FindSpawnPoint(spawnId);
 		if (target is null) return;
 
-		_player.GlobalPosition = target.GlobalPosition;
-		_player.Rotation = target.Rotation;
+		Player.GlobalPosition = target.GlobalPosition;
+		Player.Rotation = target.Rotation;
 	}
 
 	private Node3D FindSpawnPoint(string spawnId)

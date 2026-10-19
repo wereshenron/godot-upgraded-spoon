@@ -1,7 +1,7 @@
 [gd_scene format=4 uid="uid://dojmqfepqscc4"]
 
 [ext_resource type="Material" uid="uid://bnn633wn1htch" path="res://models/guns/simple_gun/shared_mat.res" id="1_07hyc"]
-[ext_resource type="Script" uid="uid://b2bhja66w7ak5" path="res://models/bullets/bullet.gd" id="1_8tb6y"]
+[ext_resource type="Script" uid="uid://dtbqwq5osok0w" path="res://models/bullets/Bullet.cs" id="1_8tb6y"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_6um7j"]
 _surfaces = [{
@@ -38,14 +38,14 @@ blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_6um7j")
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_3ea33"]
-radius = 0.029785156
+radius = 0.038085938
 height = 0.1645957
 
 [sub_resource type="PlaceholderMesh" id="PlaceholderMesh_12sn5"]
 
-[node name="Bullet" type="RigidBody3D" unique_id=1322728350]
-mass = 0.007
+[node name="Bullet" type="Area3D" unique_id=1045853971]
 script = ExtResource("1_8tb6y")
+TimeToLive = 5.0
 
 [node name="service_pistol_bullet" type="MeshInstance3D" parent="." unique_id=907308666]
 transform = Transform3D(5, 0, 0, 0, -2.1855695e-07, 5, 0, -5, -2.1855695e-07, 0, 0, 0)

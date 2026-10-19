@@ -6,6 +6,7 @@
 [ext_resource type="Shape3D" uid="uid://b35gwbx1qlr2g" path="res://models/guns/simple_gun/simple_gun_capsule_collider_2.tres" id="5_qpxi4"]
 [ext_resource type="PackedScene" uid="uid://xrymkvqoj1sg" path="res://traits/shootable/shootable.tscn" id="5_wl1ro"]
 [ext_resource type="Resource" uid="uid://bhyinapxfjnu3" path="res://traits/shootable/gun_settings/deagle.tres" id="6_3w8vd"]
+[ext_resource type="PackedScene" uid="uid://corg8c2403rhj" path="res://playground/marker.tscn" id="7_3w8vd"]
 
 [node name="SimpleGun" type="RigidBody3D" unique_id=69713160 groups=["Holdable"]]
 collision_layer = 32769
@@ -26,6 +27,7 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0
 TracerMaterial = ExtResource("5_eko8r")
 AimOffset = Vector3(0, -0.395, 0.505)
 GunSettings = ExtResource("6_3w8vd")
+Marker = ExtResource("7_3w8vd")
 HoldOffset = Vector3(0.695, -0.575, 0.8)
 MovementLowerThreshold = 0.33
 BaseFollowSpeed = 125.0

@@ -4,13 +4,16 @@ namespace upgradedspoon.types;
 
 public struct AimContext
 {
-    public AimContext(Vector3 direction, float strengthMultiplier)
+    public AimContext(Vector3 origin, Vector3 cameraForward, Vector3 aimPoint)
     {
-        Direction = direction;
-        StrengthMultiplier = strengthMultiplier;
+        Origin = origin;
+        CameraForward = cameraForward;
+        AimPoint = aimPoint;
     }
 
-    public float StrengthMultiplier { get; set; } = 1.0f;
+    public Vector3 AimPoint { get; set; }
 
-    public Vector3 Direction { get; set; } = Vector3.Forward;
+    public Vector3 Origin { get; set; } = Vector3.Forward;
+    
+    public Vector3 CameraForward { get; set; }
 }
