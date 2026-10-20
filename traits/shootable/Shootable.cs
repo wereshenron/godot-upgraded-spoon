@@ -151,11 +151,11 @@ public partial class Shootable : Holdable
 	{
 		var bullet = GunSettings.BulletScene.Instantiate<Bullet>();
 		GetTree().Root.AddChild(bullet);
+		
 		bullet.GlobalPosition = _bulletPivot.GlobalPosition;
 		bullet.GlobalBasis = GlobalBasis;
 		bullet.Velocity = direction * GunSettings.FireVelocity;
 		bullet.Mass = GunSettings.ReferenceBulletMass;
-		bullet.CollisionPoint = aimPoint;
 	}
 
 	// Input from the interactor

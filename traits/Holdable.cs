@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Godot;
 using Godot.Collections;
 using upgradedspoon.globals;
@@ -31,7 +30,7 @@ public abstract partial class Holdable : Interactable
 	public event EventHandler Grabbed;
 	public event EventHandler Released;
 
-	protected internal RigidBody3D Body { get; set; }
+	protected internal RigidBody3D Body { get; private set; }
 	protected double Movement;
 	protected bool HasSpiked;
 
@@ -41,6 +40,17 @@ public abstract partial class Holdable : Interactable
 	public override void _Ready()
 	{
 		base._Ready();
+
+		var parent = GetParent<Node3D>();
+		switch (parent)
+		{
+			case RigidBody3D rigidBody:
+				Body = rigidBody;
+				break;
+			default:
+				Body = null;
+				break;
+		}
 		Body = GetParent() as RigidBody3D;
 		Body?.AddToGroup("Holdable");
 
@@ -59,7 +69,8 @@ public abstract partial class Holdable : Interactable
 
 	public override void _PhysicsProcess(double delta)
 	{
-		HandleCcd();
+		if (Body == null) return;
+			HandleCcd();
 	}
 
 	private void OnGrabbed()

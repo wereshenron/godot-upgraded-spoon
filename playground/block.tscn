@@ -9,8 +9,6 @@
 material = ExtResource("1_275sg")
 
 [node name="Block" type="RigidBody3D" unique_id=1541687413 groups=["Holdable"]]
-collision_layer = 32769
-collision_mask = 32769
 mass = 4.536
 freeze_mode = 1
 

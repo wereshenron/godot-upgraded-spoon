@@ -29,6 +29,7 @@ transform = Transform3D(1, 0, 0, 0, -0.022013817, -0.9997577, 0, 0.9997577, -0.0
 shape = SubResource("CapsuleShape3D_6t3g5")
 
 [node name="Shootable" parent="." unique_id=321872780 node_paths=PackedStringArray("GeometryList") instance=ExtResource("2_1x5rg")]
+AimOffset = Vector3(-0.005, -0.305, 0.3)
 GunSettings = ExtResource("3_da1x0")
 HoldOffset = Vector3(0.53, -0.44, 0.44)
 MovementLowerThreshold = 0.33
