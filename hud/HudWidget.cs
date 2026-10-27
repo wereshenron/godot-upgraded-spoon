@@ -5,6 +5,7 @@ namespace upgradedspoon.hud;
 
 public partial class HudWidget : Control
 {
+	private static readonly NodePath ModulateAlpha = "modulate:a";
 	private Tween _tween;
 
 	public override void _Ready()
@@ -19,7 +20,7 @@ public partial class HudWidget : Control
 	{
 		_tween?.Kill();
 		_tween = CreateTween();
-		_tween.TweenProperty(this, "modulate:a", alpha, duration);
+		_tween.TweenProperty(this, ModulateAlpha, alpha, duration);
 		if (onFinished != null)
 			_tween.TweenCallback(Callable.From(onFinished));
 	}

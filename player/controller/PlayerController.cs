@@ -8,23 +8,19 @@ namespace upgradedspoon.player.controller;
 
 public partial class PlayerController : CharacterBody3D
 {
-	private Node3D _pivot;
-	private Interactor _interactor;
-
-	[Export] public Camera Camera { get; set; }
+	
 	[Export] public float JumpForce = 8.0f;
 	[Export] public float SprintMultiplier = 1.6f;
 	[Export(PropertyHint.Range, "1,3")] public float FallGravityMultiplier = 1.4f;
-	[Export] public float TerminalVelocity = 50.0f;
 	[Export(PropertyHint.Range, "0.01,1")] public float Acceleration = 0.12f;
 
+	[ExportGroup("Node References")]
+	[Export] public Camera Camera { get; set; }
+	[Export] public Node3D Pivot { get; set; }
+	[Export] public Interactor Interactor { get; set; }
 	[Export] public PlayerStats PlayerStats { get; set; }
-	[Export] public float TiltLimit = Mathf.DegToRad(75f);
 	[Export] public float TurnSpeed = 4.8f;
 	[Export] public float FallAcceleration = 75.0f;
-	[Export] public float PushForce = 5.0f;
-	[Export] public float RecoilRecoverSpeed = 4.0f;
-	[Export] public float RecoilSnap = 12.0f;
 
 	private Vector3 _direction;
 	private float _speed;
@@ -41,14 +37,12 @@ public partial class PlayerController : CharacterBody3D
 
 	public override void _Ready()
 	{
-		_pivot = GetNode<Node3D>("Pivot");
-		_interactor = GetNode<Interactor>("Interactor");
 		_direction = Vector3.Zero;
 
 		if (PlayerStats is { } playerStats)
 		{
 			_speed = playerStats.Speed;
-			_interactor.PlayerStats = playerStats;
+			Interactor.PlayerStats = playerStats;
 		}
 
 		Camera.AimRaycast.AddException(this);
@@ -57,6 +51,7 @@ public partial class PlayerController : CharacterBody3D
 
 	public override void _PhysicsProcess(double deltaD)
 	{
+		// using var _ = GcWatcher.Track("Player._PhysicsProcess");
 		var delta = (float)deltaD;
 		_runningSpeed = _speed;
 
@@ -92,10 +87,10 @@ public partial class PlayerController : CharacterBody3D
 			_direction = (right * _direction.X + forward * _direction.Z).Normalized();
 
 			var lookDirection = new Vector3(_direction.X, 0, _direction.Z);
-			var current = _pivot.Basis.Orthonormalized();
+			var current = Pivot.Basis.Orthonormalized();
 			var target = Basis.LookingAt(lookDirection).Orthonormalized();
 			target = new Basis(target.X.Normalized(), Vector3.Up, target.Z.Normalized());
-			_pivot.Basis = current.Slerp(target, delta * TurnSpeed);
+			Pivot.Basis = current.Slerp(target, delta * TurnSpeed);
 		}
 
 		// Ground Velocity

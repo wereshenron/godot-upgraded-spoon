@@ -43,7 +43,11 @@ public partial class Interactor : Node3D
 		StateMachine.Enter("Idle");
 	}
 
-	public override void _Process(double delta) => SetTarget(FindTarget());
+	public override void _Process(double delta) 
+	{
+		// using var _ = GcWatcher.Track("Interactor.Process");
+		SetTarget(FindTarget());
+	}
 
 	public override void _UnhandledInput(InputEvent @event)
 	{

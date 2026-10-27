@@ -43,6 +43,7 @@ public partial class StateMachine<TActor> : Node where TActor : Node3D
 	public override void _Process(double delta)
 	{
 		
+		// using var _ = GcWatcher.Track("StateMachine.Process");
 		CurrentState?.Update(delta);
 	}
 

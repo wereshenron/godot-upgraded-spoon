@@ -99,17 +99,12 @@ public partial class InteractorHoldingState : State<Interactor>
     // Only continuous "held" polling lives here.
     public override void PhysicsUpdate(double delta)
     {
+        // using var _ = GcWatcher.Track("InteractorHoldingState._PhysicsProcess");
         if (!TryGetHeld(out var held))
         {
             OnTransitioned(this, "Idle", new Dictionary());
             return;
         }
-        
-        //
-        // _camera = Actor.Camera;
-        // _origin = _camera.GlobalPosition;
-        // _cameraForward = -_camera.GlobalBasis.Z;
-        // _aimPoint = _origin + _cameraForward * 1000.0f;
 
         held.UpdateHold(Actor.HoldPivot, delta);
 
@@ -130,7 +125,7 @@ public partial class InteractorHoldingState : State<Interactor>
 
     public override void Update(double delta)
     {
-        
+        // using var _ = GcWatcher.Track("InteractorHoldingState.Update");
         _camera = Actor.Camera;
         _origin = _camera.GlobalPosition;
         _cameraForward = -_camera.GlobalBasis.Z;

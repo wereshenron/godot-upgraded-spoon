@@ -1,11 +1,11 @@
 using Godot;
-using upgradedspoon.globals;
 
 namespace upgradedspoon.hud;
 
 public partial class HudController : CanvasLayer
 {
 
+	private static readonly StringName Pause = "Pause";
 	private bool _isPaused;
 	
 	public override void _Ready()
@@ -17,7 +17,7 @@ public partial class HudController : CanvasLayer
 
 	public override void _UnhandledInput(InputEvent @event)
 	{
-		if (@event.IsActionPressed("Pause"))
+		if (@event.IsActionPressed(Pause))
 		{
 			OnPauseStarted(this, !_isPaused);
 		}

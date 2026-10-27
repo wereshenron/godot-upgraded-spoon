@@ -30,9 +30,11 @@ public partial class Camera : Camera3D
     private Vector3 _recoilOffset = Vector3.Zero;
     private Vector3 _recoilTarget = Vector3.Zero;
     private Vector2 _look = Vector2.Zero;
-
-    /// <summary>Smoothed horizontal look angle (no recoil). Use this for movement direction.</summary>
-    public float Yaw => _yaw;
+    
+    private static readonly StringName LookLeft = "look_left";
+    private static readonly StringName LookRight = "look_right";
+    private static readonly StringName LookDown = "look_down";
+    private static readonly StringName LookUp = "look_up";
 
     public override void _Ready()
     {
@@ -50,6 +52,7 @@ public partial class Camera : Camera3D
 
     public override void _Input(InputEvent @event)
     {
+        // using var _ = GcWatcher.Track("Camera._Input");
         if (@event is not InputEventMouseMotion motion || Input.MouseMode != Input.MouseModeEnum.Captured) return;
 
         _targetPitch = Mathf.Clamp(_targetPitch - motion.Relative.Y * MouseSensitivity, -TiltLimit, TiltLimit);
@@ -58,6 +61,7 @@ public partial class Camera : Camera3D
 
     public override void _PhysicsProcess(double deltaD)
     {
+        // using var _ = GcWatcher.Track("Camera._PhysicsProcess");
         var delta = (float)deltaD;
         var t = 1.0f - Mathf.Exp(-CameraSmoothing * delta);
 
@@ -77,9 +81,9 @@ public partial class Camera : Camera3D
     
     public override void _Process(double delta)
     {
-        _look = Input.GetVector("look_left", "look_right", "look_up", "look_down");
+        // using var _ = GcWatcher.Track("Camera._Process");
+        _look = Input.GetVector(LookLeft, LookRight, LookUp, LookDown);
         if (_look == Vector2.Zero) return;
-        // GD.Print(look);
 
         // Optional: response curve for finer control near the center
         _look = _look.Normalized() * Mathf.Pow(_look.Length(), 2f);

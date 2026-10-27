@@ -18,6 +18,7 @@ public partial class Bullet : Node3D
 
 	public override void _PhysicsProcess(double delta)
 	{
+		// using var _ = GcWatcher.Track("Bullet._Process");
 		TimeToLive -= (float)delta;
 		if (TimeToLive <= 0f)
 		{

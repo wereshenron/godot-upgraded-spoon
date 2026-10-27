@@ -10,10 +10,12 @@
 radius = 0.50878906
 height = 1.8482472
 
-[node name="Player" type="CharacterBody3D" unique_id=5736185 node_paths=PackedStringArray("Camera") groups=["SpawnPoints"]]
+[node name="Player" type="CharacterBody3D" unique_id=5736185 node_paths=PackedStringArray("Camera", "Pivot", "Interactor") groups=["SpawnPoints"]]
 script = ExtResource("1_83hs8")
-Camera = NodePath("Camera")
 JumpForce = 9.5
+Camera = NodePath("Camera")
+Pivot = NodePath("Pivot")
+Interactor = NodePath("Interactor")
 PlayerStats = ExtResource("2_x8kxw")
 FallAcceleration = 30.0
 

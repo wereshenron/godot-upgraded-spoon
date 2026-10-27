@@ -20,7 +20,6 @@ config/icon="res://icon.svg"
 
 SignalBus="*uid://dkg7mfarffhtm"
 GameManager="*uid://bsabaqc6nbkf1"
-GcWatcher="*uid://0xjuphikje8e"
 
 [debug]
 
