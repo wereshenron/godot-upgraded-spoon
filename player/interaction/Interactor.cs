@@ -23,7 +23,11 @@ public partial class Interactor : Node3D
 
 	public Holdable ObjectHeld;
 
+	private static readonly StringName InteractableName = "Interactable";
 	private Interactable _currentTarget;
+	private RigidBody3D _lastBody;
+	private Interactable _lastInteractable;
+	
 
 	public override void _Ready()
 	{
@@ -39,7 +43,7 @@ public partial class Interactor : Node3D
 		StateMachine.Enter("Idle");
 	}
 
-	public override void _PhysicsProcess(double delta) => SetTarget(FindTarget());
+	public override void _Process(double delta) => SetTarget(FindTarget());
 
 	public override void _UnhandledInput(InputEvent @event)
 	{
@@ -50,7 +54,7 @@ public partial class Interactor : Node3D
 	private Interactable FindTarget()
 	{
 		if (!Camera.PickupRaycast.IsColliding()) return null;
-		if (Camera.PickupRaycast.GetCollider() is not RigidBody3D body || !body.IsInGroup("Interactable")) return null;
+		if (Camera.PickupRaycast.GetCollider() is not RigidBody3D body || !body.IsInGroup(InteractableName)) return null;
 
 		var target = GetInteractable(body);
 		if (target is null || target == ObjectHeld) return null;
@@ -81,11 +85,18 @@ public partial class Interactor : Node3D
 		SignalBus.Instance.RaiseInteractableSeen(next);
 	}
 
-	private static Interactable GetInteractable(RigidBody3D body)
+	private Interactable GetInteractable(RigidBody3D body)
 	{
+		if (body == _lastBody && IsInstanceValid(_lastInteractable)) return _lastInteractable;
+		_lastBody = body;
+		_lastInteractable = null;
+		
 		foreach (var child in body.GetChildren())
 			if (child is Interactable interactable)
-				return interactable;
-		return null;
+			{
+				_lastInteractable = interactable;
+				break;
+			}
+		return _lastInteractable;
 	}
 }

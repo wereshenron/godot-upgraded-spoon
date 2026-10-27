@@ -25,12 +25,12 @@ public partial class RagdollReceiver : Node
 
     private static float GetBoneMass(string bone) => bone switch
     {
-        var b when b.Contains("spine") || b.Contains("hips") => 15f,
-        var b when b.Contains("thigh") => 8f,
-        var b when b.Contains("calf") || b.Contains("shin") => 4f,
-        var b when b.Contains("upperarm") => 3f,
-        var b when b.Contains("forearm") || b.Contains("hand") => 1.5f,
-        var b when b.Contains("head") => 5f,
+        _ when bone.Contains("spine") || bone.Contains("hips") => 15f,
+        _ when bone.Contains("thigh") => 8f,
+        _ when bone.Contains("calf") || bone.Contains("shin") => 4f,
+        _ when bone.Contains("upperarm") => 3f,
+        _ when bone.Contains("forearm") || bone.Contains("hand") => 1.5f,
+        _ when bone.Contains("head") => 5f,
         _ => 2f,
     };
 

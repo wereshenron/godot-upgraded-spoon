@@ -1,7 +1,7 @@
 using System;
 using Godot;
 using Godot.Collections;
-using upgradedspoon.globals;
+using upgradedspoon.player.camera;
 using upgradedspoon.state;
 using upgradedspoon.traits;
 using upgradedspoon.types;
@@ -17,11 +17,25 @@ public partial class InteractorHoldingState : State<Interactor>
         ("ReloadAction", UseSlot.Reload)
     ];
 
+    private Camera _camera;
+    private AimContext _aimContext;
+    private Vector3 _origin;
+    private Vector3 _cameraForward;
+    private Vector3 _aimPoint;
+    private bool _contextBuilt;
+
 #nullable enable
     private Holdable? _heldObject;
 
     public override void Enter(Dictionary? msg)
     {
+        // // Initialization
+        // _camera = Actor.Camera;
+        // _origin = _camera.GlobalPosition;
+        // _cameraForward = -_camera.GlobalBasis.Z;
+        // _aimPoint = _origin + _cameraForward * 1000.0f;
+        _aimContext = default!;
+        
         Holdable? holdable = null;
         if (msg is not null && msg.TryGetValue("holdable", out var value))
             holdable = value.As<Holdable>();
@@ -56,8 +70,8 @@ public partial class InteractorHoldingState : State<Interactor>
         if (!TryGetHeld(out var held)) return;
         if (!@event.IsActionType()) return;
 
-        var built = false;
-        AimContext ctx = default!;
+        _contextBuilt = false;
+        _aimContext = default!;
 
         if (@event.IsActionReleased("LetGo"))
         {
@@ -72,9 +86,13 @@ public partial class InteractorHoldingState : State<Interactor>
 
             var phase = @event.IsPressed() ? InputPhase.Pressed : InputPhase.Released;
 
-            if (!built) { ctx = BuildAimContext(held); built = true; }
+            if (!_contextBuilt)
+            {
+                _aimContext = BuildAimContext(held); 
+                _contextBuilt = true;
+            }
 
-            held.OnAction(slot, phase, 0, ctx);
+            held.OnAction(slot, phase, 0, _aimContext);
         }
     }
 
@@ -86,22 +104,37 @@ public partial class InteractorHoldingState : State<Interactor>
             OnTransitioned(this, "Idle", new Dictionary());
             return;
         }
+        
+        //
+        // _camera = Actor.Camera;
+        // _origin = _camera.GlobalPosition;
+        // _cameraForward = -_camera.GlobalBasis.Z;
+        // _aimPoint = _origin + _cameraForward * 1000.0f;
 
         held.UpdateHold(Actor.HoldPivot, delta);
 
-        var built = false;
-        AimContext ctx = default!;
+        _contextBuilt = false;
+        _aimContext = default!;
 
         foreach (var (action, slot) in Bindings)
         {
             if (!Input.IsActionPressed(action)) continue;
 
-            if (!built) { ctx = BuildAimContext(held); built = true; }
+            if (!_contextBuilt) { _aimContext = BuildAimContext(held); _contextBuilt = true; }
 
-            held.OnAction(slot, InputPhase.Held, delta, ctx);
+            held.OnAction(slot, InputPhase.Held, delta, _aimContext);
 
             if (!TryGetHeld(out held)) return;
         }
+    }
+
+    public override void Update(double delta)
+    {
+        
+        _camera = Actor.Camera;
+        _origin = _camera.GlobalPosition;
+        _cameraForward = -_camera.GlobalBasis.Z;
+        _aimPoint = _origin + _cameraForward * 1000.0f;
     }
 
     private bool TryGetHeld(out Holdable held)
@@ -112,15 +145,10 @@ public partial class InteractorHoldingState : State<Interactor>
 
     private AimContext BuildAimContext(Holdable held)
     {
-        var camera = Actor.Camera;
-        var origin = camera.GlobalPosition;
-        var cameraForward = -camera.GlobalBasis.Z;
-        var aimPoint = origin + cameraForward * 1000.0f;
-        
-        if (camera.AimRaycast.IsColliding())
-            aimPoint = camera.AimRaycast.GetCollisionPoint();
+        if (_camera.AimRaycast.IsColliding())
+            _aimPoint = _camera.AimRaycast.GetCollisionPoint();
 
-        return new AimContext(origin, cameraForward, aimPoint);
+        return new AimContext(_origin, _cameraForward, _aimPoint);
     }
 
     private void OnReleased(object? sender, EventArgs e)

@@ -7,6 +7,7 @@ cull_mask = 524287
 current = true
 script = ExtResource("1_lw1ob")
 CameraSmoothing = 20.0
+TiltLimit = 1.459
 PickupRaycast = NodePath("PickupRaycast")
 AimRaycast = NodePath("AimRaycast")
 

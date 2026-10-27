@@ -25,6 +25,11 @@ public partial class Bullet : Node3D
 			return;
 		}
 
+		MoveBullet((float)delta);
+	}
+	
+	private void MoveBullet(float delta)
+	{
 		Vector3 from = GlobalPosition;
 		Vector3 to = from + Velocity * (float)delta;
 

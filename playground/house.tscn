@@ -6,6 +6,12 @@
 [ext_resource type="PackedScene" uid="uid://dm28oc84032p2" path="res://playground/ps1_assets/Models/GLB (recommended)/Modular Structures/stairs_5_wood.glb" id="4_vlmht"]
 [ext_resource type="PackedScene" uid="uid://bgoi8yuk0d2w5" path="res://playground/ps1_assets/Models/GLB (recommended)/Modular Structures/wall_1_2_half.glb" id="5_w8xmq"]
 [ext_resource type="PackedScene" uid="uid://cus2bg2dw6fx7" path="res://playground/ps1_assets/Models/GLB (recommended)/Modular Structures/floor_ceiling_3.glb" id="6_rpdso"]
+[ext_resource type="PackedScene" uid="uid://cxor3hiy7svaq" path="res://playground/ps1_assets/Models/GLB (recommended)/Modular Structures/side_doorway_2_1.glb" id="7_vlmht"]
+[ext_resource type="Texture2D" uid="uid://7uxrcyrtimi5" path="res://playground/ps1_assets/Models/GLB (recommended)/Modular Structures/side_doorway_2_door_frame_wood_1.png" id="8_w8xmq"]
+[ext_resource type="PackedScene" uid="uid://cr1oxun6bfu2f" path="res://playground/ps1_assets/Models/GLB (recommended)/Modular Structures/doorway_door_mp_1.glb" id="9_rpdso"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hc61n"]
+albedo_texture = ExtResource("8_w8xmq")
 
 [node name="House" type="Node3D" unique_id=1045293935]
 
@@ -19,9 +25,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
 
 [node name="wall_2_13" parent="Walls" unique_id=793265723 instance=ExtResource("2_auyw0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+visible = false
 
 [node name="wall_2_14" parent="Walls" unique_id=1297797072 instance=ExtResource("2_auyw0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, -2)
+visible = false
 
 [node name="Floor" type="Node3D" parent="." unique_id=848469796]
 
@@ -41,9 +49,24 @@ transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -4, 
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -2, 0, 1)
 
 [node name="Ceiling" type="Node3D" parent="." unique_id=1237743650]
+visible = false
 
 [node name="floor_ceiling_32" parent="Ceiling" unique_id=338005273 instance=ExtResource("6_rpdso")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 3, 0)
 
 [node name="floor_ceiling_33" parent="Ceiling" unique_id=1673896905 instance=ExtResource("6_rpdso")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+
+[node name="side_doorway_2_12" parent="." unique_id=57832006 instance=ExtResource("7_vlmht")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, 1)
+
+[node name="side_doorway_2_1" parent="side_doorway_2_12" index="0" unique_id=1622254875]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 11, 0, -0.9999999)
+surface_material_override/0 = SubResource("StandardMaterial3D_hc61n")
+
+[node name="FrontDoor" type="Node3D" parent="." unique_id=341801234]
+
+[node name="doorway_door_mp_12" parent="FrontDoor" unique_id=671832446 instance=ExtResource("9_rpdso")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 7, 0, 0)
+
+[editable path="side_doorway_2_12"]

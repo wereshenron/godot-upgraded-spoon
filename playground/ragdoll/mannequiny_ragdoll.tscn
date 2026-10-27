@@ -249,10 +249,10 @@ transform = Transform3D(0.9987839, 0.006565829, -0.048863254, 0.036262766, 0.573
 shape = SubResource("CapsuleShape3D_63wjt")
 
 [node name="Physical Bone spine_01" type="PhysicalBone3D" parent="root/root_001/Skeleton3D/PhysicalBoneSimulator3D" index="4" unique_id=985138646]
-transform = Transform3D(0.99998116, -0.0061232927, 0.0005538599, 0.0061328104, 0.9997964, -0.01922599, -0.0004360208, 0.019229023, 0.99981505, -0.0005520407, 0.2843545, -1.1367805)
+transform = Transform3D(0.99998116, -0.0061232923, 0.00055359857, 0.006132805, 0.9997964, -0.019225992, -0.0004357595, 0.019229023, 0.99981505, -0.0005538956, 0.28435448, -1.1367805)
 joint_type = 2
-joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0001717007, 0.0027109906, 0.05499766)
-body_offset = Transform3D(1.0000002, 7.123221e-05, -4.2764266e-05, -4.2804095e-05, 8.484535e-05, -1.0000001, -7.125223e-05, 1.0000001, 8.488819e-05, -0.00016954192, 0.054997444, -0.0027156472)
+joint_offset = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00017357004, 0.0027109908, 0.05499766)
+body_offset = Transform3D(1.0000002, 7.123267e-05, -4.3025626e-05, -4.306546e-05, 8.484535e-05, -1.0000001, -7.1252696e-05, 1.0000001, 8.488819e-05, -0.00017139688, 0.054997444, -0.0027156472)
 friction = 0.6
 bounce = 0.8
 bone_name = "spine_01"
@@ -524,6 +524,7 @@ active = false
 [node name="RagdollReceiver" type="Node3D" parent="." index="2" unique_id=555515322 node_paths=PackedStringArray("Sim")]
 script = ExtResource("3_04fyt")
 Sim = NodePath("../root/root_001/Skeleton3D/PhysicalBoneSimulator3D")
+FullRagdollDelay = 0.035
 
 [node name="Throwable" type="Node3D" parent="." index="3" unique_id=283650403 node_paths=PackedStringArray("GeometryList")]
 script = ExtResource("4_hnayr")

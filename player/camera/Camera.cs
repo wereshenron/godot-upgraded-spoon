@@ -9,6 +9,7 @@ public partial class Camera : Camera3D
     [Export] public float MouseSensitivity = 0.003f;
     [Export] public float CameraSmoothing = 0.12f;
     [Export] public float TiltLimit = Mathf.DegToRad(75f);
+    [Export] public float StickSensitivity = 3f;
 
     [ExportGroup("Recoil")]
     [Export] public float RecoilRecoverSpeed = 4.0f;
@@ -28,6 +29,7 @@ public partial class Camera : Camera3D
 
     private Vector3 _recoilOffset = Vector3.Zero;
     private Vector3 _recoilTarget = Vector3.Zero;
+    private Vector2 _look = Vector2.Zero;
 
     /// <summary>Smoothed horizontal look angle (no recoil). Use this for movement direction.</summary>
     public float Yaw => _yaw;
@@ -70,6 +72,21 @@ public partial class Camera : Camera3D
             _pitch + _recoilOffset.X,
             _yaw - _recoilOffset.Y,
             0f);
+    }
+    
+    
+    public override void _Process(double delta)
+    {
+        _look = Input.GetVector("look_left", "look_right", "look_up", "look_down");
+        if (_look == Vector2.Zero) return;
+        // GD.Print(look);
+
+        // Optional: response curve for finer control near the center
+        _look = _look.Normalized() * Mathf.Pow(_look.Length(), 2f);
+
+        var dt = (float)delta;
+        _targetPitch = Mathf.Clamp(_targetPitch - _look.Y * StickSensitivity * dt, -TiltLimit, TiltLimit);
+        _targetYaw -= _look.X * StickSensitivity * dt;
     }
 
     private void OnRecoilKicked(object sender, RecoilKickedArgs args)
