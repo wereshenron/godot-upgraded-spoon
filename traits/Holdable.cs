@@ -15,6 +15,7 @@ public abstract partial class Holdable : Interactable
 	[Export] public double BaseFollowSpeed;
 	[Export] public double AimFollowSpeed;
 	[Export] public double MassInfluence;
+	[Export] public RigidBody3D Body;
 
 	public virtual Vector3 GetHoldOffset() => Vector3.Zero;
 	public virtual double GetFollowSpeed(double baseSpeed) => baseSpeed;
@@ -24,37 +25,27 @@ public abstract partial class Holdable : Interactable
 	public virtual void UpdateHold(Node3D holdPivot, double delta)
 	{
 	}
-	
+
 	public bool IsAiming { get; set; }
-	
+
 	public event EventHandler Grabbed;
 	public event EventHandler Released;
 
-	protected internal RigidBody3D Body { get; private set; }
 	protected double Movement;
 	protected bool HasSpiked;
 
 	protected internal void RaiseGrabbed() => Grabbed?.Invoke(this, EventArgs.Empty);
 	protected internal void RaiseReleased() => Released?.Invoke(this, EventArgs.Empty);
+	
+	private bool _isMonitored = false;
 
 	public override void _Ready()
 	{
 		base._Ready();
 
-		var parent = GetParent<Node3D>();
-		switch (parent)
-		{
-			case RigidBody3D rigidBody:
-				Body = rigidBody;
-				break;
-			default:
-				Body = null;
-				break;
-		}
-		Body = GetParent() as RigidBody3D;
 		Body?.AddToGroup("Holdable");
 
-		Grabbed += (_, _) => OnGrabbed();
+		Grabbed += OnGrabbed;
 
 		Action = "Hold";
 	}
@@ -70,33 +61,41 @@ public abstract partial class Holdable : Interactable
 	public override void _PhysicsProcess(double delta)
 	{
 		if (Body == null) return;
-			HandleCcd();
+		HandleCcd();
 	}
 
-	private void OnGrabbed()
+	private void OnGrabbed(object sender, EventArgs args)
 	{
 		SetHighlight(false);
-		// SetShouldHover(true);
 		SignalBus.Instance.RaiseLookedAway();
+
+		_isMonitored = true;
 	}
 
 	// Helpers
 	private void HandleCcd()
 	{
-		if (!Body.ContinuousCd)
+		if (!Body.ContinuousCd && !HasSpiked)
 		{
-			HasSpiked = false;
 			return;
 		}
 
 		Movement = Mathf.Clamp(Body.LinearVelocity.Length(), 0.0, 1.0);
 
-		if (Movement > MovementLowerThreshold)
+		// This is the first instance of seeing quick movement - set CCD = true and continue 
+		if (Movement > MovementLowerThreshold && !Body.ContinuousCd)
 		{
 			HasSpiked = true;
+			Body.ContinuousCd = true;
+			return;
+		}
+		
+		// Return if there is quick movement, CCD is true, and it's spiked
+		if (Movement > MovementLowerThreshold && Body.ContinuousCd)
+		{
+			return;
 		}
 
-		if (!HasSpiked) return;
 		Body.ContinuousCd = false;
 		HasSpiked = false;
 	}
@@ -109,5 +108,7 @@ public abstract partial class Holdable : Interactable
 
 	/// Semantic input from whoever is holding this. Override only the slots you care about.
 	/// `delta` is 0 for Pressed/Released and the frame step for Held.
-	public virtual void OnAction(UseSlot slot, InputPhase phase, double delta, AimContext ctx) { }
+	public virtual void OnAction(UseSlot slot, InputPhase phase, double delta, AimContext ctx)
+	{
+	}
 }

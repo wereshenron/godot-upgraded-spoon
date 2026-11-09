@@ -2,7 +2,6 @@ using System;
 using Godot;
 using upgradedspoon.globals;
 using upgradedspoon.types;
-using static Godot.PropertyHint;
 
 namespace upgradedspoon.traits;
 
@@ -37,7 +36,7 @@ public partial class Throwable : Holdable
 			case (UseSlot.Primary, InputPhase.Pressed):
 				if (IsAiming)
 				{
-					Throw((ctx.AimPoint - ctx.Origin).Normalized());
+					Throw((ctx.AimPoint - Body.GlobalPosition).Normalized());
 				}
 
 				IsAiming = false;

@@ -4,64 +4,66 @@ namespace upgradedspoon.playground.ragdoll;
 
 public partial class RagdollReceiver : Node
 {
-    [Export] public PhysicalBoneSimulator3D Sim { get; set; }
-    [Export] public float FullRagdollDelay { get; set; } = 0.1f;
+	[Export] public PhysicalBoneSimulator3D Sim { get; set; }
+	[Export] public float FullRagdollDelay { get; set; } = 0.1f;
+	[Export] public AnimationPlayer AnimationPlayer { get; set; }
 
-    private bool _fullRagdoll;
-    private bool _fullRagdollPending;
-    private Skeleton3D _skeleton;
-    
-    public override void _Ready()
-    {
-        _skeleton = Sim.GetSkeleton();
-        foreach (var child in Sim.GetChildren())
-        {
-            if (child is not PhysicalBone3D pb) continue;
-            var id = pb.GetBoneId();
-            var bone = _skeleton.GetBoneName(id);
-            pb.Mass = GetBoneMass(bone);
-        }
-    }
+	private bool _fullRagdoll;
+	private bool _fullRagdollPending;
+	private Skeleton3D _skeleton;
+	
+	public override void _Ready()
+	{
+		_skeleton = Sim.GetSkeleton();
+		foreach (var child in Sim.GetChildren())
+		{
+			if (child is not PhysicalBone3D pb) continue;
+			var id = pb.GetBoneId();
+			var bone = _skeleton.GetBoneName(id);
+			pb.Mass = GetBoneMass(bone);
+		}
+	}
 
-    private static float GetBoneMass(string bone) => bone switch
-    {
-        _ when bone.Contains("spine") || bone.Contains("hips") => 15f,
-        _ when bone.Contains("thigh") => 8f,
-        _ when bone.Contains("calf") || bone.Contains("shin") => 4f,
-        _ when bone.Contains("upperarm") => 3f,
-        _ when bone.Contains("forearm") || bone.Contains("hand") => 1.5f,
-        _ when bone.Contains("head") => 5f,
-        _ => 2f,
-    };
+	private static float GetBoneMass(string bone) => bone switch
+	{
+		_ when bone.Contains("spine") || bone.Contains("hips") => 15f,
+		_ when bone.Contains("thigh") => 8f,
+		_ when bone.Contains("calf") || bone.Contains("shin") => 4f,
+		_ when bone.Contains("upperarm") => 3f,
+		_ when bone.Contains("forearm") || bone.Contains("hand") => 1.5f,
+		_ when bone.Contains("head") => 5f,
+		_ => 2f,
+	};
 
-    public async void Hit(PhysicalBone3D pb, Vector3 impulse, Vector3 worldPoint)
-    {
-        // Already fully ragdolled: just shove the bone
-        if (_fullRagdoll)
-        {
-            pb.ApplyImpulse(impulse, worldPoint - pb.GlobalPosition);
-            return;
-        }
-        
-        var id = pb.GetBoneId();
-        var bone = _skeleton.GetBoneName(id);
+	public async void Hit(PhysicalBone3D pb, Vector3 impulse, Vector3 worldPoint)
+	{
+		// Already fully ragdolled: just shove the bone
+		if (_fullRagdoll)
+		{
+			pb.ApplyImpulse(impulse, worldPoint - pb.GlobalPosition);
+			return;
+		}
+		
+		var id = pb.GetBoneId();
+		var bone = _skeleton.GetBoneName(id);
 
-        // 1. Simulate just the hit bone (and its children) and hit it
-        Sim.PhysicalBonesStartSimulation([bone]);
-        pb.ApplyImpulse(impulse, worldPoint - pb.GlobalPosition);
+		// 1. Simulate just the hit bone (and its children) and hit it
+		Sim.PhysicalBonesStartSimulation([bone]);
+		pb.ApplyImpulse(impulse, worldPoint - pb.GlobalPosition);
 
-        // 2. Only one pending full-ragdoll per enemy, no matter how many hits land
-        if (_fullRagdollPending) return;
-        _fullRagdollPending = true;
+		// 2. Only one pending full-ragdoll per enemy, no matter how many hits land
+		if (_fullRagdollPending) return;
+		_fullRagdollPending = true;
 
-        await ToSignal(GetTree().CreateTimer(FullRagdollDelay), SceneTreeTimer.SignalName.Timeout);
+		await ToSignal(GetTree().CreateTimer(FullRagdollDelay), SceneTreeTimer.SignalName.Timeout);
 
-        // The enemy may have been freed while we waited
-        if (!IsInstanceValid(this) || !IsInstanceValid(Sim)) return;
+		// The enemy may have been freed while we waited
+		if (!IsInstanceValid(this) || !IsInstanceValid(Sim)) return;
 
-        // 3. Start everything else; already-simulating bones keep their velocity
-        Sim.PhysicalBonesStartSimulation();
-        _fullRagdoll = true;
-        _fullRagdollPending = false;
-    }
+		// 3. Start everything else; already-simulating bones keep their velocity
+		Sim.PhysicalBonesStartSimulation();
+		AnimationPlayer.Stop();
+		_fullRagdoll = true;
+		_fullRagdollPending = false;
+	}
 }

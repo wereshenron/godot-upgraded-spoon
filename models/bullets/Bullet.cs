@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Godot;
+using Godot.Collections;
 using upgradedspoon.playground.ragdoll;
 
 namespace upgradedspoon.models.bullets;
@@ -14,7 +15,19 @@ public partial class Bullet : Node3D
 	public float Mass;
 
 	public event EventHandler BulletHit;
-	
+
+	private PhysicsDirectSpaceState3D _space;
+	private PhysicsRayQueryParameters3D _query;
+	private Vector3 _from;
+	private Vector3 _to;
+	private Dictionary _hit;
+
+	public override void _Ready()
+	{
+		_space = GetWorld3D().DirectSpaceState;
+		_query = new PhysicsRayQueryParameters3D();
+	}
+
 
 	public override void _PhysicsProcess(double delta)
 	{
@@ -31,20 +44,21 @@ public partial class Bullet : Node3D
 	
 	private void MoveBullet(float delta)
 	{
-		Vector3 from = GlobalPosition;
-		Vector3 to = from + Velocity * (float)delta;
+		_from = GlobalPosition;
+		_to = _from + Velocity * delta;
 
-		var space = GetWorld3D().DirectSpaceState;
-		var query = PhysicsRayQueryParameters3D.Create(from, to, CollisionMask);
-		// query.CollideWithAreas = false; // default is false already
-		// query.Exclude = new Godot.Collections.Array<Rid> { shooterRid };
+		_query.From = _from;
+		_query.To = _to;
+		_query.CollisionMask = CollisionMask;
 
-		var hit = space.IntersectRay(query);
+		_hit = _space.IntersectRay(_query);
 
-		if (hit.Count > 0)
+		if (_hit.Count > 0)
 		{
-			var point = (Vector3)hit["position"];
-			var collider = hit["collider"].As<Node>();
+			var point = (Vector3)_hit["position"];
+			var collider = _hit["collider"].As<Node>();
+
+			GD.Print(collider);
 
 			switch (collider)
 			{
@@ -55,13 +69,15 @@ public partial class Bullet : Node3D
 					var receiver = pb.Owner?.GetNodeOrNull<RagdollReceiver>("RagdollReceiver");
 					receiver?.Hit(pb, Velocity * Mass, point);
 					break;
+				case CharacterBody3D:
+					return;
 			}
 
 			QueueFree();
 			return;
 		}
 
-		GlobalPosition = to;
+		GlobalPosition = _to;
 	}
 	
 	public class BulletHitArgs(Vector3 hitPoint, Vector3 direction) : EventArgs

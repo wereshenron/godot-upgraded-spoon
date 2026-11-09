@@ -10,7 +10,6 @@ public partial class PlayerController : CharacterBody3D
 {
 	
 	[Export] public float JumpForce = 8.0f;
-	[Export] public float SprintMultiplier = 1.6f;
 	[Export(PropertyHint.Range, "1,3")] public float FallGravityMultiplier = 1.4f;
 	[Export(PropertyHint.Range, "0.01,1")] public float Acceleration = 0.12f;
 
@@ -69,7 +68,7 @@ public partial class PlayerController : CharacterBody3D
 
 		if (Input.IsActionPressed(Sprint))
 		{
-			_runningSpeed *= SprintMultiplier;
+			_runningSpeed *= PlayerStats.SprintMultiplier;
 			_isSprinting = true;
 		}
 		else

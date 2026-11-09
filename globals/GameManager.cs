@@ -34,9 +34,10 @@ public partial class GameManager : Node
 
 		var target = FindSpawnPoint(spawnId);
 		if (target is null) return;
+		GD.Print("Spawning player: " + target.GlobalPosition);
 
 		Player.GlobalPosition = target.GlobalPosition;
-		Player.Rotation = target.Rotation;
+		Player.Rotation = target.GlobalRotation;
 	}
 
 	private Node3D FindSpawnPoint(string spawnId)

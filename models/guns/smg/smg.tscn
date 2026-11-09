@@ -13,8 +13,8 @@ radius = 0.15966797
 height = 0.8757858
 
 [node name="Smg" type="RigidBody3D" unique_id=376674517]
-collision_layer = 32769
-collision_mask = 32769
+collision_layer = 32768
+collision_mask = 32768
 
 [node name="Mesh" type="MeshInstance3D" parent="." unique_id=1588413474]
 transform = Transform3D(-0.18, 0, -1.57361e-08, 0, 0.18, 0, 1.57361e-08, 0, -0.18, 0, 0, 0)
@@ -28,14 +28,16 @@ shape = SubResource("CapsuleShape3D_3ea33")
 transform = Transform3D(1, 0, 0, 0, -0.022013817, -0.9997577, 0, 0.9997577, -0.022013817, 2.4170214e-07, -0.13268992, -0.2800768)
 shape = SubResource("CapsuleShape3D_6t3g5")
 
-[node name="Shootable" parent="." unique_id=321872780 node_paths=PackedStringArray("GeometryList") instance=ExtResource("2_1x5rg")]
+[node name="Shootable" parent="." unique_id=321872780 node_paths=PackedStringArray("BulletPivot", "Body", "GeometryList") instance=ExtResource("2_1x5rg")]
 AimOffset = Vector3(-0.005, -0.305, 0.3)
 GunSettings = ExtResource("3_da1x0")
+BulletPivot = NodePath("../BulletPivot")
 HoldOffset = Vector3(0.53, -0.44, 0.44)
 MovementLowerThreshold = 0.33
 BaseFollowSpeed = 125.0
 AimFollowSpeed = 139.84
 MassInfluence = 1.5
+Body = NodePath("..")
 GeometryList = [NodePath("../Mesh")]
 
 [node name="BulletPivot" type="Node3D" parent="." unique_id=10606882]

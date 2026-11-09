@@ -11,20 +11,47 @@ namespace upgradedspoon.traits.shootable;
 
 public partial class Shootable : Holdable
 {
+	/// <summary>
+	/// State machine that drives the gun's behavior (Idle, Firing). States are registered in <c>_Ready</c>.
+	/// </summary>
 	[Export] public ShootableStateMachine StateMachine { get; set; }
-	[Export] public Material TracerMaterial { get; set; }
+
+	/// <summary>
+	/// Hold position used while aiming down sights, relative to the hold pivot
+	/// (X = right, Y = up, Z = forward). Blended with <c>HoldOffset</c> (hip position)
+	/// over <see cref="GunSettings.AdsTime"/>.
+	/// </summary>
 	[Export] public Vector3 AimOffset { get; set; }
+
+	/// <summary>
+	/// Tuning resource for this gun: recoil, fire rate, ammo, bullet, and ADS timing.
+	/// </summary>
 	[Export] public GunSettings GunSettings { get; set; }
+
+	/// <summary>
+	/// Distance in meters along the camera's aim ray used to compute the aim point
+	/// that the gun body and bullets are directed toward.
+	/// </summary>
 	[Export] public float AimLength { get; set; } = 1000.0f;
+
+	/// <summary>
+	/// Debug scene spawned at the aim point by <c>SpawnMarker</c>
+	/// (currently disabled in <c>Shoot</c>).
+	/// </summary>
 	[Export] public PackedScene Marker { get; set; }
+	
+	/// <summary>
+	/// Node reference to the bullet pivot (where the bullet shoots from)
+	/// </summary>
+	[Export] public Node3D BulletPivot { get; set; }
+	
+	[Export] public GpuParticles3D BulletParticles { get; set; }
 
 	/// Latest aim from the interactor; states read this when firing.
 	public AimContext CurrentAim { get; private set; }
 
 	public int Ammo { get; private set; }
 	public bool CanReload => Ammo < GunSettings.MagazineSize;
-
-	private Node3D _bulletPivot;
 
 	/// 0 = hold_offset, 1 = aim_offset
 	private double _aimBlend;
@@ -37,6 +64,9 @@ public partial class Shootable : Holdable
 	private Vector3 _shootAimPoint;
 	private Vector3 _direction = Vector3.Zero;
 
+	private static readonly StringName Idle = "Idle";
+	private static readonly StringName Firing = "Firing";
+
 	private ShootableState CurrentState => StateMachine.CurrentState as ShootableState;
 
 	public override void _Ready()
@@ -45,14 +75,13 @@ public partial class Shootable : Holdable
 
 		Ammo = GunSettings.MagazineSize;
 
-		_bulletPivot = Body.GetNode<Node3D>("BulletPivot");
 		_initialLayer = Body.CollisionLayer;
 		_initialMask = Body.CollisionMask;
-		_aimRaycast = GetViewport().GetCamera3D().GetNode("AimRaycast") as RayCast3D;
+		_aimRaycast = GameManager.Instance.Player.Camera.AimRaycast;
 
-		StateMachine.AddState("Firing", new ShootableFiringState());
-		StateMachine.AddState("Idle", new ShootableIdleState());
-		StateMachine.Enter("Idle");
+		StateMachine.AddState(Firing, new ShootableFiringState());
+		StateMachine.AddState(Idle, new ShootableIdleState());
+		StateMachine.Enter(Idle);
 
 		Grabbed += (_, _) => OnGrabbed();
 		Released += (_, _) => OnReleased();
@@ -67,6 +96,7 @@ public partial class Shootable : Holdable
 
 	public override void UpdateHold(Node3D holdPivot, double delta)
 	{
+		// _aimBlend = 1.0f; // Testing always aiming
 		_aimBlend = Mathf.MoveToward(_aimBlend, IsAiming ? 1.0 : 0.0, delta / GunSettings.AdsTime);
 
 		_targetRecoilOffset = _targetRecoilOffset.MoveToward(Vector3.Zero, GunSettings.RecoilSpeed * (float)delta);
@@ -116,7 +146,7 @@ public partial class Shootable : Holdable
 
 	public void Shoot()
 	{
-		var spawnPos = _bulletPivot.GlobalPosition;
+		var spawnPos = BulletPivot.GlobalPosition;
 		var toAim = CurrentAim.AimPoint - spawnPos;
 		var direction = toAim.LengthSquared() > 0.01f
 			? toAim.Normalized()
@@ -127,6 +157,7 @@ public partial class Shootable : Holdable
 		SignalBus.Instance.RaiseAmmoChanged(new AmmoState(Ammo, 0, GunSettings.MagazineSize));
 		ApplyRecoilKick();
 		LaunchBullet(direction, CurrentAim.AimPoint);
+		RestartBulletEffect();
 		// SpawnMarker(CurrentAim.AimPoint);
 	}
 
@@ -152,10 +183,15 @@ public partial class Shootable : Holdable
 		var bullet = GunSettings.BulletScene.Instantiate<Bullet>();
 		GetTree().Root.AddChild(bullet);
 		
-		bullet.GlobalPosition = _bulletPivot.GlobalPosition;
+		bullet.GlobalPosition = BulletPivot.GlobalPosition;
 		bullet.GlobalBasis = GlobalBasis;
 		bullet.Velocity = direction * GunSettings.FireVelocity;
 		bullet.Mass = GunSettings.ReferenceBulletMass;
+	}
+
+	private void RestartBulletEffect()
+	{
+		BulletParticles.Restart();
 	}
 
 	// Input from the interactor

@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://de3uw40m7q37l" path="res://hud/Widgets/Reticle/reticle.tscn" id="2_fjv1a"]
 [ext_resource type="PackedScene" uid="uid://dduidl0dbs1sf" path="res://hud/Widgets/InteractionPrompt/interaction_prompt.tscn" id="2_svhta"]
 [ext_resource type="PackedScene" uid="uid://dfg5c6s5iqbg2" path="res://hud/Widgets/Ammo/ammo.tscn" id="5_fjv1a"]
+[ext_resource type="Script" uid="uid://cv5hqrptm144c" path="res://hud/FrameTime.cs" id="6_fjv1a"]
 
 [node name="HUD" type="CanvasLayer" unique_id=1673316801]
 script = ExtResource("1_svhta")
@@ -44,3 +45,17 @@ layout_mode = 1
 layout_mode = 1
 offset_left = -51.569946
 offset_right = -11.569946
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Root" unique_id=1149796840]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -144.56995
+offset_right = -52.569946
+offset_bottom = 40.0
+grow_horizontal = 0
+text = "Frame Time: "
+fit_content = true
+autowrap_mode = 0
+script = ExtResource("6_fjv1a")

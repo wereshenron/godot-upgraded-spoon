@@ -4,5 +4,6 @@
 
 [resource]
 script = ExtResource("1_u6527")
-Speed = 7.0
+Speed = 4.0
+SprintMultiplier = 1.2
 StrengthMultiplier = 1.25
