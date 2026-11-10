@@ -45,7 +45,7 @@ public partial class PlayerController : CharacterBody3D
 		}
 
 		Camera.AimRaycast.AddException(this);
-		Camera.PickupRaycast.AddException(this);
+		Camera.InteractRaycast.AddException(this);
 	}
 
 	public override void _PhysicsProcess(double deltaD)
@@ -110,9 +110,9 @@ public partial class PlayerController : CharacterBody3D
 		else if (_targetVelocity.Y < 0)
 		{
 			_targetVelocity.Y = 0; // reset on landing so stale fall speed doesn't carry over
-        }
+		}
 
-        Velocity = _targetVelocity;
-        MoveAndSlide();
-    }
+		Velocity = _targetVelocity;
+		MoveAndSlide();
+	}
 }

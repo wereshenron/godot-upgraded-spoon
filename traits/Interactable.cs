@@ -26,6 +26,8 @@ public abstract partial class Interactable : Node3D
     public override void _Ready()
     {
         GetParentNode3D().AddToGroup("Interactable");
+        
+        
         _outlineShaderMaterial = GD.Load<ShaderMaterial>("res://textures/materials/outline.tres");
         _setBlend = Callable.From<double>(SetBlend);
         globals.SignalBus.Instance.LookedAway += (_, _) => { SetHighlight(false); };

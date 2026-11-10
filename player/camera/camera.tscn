@@ -2,16 +2,16 @@
 
 [ext_resource type="Script" uid="uid://c000mqcqone04" path="res://player/camera/Camera.cs" id="1_lw1ob"]
 
-[node name="Camera" type="Camera3D" unique_id=1299159829 node_paths=PackedStringArray("PickupRaycast", "AimRaycast")]
+[node name="Camera" type="Camera3D" unique_id=1299159829 node_paths=PackedStringArray("InteractRaycast", "AimRaycast")]
 cull_mask = 524287
 current = true
 script = ExtResource("1_lw1ob")
 CameraSmoothing = 20.0
 TiltLimit = 1.459
-PickupRaycast = NodePath("PickupRaycast")
+InteractRaycast = NodePath("InteractRaycast")
 AimRaycast = NodePath("AimRaycast")
 
-[node name="PickupRaycast" type="RayCast3D" parent="." unique_id=2095988848]
+[node name="InteractRaycast" type="RayCast3D" parent="." unique_id=2095988848]
 target_position = Vector3(0, 0, -4)
 collision_mask = 32769
 

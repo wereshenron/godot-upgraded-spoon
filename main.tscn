@@ -33,8 +33,3 @@ monitorable = false
 
 [node name="House" parent="." unique_id=1045293935 instance=ExtResource("4_dg77c")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9993591, 0.010350227, 0.00037527084)
-
-[editable path="House"]
-[editable path="House/Walls/doorway_1_half2"]
-[editable path="House/Walls/window_2_1_single2"]
-[editable path="House/Walls/wall_2_12"]

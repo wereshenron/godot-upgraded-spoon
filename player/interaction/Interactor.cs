@@ -25,7 +25,7 @@ public partial class Interactor : Node3D
 
 	private static readonly StringName InteractableName = "Interactable";
 	private Interactable _currentTarget;
-	private RigidBody3D _lastBody;
+	private PhysicsBody3D _lastBody;
 	private Interactable _lastInteractable;
 	
 
@@ -36,7 +36,7 @@ public partial class Interactor : Node3D
 		// Assumes Owner is the player body. The old code cast a CollisionShape3D, which is
 		// not a CollisionObject3D, so it was always null.
 		// if (Owner is CollisionObject3D body)
-		// 	Camera.PickupRaycast.AddException(body);
+		// 	Camera.InteractRaycast.AddException(body);
 
 		StateMachine.AddState("Idle", new InteractorIdleState());
 		StateMachine.AddState("Holding", new InteractorHoldingState());
@@ -57,10 +57,11 @@ public partial class Interactor : Node3D
 
 	private Interactable FindTarget()
 	{
-		if (!Camera.PickupRaycast.IsColliding()) return null;
-		if (Camera.PickupRaycast.GetCollider() is not RigidBody3D body || !body.IsInGroup(InteractableName)) return null;
+		if (!Camera.InteractRaycast.IsColliding()) return null;
+		if (Camera.InteractRaycast.GetCollider() is not PhysicsBody3D body || !body.IsInGroup(InteractableName)) return null;
 
 		var target = GetInteractable(body);
+		GD.Print(target);
 		if (target is null || target == ObjectHeld) return null;
 		if (ObjectHeld is not null && target is Holdable) return null; // hands full
 		return target;
@@ -89,7 +90,7 @@ public partial class Interactor : Node3D
 		SignalBus.Instance.RaiseInteractableSeen(next);
 	}
 
-	private Interactable GetInteractable(RigidBody3D body)
+	private Interactable GetInteractable(PhysicsBody3D body)
 	{
 		if (body == _lastBody && IsInstanceValid(_lastInteractable)) return _lastInteractable;
 		_lastBody = body;

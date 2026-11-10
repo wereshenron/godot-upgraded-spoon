@@ -1,21 +1,25 @@
 [gd_scene format=3 uid="uid://d0kdn6jxbcn2y"]
 
-[ext_resource type="PackedScene" uid="uid://dwxq2thakw0ni" path="res://playground/ps1_assets/Models/GLB (recommended)/Modular Structures/doorway_1_half.glb" id="1_2w1pf"]
+[ext_resource type="PackedScene" uid="uid://e8gfiyd2ngmr" path="res://playground/building_scenes/wood_door.tscn" id="1_hc61n"]
+[ext_resource type="PackedScene" uid="uid://c5t7o3w2x2ohk" path="res://playground/ps1_assets/Models/GLB (recommended)/Modular Structures/doorway_2_1_half.glb" id="1_rpdso"]
 [ext_resource type="PackedScene" uid="uid://bs1ad2wv58jd2" path="res://playground/ps1_assets/Models/GLB (recommended)/Modular Structures/window_2_1_single.glb" id="1_vfwrp"]
 [ext_resource type="PackedScene" uid="uid://bhkw3l3j2koa5" path="res://playground/ps1_assets/Models/GLB (recommended)/Modular Structures/wall_2_1.glb" id="2_auyw0"]
-[ext_resource type="Texture2D" uid="uid://ctefrxiu3i1p2" path="res://playground/ps1_assets/Models/GLB (recommended)/Modular Structures/doorway_2_1_half_wall_6.png" id="2_vlmht"]
 [ext_resource type="PackedScene" uid="uid://bgoi8yuk0d2w5" path="res://playground/ps1_assets/Models/GLB (recommended)/Modular Structures/wall_1_2_half.glb" id="5_w8xmq"]
-[ext_resource type="PackedScene" uid="uid://wma2gtplq5wy" path="res://playground/wood_floor.tscn" id="6_2w1pf"]
+[ext_resource type="PackedScene" uid="uid://wma2gtplq5wy" path="res://playground/building_scenes/wood_floor.tscn" id="6_2w1pf"]
 [ext_resource type="PackedScene" uid="uid://cus2bg2dw6fx7" path="res://playground/ps1_assets/Models/GLB (recommended)/Modular Structures/floor_ceiling_3.glb" id="6_rpdso"]
-[ext_resource type="PackedScene" uid="uid://fn5pf02c2x0f" path="res://playground/ps1_assets/Models/GLB (recommended)/Modular Structures/door_4_loose.glb" id="8_w8xmq"]
 [ext_resource type="PackedScene" uid="uid://c4x72vaqbnvjn" path="res://playground/ps1_assets/Models/GLB (recommended)/Lighting/lamp_5_on.glb" id="9_vlmht"]
 [ext_resource type="PackedScene" uid="uid://d14s0577260hg" path="res://playground/ps1_assets/Models/GLB (recommended)/Furniture/coffee_table_1_1.glb" id="10_w8xmq"]
-[ext_resource type="Environment" uid="uid://cqtqaci4pdnm5" path="res://world/world_env.tres" id="11_rpdso"]
 [ext_resource type="PackedScene" uid="uid://bathrloyj06tw" path="res://holdables/weapons/guns/deagle.tscn" id="12_hc61n"]
 [ext_resource type="PackedScene" uid="uid://cirnotkwyri7m" path="res://holdables/util/flashlight.tscn" id="13_uea51"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rpdso"]
-albedo_texture = ExtResource("2_vlmht")
+[sub_resource type="BoxShape3D" id="BoxShape3D_hc61n"]
+size = Vector3(1.1448135, 0.3755722, 0.7702637)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_jibk7"]
+size = Vector3(2.2604065, 0.2793808, 2.980957)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_uea51"]
+size = Vector3(4.4417725, 0.2974472, 2.980957)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_rpdso"]
 size = Vector3(1.5876465, 0.63983154, 1)
@@ -24,14 +28,30 @@ size = Vector3(1.5876465, 0.63983154, 1)
 
 [node name="Walls" type="Node3D" parent="." unique_id=471805191]
 
-[node name="doorway_1_half2" parent="Walls" unique_id=1758727287 instance=ExtResource("1_2w1pf")]
+[node name="doorway_2_1_half2" parent="Walls" unique_id=1730544871 instance=ExtResource("1_rpdso")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -2, 0, -0.99999994)
 
-[node name="doorway_1_half" parent="Walls/doorway_1_half2" index="0" unique_id=1571752490]
-surface_material_override/0 = SubResource("StandardMaterial3D_rpdso")
+[node name="StaticBody3D" type="StaticBody3D" parent="Walls/doorway_2_1_half2" unique_id=1092969176]
+collision_layer = 32769
+collision_mask = 32769
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Walls/doorway_2_1_half2/StaticBody3D" unique_id=1405616638]
+transform = Transform3D(1, -4.371139e-08, -4.371139e-08, 4.371139e-08, -4.371139e-08, 1, -4.371139e-08, -1, -4.3711385e-08, -0.00622195, 2.5849304, -0.0037579536)
+shape = SubResource("BoxShape3D_hc61n")
+
+[node name="WoodDoor" parent="Walls/doorway_2_1_half2" unique_id=1208918519 instance=ExtResource("1_hc61n")]
+transform = Transform3D(-1, 0, 1.509958e-07, 0, 1, 0, -1.509958e-07, 0, -1, -0.49999988, 0, 0)
 
 [node name="wall_1_2_half2" parent="Walls" unique_id=1524659655 instance=ExtResource("5_w8xmq")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -2, 0, 1)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Walls/wall_1_2_half2" unique_id=153273653]
+collision_layer = 32769
+collision_mask = 32769
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Walls/wall_1_2_half2/StaticBody3D" unique_id=1824215687]
+transform = Transform3D(1, -4.371139e-08, -4.371139e-08, 4.371139e-08, -4.371139e-08, 1, -4.371139e-08, -1, -4.3711385e-08, -0.25929284, 1.4795837, -0.10938692)
+shape = SubResource("BoxShape3D_jibk7")
 
 [node name="window_2_1_single2" parent="Walls" unique_id=308875509 instance=ExtResource("1_vfwrp")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 2)
@@ -42,17 +62,61 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
 [node name="wall_2_15" parent="Walls" unique_id=1457509813 instance=ExtResource("2_auyw0")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -2, 0, -4)
 
+[node name="StaticBody3D" type="StaticBody3D" parent="Walls/wall_2_15" unique_id=2127926781]
+collision_layer = 32769
+collision_mask = 32769
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Walls/wall_2_15/StaticBody3D" unique_id=974425260]
+transform = Transform3D(1, -4.371139e-08, -4.371139e-08, 4.371139e-08, -4.371139e-08, 1, -4.371139e-08, -1, -4.3711385e-08, 0.18914795, 1.4795837, -0.067723036)
+shape = SubResource("BoxShape3D_uea51")
+
 [node name="wall_2_16" parent="Walls" unique_id=1735411678 instance=ExtResource("2_auyw0")]
 transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 1.1920929e-07, 0, -6)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Walls/wall_2_16" unique_id=1240717101]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.73125815, 0, 0)
+collision_layer = 32769
+collision_mask = 32769
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Walls/wall_2_16/StaticBody3D" unique_id=556766670]
+transform = Transform3D(1, -4.371139e-08, -4.371139e-08, 4.371139e-08, -4.371139e-08, 1, -4.371139e-08, -1, -4.3711385e-08, 0.18914795, 1.4795837, -0.067723036)
+shape = SubResource("BoxShape3D_uea51")
 
 [node name="wall_2_17" parent="Walls" unique_id=1197846558 instance=ExtResource("2_auyw0")]
 transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 4, 0, -5.9999995)
 
+[node name="StaticBody3D" type="StaticBody3D" parent="Walls/wall_2_17" unique_id=1778522237]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1947803, 0, 0)
+collision_layer = 32769
+collision_mask = 32769
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Walls/wall_2_17/StaticBody3D" unique_id=1774727709]
+transform = Transform3D(1, -4.371139e-08, -4.371139e-08, 4.371139e-08, -4.371139e-08, 1, -4.371139e-08, -1, -4.3711385e-08, 0.18914795, 1.4795837, -0.067723036)
+shape = SubResource("BoxShape3D_uea51")
+
 [node name="wall_2_18" parent="Walls" unique_id=556068690 instance=ExtResource("2_auyw0")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 6, 0, -3.9999998)
 
+[node name="StaticBody3D" type="StaticBody3D" parent="Walls/wall_2_18" unique_id=1661897884]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.20497489, 0, 0)
+collision_layer = 32769
+collision_mask = 32769
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Walls/wall_2_18/StaticBody3D" unique_id=1699789827]
+transform = Transform3D(1, -4.371139e-08, -4.371139e-08, 4.371139e-08, -4.371139e-08, 1, -4.371139e-08, -1, -4.3711385e-08, 0.18914795, 1.4795837, 0.14139938)
+shape = SubResource("BoxShape3D_uea51")
+
 [node name="wall_2_19" parent="Walls" unique_id=660761480 instance=ExtResource("2_auyw0")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 6, 0, 2.3841858e-07)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Walls/wall_2_19" unique_id=91120685]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5489633, 0, 0.16261053)
+collision_layer = 32769
+collision_mask = 32769
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Walls/wall_2_19/StaticBody3D" unique_id=692011539]
+transform = Transform3D(1, -4.371139e-08, -4.371139e-08, 4.371139e-08, -4.371139e-08, 1, -4.371139e-08, -1, -4.3711385e-08, 0.18914795, 1.4795837, -0.067723036)
+shape = SubResource("BoxShape3D_uea51")
 
 [node name="Floor" type="Node3D" parent="." unique_id=848469796]
 
@@ -93,12 +157,6 @@ spot_attenuation = 0.23
 spot_angle = 104.85
 spot_angle_attenuation = 0.70710886
 
-[node name="door_4_loose2" parent="." unique_id=1554215353 instance=ExtResource("8_w8xmq")]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -2, 0, -0.50000006)
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=2032318892]
-environment = ExtResource("11_rpdso")
-
 [node name="Deagle" parent="." unique_id=1275172979 instance=ExtResource("12_hc61n")]
 transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 2.5075758, 0.713014, -4.9279556)
 
@@ -118,6 +176,5 @@ shape = SubResource("BoxShape3D_rpdso")
 [node name="Flashlight" parent="Decor" unique_id=2111664478 instance=ExtResource("13_uea51")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0014958, 0.66369766, -5.004724)
 
-[editable path="Walls/doorway_1_half2"]
 [editable path="Walls/window_2_1_single2"]
 [editable path="Walls/wall_2_12"]
