@@ -21,6 +21,7 @@ config/icon="res://icon.svg"
 
 SignalBus="*uid://dkg7mfarffhtm"
 GameManager="*uid://bsabaqc6nbkf1"
+Hud="*uid://d0uimw7pk02ow"
 
 [debug]
 

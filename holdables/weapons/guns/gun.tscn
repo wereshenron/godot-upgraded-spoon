@@ -1,0 +1,68 @@
+[gd_scene format=3 uid="uid://c54kmtgnuvxns"]
+
+[ext_resource type="PackedScene" uid="uid://xrymkvqoj1sg" path="res://traits/shootable/shootable.tscn" id="1_gey3x"]
+[ext_resource type="Resource" uid="uid://bhyinapxfjnu3" path="res://holdables/weapons/guns/deagle.tres" id="2_541sl"]
+[ext_resource type="PackedScene" uid="uid://corg8c2403rhj" path="res://playground/marker.tscn" id="3_it85b"]
+
+[sub_resource type="Curve" id="Curve_4eyag"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_8ewnw"]
+curve = SubResource("Curve_4eyag")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_7tfrh"]
+particle_flag_align_y = true
+direction = Vector3(0, 24.925, -67.855)
+spread = 27.345
+flatness = 1.0
+initial_velocity_max = 79.78
+scale_curve = SubResource("CurveTexture_8ewnw")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_go0o3"]
+emission_enabled = true
+emission = Color(1, 0.53333336, 0, 1)
+emission_energy_multiplier = 16.0
+billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="BoxMesh" id="BoxMesh_mya6k"]
+material = SubResource("StandardMaterial3D_go0o3")
+size = Vector3(0.02, 0.02, 0.02)
+
+[node name="Gun" type="RigidBody3D" unique_id=1275172979]
+collision_layer = 32768
+collision_mask = 32768
+
+[node name="Shootable" parent="." unique_id=321872780 node_paths=PackedStringArray("BulletPivot", "BulletParticles", "UiOffset", "GeometryList") instance=ExtResource("1_gey3x")]
+AimOffset = Vector3(-0.001, -0.395, 0.505)
+GunSettings = ExtResource("2_541sl")
+Marker = ExtResource("3_it85b")
+BulletPivot = NodePath("../BulletPivot")
+BulletParticles = NodePath("../BulletParticles")
+UiOffset = NodePath("../UiOffset")
+HoldOffset = Vector3(0.695, -0.575, 0.8)
+MovementLowerThreshold = 0.33
+BaseFollowSpeed = 125.0
+AimFollowSpeed = 139.84
+MassInfluence = 1.5
+GeometryList = [null, null, null, null, null]
+
+[node name="BulletPivot" type="Node3D" parent="." unique_id=1499940003]
+
+[node name="BulletParticles" type="GPUParticles3D" parent="." unique_id=588731587]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.071322635, -0.211464)
+emitting = false
+amount = 5
+lifetime = 0.67
+interp_to_end = 0.05
+one_shot = true
+explosiveness = 1.0
+fixed_fps = 60
+trail_lifetime = 4.97
+process_material = SubResource("ParticleProcessMaterial_7tfrh")
+draw_pass_1 = SubResource("BoxMesh_mya6k")
+
+[node name="UiOffset" type="Node3D" parent="." unique_id=889549477]
