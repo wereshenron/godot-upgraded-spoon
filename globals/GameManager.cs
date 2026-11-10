@@ -19,12 +19,10 @@ public partial class GameManager : Node
 		// Initialize onReadies
 		_globalScenes =
 		[
-			GD.Load<PackedScene>("res://hud/hud.tscn")
+			// GD.Load<PackedScene>("res://hud/hud.tscn")
 		];
 
 		InstantiateGlobalScenes();
-		// SpawnPlayer("default");
-		
 	}
 
 	public void SpawnPlayer(string spawnId)

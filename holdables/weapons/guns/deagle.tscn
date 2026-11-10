@@ -1,0 +1,94 @@
+[gd_scene format=3 uid="uid://bathrloyj06tw"]
+
+[ext_resource type="PackedScene" uid="uid://c54kmtgnuvxns" path="res://holdables/weapons/guns/gun.tscn" id="1_x24oy"]
+[ext_resource type="Shape3D" uid="uid://c08enaly15nmm" path="res://models/guns/simple_gun/simple_gun_capsule_collider_1.tres" id="2_21xci"]
+[ext_resource type="Shape3D" uid="uid://b35gwbx1qlr2g" path="res://models/guns/simple_gun/simple_gun_capsule_collider_2.tres" id="3_twyu7"]
+[ext_resource type="PackedScene" uid="uid://biknkk38qm7by" path="res://playground/ps1_assets/Models/GLB (recommended)/Items & Weapons/pistol_mp_1_1.glb" id="4_gs4f0"]
+
+[sub_resource type="Animation" id="Animation_kkadq"]
+length = 0.001
+tracks/0/type = "position_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("pistol_mp_1_12")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0)
+tracks/1/type = "position_3d"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CollisionShape3D")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = PackedFloat32Array(0, 1, 0, -0.025546938, 0.03308165)
+tracks/2/type = "position_3d"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("CollisionShape3D2")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = PackedFloat32Array(0, 1, 0, 0.05407819, -0.07360011)
+
+[sub_resource type="Animation" id="Animation_go0o3"]
+resource_name = "Reload"
+length = 0.39999999999999997
+tracks/0/type = "position_3d"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("pistol_mp_1_12")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0, 0.2, 1, -0.39160803, 0, 0, 0.4, 1, 0, 0, 0)
+tracks/1/type = "position_3d"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CollisionShape3D")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = PackedFloat32Array(0, 1, 0, -0.025546938, 0.03308165, 0.2, 1, -0.39160803, -0.025546938, 0.03308165, 0.4, 1, 0, -0.025546938, 0.03308165)
+tracks/2/type = "position_3d"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("CollisionShape3D2")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = PackedFloat32Array(0, 1, 0, 0.05407819, -0.07360011, 0.2, 1, -0.39160803, 0.05407819, -0.07360011, 0.4, 1, 0, 0.05407819, -0.07360011)
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_8ewnw"]
+_data = {
+&"RESET": SubResource("Animation_kkadq"),
+&"Reload": SubResource("Animation_go0o3")
+}
+
+[node name="Deagle" unique_id=1275172979 instance=ExtResource("1_x24oy")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." index="0" unique_id=1905958393]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.025546938, 0.03308165)
+shape = ExtResource("2_21xci")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="." index="1" unique_id=427316863]
+transform = Transform3D(-0.0021496634, -0.0011840846, 0.999997, 0.9999907, -0.0037430362, 0.002145217, 0.0037404846, 0.99999225, 0.0011921213, 0, 0.05407819, -0.07360011)
+shape = ExtResource("3_twyu7")
+
+[node name="pistol_mp_1_12" parent="." index="2" unique_id=473977052 instance=ExtResource("4_gs4f0")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, 0)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." index="3" unique_id=1034727408]
+libraries/ = SubResource("AnimationLibrary_8ewnw")
+
+[node name="Shootable" parent="." index="4" unique_id=321872780 node_paths=PackedStringArray("AnimationPlayer", "Body", "GeometryList")]
+AimOffset = Vector3(0, -0.095, 0.115)
+AnimationPlayer = NodePath("../AnimationPlayer")
+HoldOffset = Vector3(0.24, -0.195, 0.355)
+BaseFollowSpeed = 140.0
+AimFollowSpeed = 142.0
+Body = NodePath("..")
+GeometryList = [NodePath("../pistol_mp_1_12/pistol_mp_1_1"), NodePath("../pistol_mp_1_12/pistol_mp_1_1/pistol_mp_1_1_mag_initial"), NodePath("../pistol_mp_1_12/pistol_mp_1_1/pistol_mp_1_1_slide"), NodePath("../pistol_mp_1_12/pistol_mp_1_1/pistol_mp_1_1_trigger")]
+
+[node name="BulletPivot" parent="." index="5" unique_id=1499940003]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0022476465, 0.056845695, -0.21188562)
+
+[node name="UiOffset" parent="." index="7" unique_id=889549477]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.071, 0.067, 0)
+
+[editable path="pistol_mp_1_12"]

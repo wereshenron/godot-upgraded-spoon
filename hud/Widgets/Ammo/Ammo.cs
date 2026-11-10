@@ -1,6 +1,7 @@
 using Godot;
 using upgradedspoon.globals;
 using upgradedspoon.traits.shootable;
+using upgradedspoon.types;
 
 namespace upgradedspoon.hud.Widgets.Ammo;
 
@@ -8,12 +9,21 @@ public partial class Ammo : HudWidget
 {
 	[Export] public RichTextLabel Loaded { get; set; }
 	[Export] public RichTextLabel MagSize { get; set; }
+
+	private Shootable _holder;
 	public override void _Ready()
 	{
 		Visible = false;
 		
 		SignalBus.Instance.AmmoShown += OnAmmoShown;
 		SignalBus.Instance.AmmoChanged += OnAmmoChanged;
+	}
+
+	public override void _PhysicsProcess(double delta)
+	{
+		if (_holder is null) return;
+
+		GlobalPosition = GetViewport().GetCamera3D().UnprojectPosition(_holder.UiOffset.GlobalPosition);
 	}
 
 	private void OnAmmoChanged(object sender, AmmoState state)
@@ -24,6 +34,7 @@ public partial class Ammo : HudWidget
 	private void OnAmmoShown(object sender, bool e)
 	{
 		if (sender is not Shootable shootable) return;
+		_holder = shootable;
 		
 		Visible = e;
 		SetAmmoState(shootable.Ammo, shootable.GunSettings.MagazineSize);

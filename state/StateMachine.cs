@@ -26,10 +26,8 @@ public partial class StateMachine<TActor> : Node where TActor : Node3D
 		States[id] = state;
 	}
 
-	public void Enter(StringName stateId, Dictionary msg = null)
+	public void Enter(StringName stateId, Dictionary? msg = null)
 	{
-		msg ??= new Dictionary();
-
 		if (!States.ContainsKey(stateId))
 		{
 			GD.PushError($"StateMachine: no state registered with id '{stateId}'");
@@ -65,7 +63,7 @@ public partial class StateMachine<TActor> : Node where TActor : Node3D
 		}
 	}
 
-	public void TransitionTo(StringName stateId, Dictionary msg = null)
+	public void TransitionTo(StringName stateId, Dictionary? msg = null)
 	{
 
 		if (!States.ContainsKey(stateId))
@@ -80,7 +78,7 @@ public partial class StateMachine<TActor> : Node where TActor : Node3D
 		CurrentState.Enter(msg);
 	}
 
-	protected void _OnStateTransitioned(State<TActor> state, StringName newStateId, Dictionary msg)
+	protected void _OnStateTransitioned(State<TActor> state, StringName newStateId, Dictionary? msg)
 	{
 		if (state != CurrentState)
 		{

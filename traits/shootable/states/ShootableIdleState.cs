@@ -8,7 +8,7 @@ public partial class ShootableIdleState : ShootableState
 {
     private bool _fireNextTick;
 
-#nullable enable
+
     public override void Enter(Dictionary? msg)
     {
         _fireNextTick = msg is not null && msg.ContainsKey("nextShotQueued");
@@ -37,7 +37,7 @@ public partial class ShootableIdleState : ShootableState
     private void TryFire()
     {
         if (Actor.Ammo > 0)
-            OnTransitioned(this, "Firing", new Dictionary());
+            OnTransitioned(this, Actor.FiringState, new Dictionary());
         else
             TryReload(); // empty mag: auto-reload (swap for a dry-fire click if you prefer)
     }
@@ -45,6 +45,6 @@ public partial class ShootableIdleState : ShootableState
     private void TryReload()
     {
         if (Actor.CanReload)
-            OnTransitioned(this, "Reload", new Dictionary());
+            OnTransitioned(this, Actor.ReloadState, new Dictionary());
     }
 }

@@ -9,7 +9,7 @@ public abstract partial class State<TActor> : Node where TActor : Node3D
 {
     //# Base class for a single state in a StateMachine. States are plain objects,
 
-    public event Action<State<TActor>, StringName, Dictionary> Transitioned;
+    public event Action<State<TActor>, StringName, Dictionary?> Transitioned = null!;
 
     public TActor Actor { get; set; }
 
@@ -36,7 +36,7 @@ public abstract partial class State<TActor> : Node where TActor : Node3D
     {
     }
 
-    protected virtual void OnTransitioned(State<TActor> currentState, StringName currentStateId, Dictionary message)
+    protected virtual void OnTransitioned(State<TActor> currentState, StringName currentStateId, Dictionary? message = null)
     {
         Transitioned?.Invoke(currentState, currentStateId, message);
     }

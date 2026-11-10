@@ -1,18 +1,21 @@
 using Godot;
+using upgradedspoon.globals;
 
 namespace upgradedspoon.hud;
 
 public partial class HudController : CanvasLayer
 {
-
+	public static HudController Instance { get; private set; }
 	private static readonly StringName Pause = "Pause";
 	private bool _isPaused;
+	
 	
 	public override void _Ready()
 	{
 		base._Ready();
+		Instance = this;
 
-		// SignalBus.Instance.PauseStarted += OnPauseStarted;
+		SignalBus.Instance.PauseStarted += OnPauseStarted;
 	}
 
 	public override void _UnhandledInput(InputEvent @event)
@@ -29,6 +32,7 @@ public partial class HudController : CanvasLayer
 
 	private void OnPauseStarted(object sender, bool e)
 	{
+		GD.Print(e);
 		switch (e)
 		{
 			case true:

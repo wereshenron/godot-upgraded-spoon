@@ -10,6 +10,9 @@
 [ext_resource type="PackedScene" uid="uid://fn5pf02c2x0f" path="res://playground/ps1_assets/Models/GLB (recommended)/Modular Structures/door_4_loose.glb" id="8_w8xmq"]
 [ext_resource type="PackedScene" uid="uid://c4x72vaqbnvjn" path="res://playground/ps1_assets/Models/GLB (recommended)/Lighting/lamp_5_on.glb" id="9_vlmht"]
 [ext_resource type="PackedScene" uid="uid://d14s0577260hg" path="res://playground/ps1_assets/Models/GLB (recommended)/Furniture/coffee_table_1_1.glb" id="10_w8xmq"]
+[ext_resource type="Environment" uid="uid://cqtqaci4pdnm5" path="res://world/world_env.tres" id="11_rpdso"]
+[ext_resource type="PackedScene" uid="uid://bathrloyj06tw" path="res://holdables/weapons/guns/deagle.tscn" id="12_hc61n"]
+[ext_resource type="PackedScene" uid="uid://cirnotkwyri7m" path="res://holdables/util/flashlight.tscn" id="13_uea51"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rpdso"]
 albedo_texture = ExtResource("2_vlmht")
@@ -85,24 +88,35 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 3, -2)
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
 light_color = Color(0.79607844, 0.69803923, 0.4862745, 1)
 light_energy = 2.377
-spot_range = 62.575
-spot_attenuation = 0.11
-spot_angle = 83.39
-spot_angle_attenuation = 0.93303293
+spot_range = 7.206
+spot_attenuation = 0.23
+spot_angle = 104.85
+spot_angle_attenuation = 0.70710886
 
 [node name="door_4_loose2" parent="." unique_id=1554215353 instance=ExtResource("8_w8xmq")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -2, 0, -0.50000006)
 
-[node name="coffee_table_1_12" parent="." unique_id=11873710 instance=ExtResource("10_w8xmq")]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=2032318892]
+environment = ExtResource("11_rpdso")
+
+[node name="Deagle" parent="." unique_id=1275172979 instance=ExtResource("12_hc61n")]
+transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 2.5075758, 0.713014, -4.9279556)
+
+[node name="Decor" type="Node3D" parent="." unique_id=4434790]
+
+[node name="coffee_table_1_12" parent="Decor" unique_id=11873710 instance=ExtResource("10_w8xmq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -5)
 
-[node name="StaticBody3D" type="StaticBody3D" parent="coffee_table_1_12" unique_id=396583927]
+[node name="StaticBody3D" type="StaticBody3D" parent="Decor/coffee_table_1_12" unique_id=396583927]
 collision_layer = 32769
 collision_mask = 32769
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="coffee_table_1_12/StaticBody3D" unique_id=1725679888]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Decor/coffee_table_1_12/StaticBody3D" unique_id=1725679888]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.032104492, 0.34909058, 0)
 shape = SubResource("BoxShape3D_rpdso")
+
+[node name="Flashlight" parent="Decor" unique_id=2111664478 instance=ExtResource("13_uea51")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0014958, 0.66369766, -5.004724)
 
 [editable path="Walls/doorway_1_half2"]
 [editable path="Walls/window_2_1_single2"]

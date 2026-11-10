@@ -1,55 +1,17 @@
 [gd_scene format=3 uid="uid://brcd0l3ocimxd"]
 
+[ext_resource type="PackedScene" uid="uid://bhjv8vsyvv7xs" path="res://world/world_environment.tscn" id="1_1bvp3"]
 [ext_resource type="PackedScene" uid="uid://d0kdn6jxbcn2y" path="res://playground/house.tscn" id="4_dg77c"]
 [ext_resource type="PackedScene" uid="uid://daokd5re032ms" path="res://world/teleporter.tscn" id="5_lquwl"]
 [ext_resource type="PackedScene" uid="uid://cys78sp5v0cs6" path="res://world/spawn_point.tscn" id="10_w48qg"]
-[ext_resource type="PackedScene" uid="uid://bathrloyj06tw" path="res://custom_nodes/guns/deagle.tscn" id="11_efxa6"]
-
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ig7tw"]
-sky_top_color = Color(0.6509804, 0.63529414, 0.7764706, 1)
-sky_horizon_color = Color(0.5019608, 0.44313726, 0.32156864, 1)
-sky_curve = 0.3567625
-ground_horizon_color = Color(0.5019608, 0.44313726, 0.32156864, 1)
-ground_curve = 0.028963197
-sun_angle_max = 118.3
-sun_curve = 0.02745131
-use_debanding = false
-
-[sub_resource type="Sky" id="Sky_lquwl"]
-sky_material = SubResource("ProceduralSkyMaterial_ig7tw")
-process_mode = 1
-
-[sub_resource type="Environment" id="Environment_h2yge"]
-background_mode = 2
-sky = SubResource("Sky_lquwl")
-ambient_light_source = 3
-ambient_light_color = Color(1, 1, 1, 1)
-ambient_light_energy = 3.19
-tonemap_mode = 3
-tonemap_white = 0.83
-ssao_enabled = true
-ssao_light_affect = 0.39
-ssao_ao_channel_affect = 0.18
-glow_enabled = true
-glow_normalized = true
-glow_intensity = 0.21
-glow_strength = 1.29
-glow_bloom = 1.0
-glow_blend_mode = 2
-fog_sun_scatter = 0.18
-fog_aerial_perspective = 0.863
-fog_sky_affect = 0.725
-fog_height = 462.45
-volumetric_fog_density = 0.0289
-volumetric_fog_emission_energy = 166.16
 
 [node name="Main" type="Node3D" unique_id=1451496822]
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1569142963]
-environment = SubResource("Environment_h2yge")
+[node name="WorldEnvironment" parent="." unique_id=1114468117 instance=ExtResource("1_1bvp3")]
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=994105193]
 transform = Transform3D(1, 0, 0, 0, 0.8660254, 0.5, 0, -0.5, 0.8660254, 0, 12.9325, 10)
+visible = false
 light_color = Color(0.5989117, 0.4853422, 0.3358973, 1)
 light_energy = 4.625
 light_specular = 0.0
@@ -70,7 +32,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 529.7759, 0)
 monitorable = false
 
 [node name="House" parent="." unique_id=1045293935 instance=ExtResource("4_dg77c")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9993591, 0.010350227, 0.00037527084)
 
-[node name="Deagle" parent="." unique_id=1275172979 instance=ExtResource("11_efxa6")]
-transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 0, 0.7130141, -4.9279556)
+[node name="Holdable" parent="House/Decor/Flashlight" parent_id_path=PackedInt32Array(1045293935, 2111664478) index="5" unique_id=49660416]
+HoldOffset = Vector3(0.21, -0.175, 0.29)
+
+[editable path="House"]
+[editable path="House/Walls/doorway_1_half2"]
+[editable path="House/Walls/window_2_1_single2"]
+[editable path="House/Walls/wall_2_12"]
+[editable path="House/Decor/Flashlight"]

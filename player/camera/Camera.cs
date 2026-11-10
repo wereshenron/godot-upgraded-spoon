@@ -36,12 +36,20 @@ public partial class Camera : Camera3D
     private static readonly StringName LookDown = "look_down";
     private static readonly StringName LookUp = "look_up";
 
+    private static readonly float _initialFrustumSize;
+
     public override void _Ready()
     {
         _pitch = _targetPitch = Rotation.X;
         _yaw = _targetYaw = Rotation.Y;
 
         SignalBus.Instance.RecoilKicked += OnRecoilKicked;
+        SignalBus.Instance.PauseStarted += PauseStarted;
+    }
+
+    private void PauseStarted(object sender, bool e)
+    {
+        // SetFrustum();
     }
 
     public override void _ExitTree()

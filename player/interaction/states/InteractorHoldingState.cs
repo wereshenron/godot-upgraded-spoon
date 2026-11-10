@@ -65,101 +65,103 @@ public partial class InteractorHoldingState : State<Interactor>
 	}
 
 	// Discrete presses/releases arrive as events, so a quick tap can't be missed between ticks.
-    public override void HandleInput(InputEvent @event)
-    {
-        if (!TryGetHeld(out var held)) return;
-        if (!@event.IsActionType()) return;
+	public override void HandleInput(InputEvent @event)
+	{
+		if (!TryGetHeld(out var held)) return;
+		if (!@event.IsActionType()) return;
 
-        _contextBuilt = false;
-        _aimContext = default!;
+		_contextBuilt = false;
+		_aimContext = default!;
 
-        if (@event.IsActionReleased("LetGo"))
-        {
-            _heldObject?.RaiseReleased();
-            return;
-        }
+		if (@event.IsActionReleased("LetGo"))
+		{
+			_heldObject?.RaiseReleased();
+			return;
+		}
 
-        foreach (var (action, slot) in Bindings)
-        {
-            if (!@event.IsAction(action)) continue;
-            if (@event.IsEcho()) continue;
+		foreach (var (action, slot) in Bindings)
+		{
+			if (!@event.IsAction(action)) continue;
+			if (@event.IsEcho()) continue;
 
-            var phase = @event.IsPressed() ? InputPhase.Pressed : InputPhase.Released;
+			var phase = @event.IsPressed() ? InputPhase.Pressed : InputPhase.Released;
 
-            if (!_contextBuilt)
-            {
-                _aimContext = BuildAimContext(held);
-                _contextBuilt = true;
-            }
+			if (!_contextBuilt)
+			{
+				_aimContext = BuildAimContext(held);
+				_contextBuilt = true;
+			}
 
-            held.OnAction(slot, phase, 0, _aimContext);
-        }
-    }
+			held.OnAction(slot, phase, 0, _aimContext);
+		}
+	}
 
-    // Only continuous "held" polling lives here.
-    public override void PhysicsUpdate(double delta)
-    {
-        // using var _ = GcWatcher.Track("InteractorHoldingState._PhysicsProcess");
-        if (!TryGetHeld(out var held))
-        {
-            OnTransitioned(this, "Idle", new Dictionary());
-            return;
-        }
+	// Only continuous "held" polling lives here.
+	public override void PhysicsUpdate(double delta)
+	{
+		// using var _ = GcWatcher.Track("InteractorHoldingState._PhysicsProcess");
+		if (!TryGetHeld(out var held))
+		{
+			OnTransitioned(this, "Idle", new Dictionary());
+			return;
+		}
 
-        held.UpdateHold(Actor.HoldPivot, delta);
+		held.UpdateHold(Actor.HoldPivot, delta);
 
-        _contextBuilt = false;
-        _aimContext = default!;
+		_contextBuilt = false;
+		_aimContext = default!;
 
-        foreach (var (action, slot) in Bindings)
-        {
-            if (!Input.IsActionPressed(action)) continue;
+		foreach (var (action, slot) in Bindings)
+		{
+			if (!Input.IsActionPressed(action)) continue;
 
-            if (!_contextBuilt)
-            {
-                _aimContext = BuildAimContext(held);
-                _contextBuilt = true;
-            }
+			if (!_contextBuilt)
+			{
+				_aimContext = BuildAimContext(held);
+				_contextBuilt = true;
+			}
 
-            held.OnAction(slot, InputPhase.Held, delta, _aimContext);
+			held.OnAction(slot, InputPhase.Held, delta, _aimContext);
 
-            if (!TryGetHeld(out held)) return;
-        }
-    }
+			if (!TryGetHeld(out held)) return;
+		}
+	}
 
-    public override void Update(double delta)
-    {
-        // using var _ = GcWatcher.Track("InteractorHoldingState.Update");
-        _camera = Actor.Camera;
-        _origin = _camera.GlobalPosition;
-        _cameraForward = -_camera.GlobalBasis.Z;
-        _aimPoint = _origin + _cameraForward * 1000.0f;
-    }
+	public override void Update(double delta)
+	{
+		// using var _ = GcWatcher.Track("InteractorHoldingState.Update");
+		_camera = Actor.Camera;
+		_origin = _camera.GlobalPosition;
+		_cameraForward = -_camera.GlobalBasis.Z;
+		_aimPoint = _origin + _cameraForward * 1000.0f;
+	}
 
-    private bool TryGetHeld(out Holdable held)
-    {
-        held = _heldObject!;
-        return _heldObject is not null && IsInstanceValid(_heldObject);
-    }
+	private bool TryGetHeld(out Holdable held)
+	{
+		held = _heldObject!;
+		return _heldObject is not null && IsInstanceValid(_heldObject);
+	}
 
-    private AimContext BuildAimContext(Holdable held)
-    {
-        if (!_camera.AimRaycast.IsColliding()) return new AimContext(_origin, _cameraForward, _aimPoint);
+	private AimContext BuildAimContext(Holdable held)
+	{
+		if (!_camera.AimRaycast.IsColliding()) return new AimContext(_origin, _cameraForward, _aimPoint);
 
-        // GD.Print(_camera.AimRaycast.GetCollider());
-        _aimPoint = _camera.AimRaycast.GetCollisionPoint();
+		// GD.Print(_camera.AimRaycast.GetCollider());
+		_aimPoint = _camera.AimRaycast.GetCollisionPoint();
 
-        return new AimContext(_origin, _cameraForward, _aimPoint);
-    }
+		return new AimContext(_origin, _cameraForward, _aimPoint);
+	}
 
-    private void OnReleased(object? sender, EventArgs e)
-    {
-        if (_heldObject is not null)
-        {
-            _heldObject.SetShouldHover(false);
-            _heldObject.IsAiming = false;
-        }
+	private void OnReleased(object? sender, EventArgs e)
+	{
+		if (_heldObject is not null)
+		{
+			_heldObject.SetShouldHover(false);
+			_heldObject.IsAiming = false;
+			_heldObject.Body.AngularVelocity = new Vector3((float)Random.Shared.NextDouble(), (float)Random.Shared.NextDouble(), (float)Random.Shared.NextDouble());
+			_heldObject.Body.ApplyCentralImpulse(_cameraForward * 1.0f);
+		}
 
-        OnTransitioned(this, "Idle", new Dictionary());
-    }
+		OnTransitioned(this, "Idle", new Dictionary());
+	}
 }

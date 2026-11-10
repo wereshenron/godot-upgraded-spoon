@@ -1,6 +1,7 @@
 using System;
 using Godot;
 using upgradedspoon.traits;
+using upgradedspoon.types;
 
 namespace upgradedspoon.globals;
 
@@ -21,7 +22,7 @@ public partial class SignalBus : Node
 
 	public event EventHandler<bool> AmmoShown;
 	public event EventHandler<AmmoState> AmmoChanged;
-	// public event EventHandler<bool> PauseStarted;
+	public event EventHandler<bool> PauseStarted;
 
 	public override void _Ready()
 	{
@@ -57,5 +58,10 @@ public partial class SignalBus : Node
 	public void RaiseAmmoChanged(AmmoState e)
 	{
 		AmmoChanged?.Invoke(this, e);
+	}
+	
+	public void RaisePauseStarted(object sender, bool e)
+	{
+		PauseStarted?.Invoke(sender, e);
 	}
 }

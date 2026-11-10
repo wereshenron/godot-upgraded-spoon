@@ -46,6 +46,10 @@ public partial class Shootable : Holdable
 	[Export] public Node3D BulletPivot { get; set; }
 	
 	[Export] public GpuParticles3D BulletParticles { get; set; }
+	
+	[Export] public AnimationPlayer AnimationPlayer { get; set; }
+	
+	[Export] public Node3D UiOffset { get; set; }
 
 	/// Latest aim from the interactor; states read this when firing.
 	public AimContext CurrentAim { get; private set; }
@@ -64,8 +68,9 @@ public partial class Shootable : Holdable
 	private Vector3 _shootAimPoint;
 	private Vector3 _direction = Vector3.Zero;
 
-	private static readonly StringName Idle = "Idle";
-	private static readonly StringName Firing = "Firing";
+	public readonly StringName IdleState = "Idle";
+	public readonly StringName FiringState = "Firing";
+	public readonly StringName ReloadState = "Reload";
 
 	private ShootableState CurrentState => StateMachine.CurrentState as ShootableState;
 
@@ -78,10 +83,12 @@ public partial class Shootable : Holdable
 		_initialLayer = Body.CollisionLayer;
 		_initialMask = Body.CollisionMask;
 		_aimRaycast = GameManager.Instance.Player.Camera.AimRaycast;
+		BulletParticles.GlobalPosition = BulletPivot.GlobalPosition;
 
-		StateMachine.AddState(Firing, new ShootableFiringState());
-		StateMachine.AddState(Idle, new ShootableIdleState());
-		StateMachine.Enter(Idle);
+		StateMachine.AddState(FiringState, new ShootableFiringState());
+		StateMachine.AddState(IdleState, new ShootableIdleState());
+		StateMachine.AddState(ReloadState, new ShootableReloadingState());
+		StateMachine.Enter(IdleState);
 
 		Grabbed += (_, _) => OnGrabbed();
 		Released += (_, _) => OnReleased();
@@ -151,18 +158,23 @@ public partial class Shootable : Holdable
 		var direction = toAim.LengthSquared() > 0.01f
 			? toAim.Normalized()
 			: CurrentAim.CameraForward;
+
+		var reducedAmmo = --Ammo;
+		UpdateAmmo(reducedAmmo);
 		
-		Ammo--;
-		
-		SignalBus.Instance.RaiseAmmoChanged(new AmmoState(Ammo, 0, GunSettings.MagazineSize));
 		ApplyRecoilKick();
 		LaunchBullet(direction, CurrentAim.AimPoint);
 		RestartBulletEffect();
 		// SpawnMarker(CurrentAim.AimPoint);
 	}
 
-	public void RefillMagazine() => Ammo = GunSettings.MagazineSize;
+	public void RefillMagazine() => UpdateAmmo(GunSettings.MagazineSize);
 
+	public void UpdateAmmo(int newValue)
+	{
+		Ammo = newValue;
+		SignalBus.Instance.RaiseAmmoChanged(new AmmoState(Ammo, 0, GunSettings.MagazineSize));
+	}
 
 	private void ApplyRecoilKick()
 	{

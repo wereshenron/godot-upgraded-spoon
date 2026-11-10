@@ -24,8 +24,8 @@ public partial class ShootableFiringState : ShootableState
 
         var msg = _nextShotQueued && Actor.GunSettings.FullAuto
             ? new Dictionary { ["nextShotQueued"] = true }
-            : new Dictionary();
-        OnTransitioned(this, "Idle", msg);
+            : null;
+        OnTransitioned(this, Actor.IdleState, msg);
     }
 
     public override void OnAction(UseSlot slot, InputPhase phase, double delta, AimContext ctx)

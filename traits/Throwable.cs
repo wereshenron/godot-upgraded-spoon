@@ -60,7 +60,7 @@ public partial class Throwable : Holdable
 				IsAiming = false;
 				_chargeTime = 0.0f;
 				break;
-		};
+		}
 	}
 
 	private void Throw(Vector3 direction)

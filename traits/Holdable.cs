@@ -10,11 +10,11 @@ namespace upgradedspoon.traits;
 
 public abstract partial class Holdable : Interactable
 {
-	[Export] public Vector3 HoldOffset;
-	[Export] public double MovementLowerThreshold;
-	[Export] public double BaseFollowSpeed;
-	[Export] public double AimFollowSpeed;
-	[Export] public double MassInfluence;
+	[Export] public Vector3 HoldOffset = new(2.4f, -0.195f, 0.355f);
+	[Export] public double MovementLowerThreshold = 0.33;
+	[Export] public double BaseFollowSpeed = 140;
+	[Export] public double AimFollowSpeed = 142;
+	[Export] public double MassInfluence = 1.5;
 	[Export] public RigidBody3D Body;
 
 	public virtual Vector3 GetHoldOffset() => Vector3.Zero;
@@ -50,7 +50,7 @@ public abstract partial class Holdable : Interactable
 		Action = "Hold";
 	}
 
-	public override void Interact(Interactor interactor, Dictionary msg = null)
+	public override void Interact(Interactor interactor, Dictionary? msg = null)
 	{
 		var target = msg?["target"].As<Interactable>();
 		if (target == null || interactor.StateMachine.CurrentState is InteractorHoldingState)
