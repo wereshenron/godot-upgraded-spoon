@@ -10,16 +10,30 @@ public partial class Flashlight : Holdable
 {
 	[Export] public Vector3 AimOffset;
 	[Export] public float AdsTime;
+	[Export] public SpotLight3D Light;
 
 	private double _aimBlend;
 	private RayCast3D _aimRaycast;
 	private Vector3 _direction = Vector3.Zero;
+
+	private bool _isShining = false;
+	private bool _shiningChangeQueued = true;
 
 	public override void _Ready()
 	{
 		base._Ready();
 		
 		_aimRaycast = GameManager.Instance.Player.Camera.AimRaycast;
+	}
+
+	public override void _Process(double delta)
+	{
+		base._Process(delta);
+
+		if (!_shiningChangeQueued) return;
+
+		Light.LightEnergy = _isShining ? 1.0f : 0.0f;
+		_shiningChangeQueued = false;
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -36,40 +50,46 @@ public partial class Flashlight : Holdable
 		return IsAiming ? AimFollowSpeed : baseSpeed;
 	}
 
-	// public override void OnAction(UseSlot slot, InputPhase phase, double delta, AimContext ctx)
-	// {
-	// 	switch (slot, phase)
-	// 	{
-	// 		case (UseSlot.Primary, InputPhase.Pressed):
-	// 			if (IsAiming)
-	// 			{
-	// 				Throw((ctx.AimPoint - Body.GlobalPosition).Normalized());
-	// 			}
-	//
-	// 			IsAiming = false;
-	// 			_chargeTime = 0.0f;
-	// 			break;
-	// 		
-	// 		case (UseSlot.Secondary, InputPhase.Pressed):
-	// 			IsAiming = true;
-	// 			_chargeTime = 0.0f;
-	// 			break;
-	// 		
-	// 		case (UseSlot.Secondary, InputPhase.Held):
-	// 			if (IsAiming)
-	// 			{
-	// 				_chargeTime = MathF.Min(_chargeTime + (float)delta, MaxChargeTime);
-	// 			}
-	//
-	// 			break;
-	// 		
-	// 		case (UseSlot.Secondary, InputPhase.Released):
-	// 			IsAiming = false;
-	// 			_chargeTime = 0.0f;
-	// 			break;
-	// 	};
-	// }
+	public override void OnAction(UseSlot slot, InputPhase phase, double delta, AimContext ctx)
+	{
+		switch (slot, phase)
+		{
+			case (UseSlot.Primary, InputPhase.Pressed):
+				_isShining = !_isShining;
+				_shiningChangeQueued = true;
+				break;
+			
+			case (UseSlot.Secondary, InputPhase.Pressed):
+				IsAiming = true;
+				SignalBus.Instance.RaiseShowReticle(false);
+				break;
+			
+			case (UseSlot.Secondary, InputPhase.Released):
+				IsAiming = false;
+				SignalBus.Instance.RaiseShowReticle(true);
+				break;
+		};
+	}
 
+	private void HandleAim(InputPhase phase)
+	{
+		switch (phase)
+		{
+			case InputPhase.Pressed:
+				IsAiming = true;
+				SignalBus.Instance.RaiseShowReticle(false);
+				break;
+			case InputPhase.Released:
+				IsAiming = false;
+				SignalBus.Instance.RaiseShowReticle(true);
+				break;
+			case InputPhase.Held:
+				break;
+			default:
+				throw new ArgumentOutOfRangeException(nameof(phase), phase, null);
+		}
+	}
+	
 	public override void UpdateHold(Node3D holdPivot, double delta)
 	{
 		// _aimBlend = 1.0f; // Testing always aiming

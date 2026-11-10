@@ -18,6 +18,8 @@ offset_transform_enabled = true
 script = ExtResource("1_anu7f")
 Loaded = NodePath("HBoxContainer/Loaded")
 MagSize = NodePath("HBoxContainer/MagSize")
+HideTimeout = 0.66
+ShowTimeout = 0.76
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=2000624151]
 layout_mode = 2

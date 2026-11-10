@@ -1,5 +1,6 @@
 using Godot;
 using upgradedspoon.globals;
+using upgradedspoon.traits;
 using upgradedspoon.traits.shootable;
 using upgradedspoon.types;
 
@@ -9,6 +10,9 @@ public partial class Ammo : HudWidget
 {
 	[Export] public RichTextLabel Loaded { get; set; }
 	[Export] public RichTextLabel MagSize { get; set; }
+	
+	[Export] public float HideTimeout = 0.08f;
+	[Export] public float ShowTimeout = 0.40f;
 
 	private Shootable _holder;
 	public override void _Ready()
@@ -31,14 +35,23 @@ public partial class Ammo : HudWidget
 		SetAmmoState(state.Loaded, state.MagSize);
 	}
 
-	private void OnAmmoShown(object sender, bool e)
+	private void OnAmmoShown(object sender, bool shown)
 	{
 		if (sender is not Shootable shootable) return;
-		_holder = shootable;
+
+		if (shown)
+		{
+			Visible = true;
+			FadeTo(1f, ShowTimeout);
+		}
+		else
+		{
+			FadeTo(0f, HideTimeout, () => Visible = false);
+		}
 		
-		Visible = e;
 		SetAmmoState(shootable.Ammo, shootable.GunSettings.MagazineSize);
-		// TODO - Add reserve 
+		
+		_holder = shootable;
 	}
 
 	// private void SetAmmoState(AmmoState state) TODO - Add reserve to UI
