@@ -108,16 +108,16 @@ public partial class Flashlight : Holdable
 		_direction = -_aimRaycast.GlobalBasis.Z.Normalized();
 
 		var targetBasis = Basis.LookingAt(_direction, holdPivot.GlobalBasis.Y);
-		var mass = Body.GetMass();
+		var mass = RigidBody.GetMass();
 		var speed = GetFollowSpeed(BaseFollowSpeed);
 		var followSpeed = speed / (1.0 + mass * MassInfluence);
 
 		var clamp = (float)Mathf.Clamp(followSpeed * delta, 0.0, 1.0);
 
-		Body.GlobalPosition = Body.GlobalPosition
+		RigidBody.GlobalPosition = RigidBody.GlobalPosition
 			.Lerp(holdTarget, clamp);
 
-		Body.GlobalBasis = Body.GlobalBasis
+		RigidBody.GlobalBasis = RigidBody.GlobalBasis
 			.Slerp(targetBasis, clamp);
 	}
 }

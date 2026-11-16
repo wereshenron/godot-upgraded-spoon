@@ -8,56 +8,61 @@ namespace upgradedspoon.hud.Widgets.Ammo;
 
 public partial class Ammo : HudWidget
 {
-	[Export] public RichTextLabel Loaded { get; set; }
-	[Export] public RichTextLabel MagSize { get; set; }
-	
-	[Export] public float HideTimeout = 0.08f;
-	[Export] public float ShowTimeout = 0.40f;
+    [Export] public RichTextLabel Loaded { get; set; }
+    [Export] public RichTextLabel MagSize { get; set; }
 
-	private Shootable _holder;
-	public override void _Ready()
-	{
-		Visible = false;
-		
-		SignalBus.Instance.AmmoShown += OnAmmoShown;
-		SignalBus.Instance.AmmoChanged += OnAmmoChanged;
-	}
+    [Export] public float HideTimeout = 0.08f;
+    [Export] public float ShowTimeout = 0.40f;
 
-	public override void _PhysicsProcess(double delta)
-	{
-		if (_holder is null) return;
+    private Shootable _holder;
 
-		GlobalPosition = GetViewport().GetCamera3D().UnprojectPosition(_holder.UiOffset.GlobalPosition);
-	}
+    public override void _Ready()
+    {
+        Visible = false;
 
-	private void OnAmmoChanged(object sender, AmmoState state)
-	{
-		SetAmmoState(state.Loaded, state.MagSize);
-	}
+        SignalBus.Instance.AmmoShown += OnAmmoShown;
+        SignalBus.Instance.AmmoChanged += OnAmmoChanged;
+    }
 
-	private void OnAmmoShown(object sender, bool shown)
-	{
-		if (sender is not Shootable shootable) return;
+    public override void _PhysicsProcess(double delta)
+    {
+        if (_holder is null) return;
 
-		if (shown)
-		{
-			Visible = true;
-			FadeTo(1f, ShowTimeout);
-		}
-		else
-		{
-			FadeTo(0f, HideTimeout, () => Visible = false);
-		}
-		
-		SetAmmoState(shootable.Ammo, shootable.GunSettings.MagazineSize);
-		
-		_holder = shootable;
-	}
+        GlobalPosition = GetViewport().GetCamera3D().UnprojectPosition(_holder.AmmoOffset.GlobalPosition);
+    }
 
-	// private void SetAmmoState(AmmoState state) TODO - Add reserve to UI
-	private void SetAmmoState(int loaded, int magSize)
-	{
-		Loaded.Text = loaded.ToString();
-		MagSize.Text = magSize.ToString();
-	}
+    private void OnAmmoChanged(object sender, AmmoState state)
+    {
+        SetAmmoState(state.Loaded, state.MagSize);
+    }
+
+    private void OnAmmoShown(object sender, bool shown)
+    {
+        if (sender is not Shootable shootable) return;
+        switch (shown)
+        {
+            case false:
+                FadeTo(0f, HideTimeout, () =>
+                {
+                    Visible = false;
+                    _holder = null;
+                });
+                return;
+            case true:
+                Visible = true;
+                FadeTo(1f, ShowTimeout);
+                break;
+        }
+
+        SetAmmoState(shootable.Ammo, shootable.GunSettings.MagazineSize);
+
+        _holder = shootable;
+    }
+
+    // private void SetAmmoState(AmmoState state) TODO - Add reserve to UI
+    private void SetAmmoState(int loaded, int magSize)
+    {
+        Loaded.Text = loaded.ToString();
+        MagSize.Text = magSize.ToString();
+    }
 }

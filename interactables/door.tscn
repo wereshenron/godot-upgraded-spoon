@@ -10,11 +10,15 @@ GeometryList = []
 Action = "Open"
 Title = "Door"
 
-[node name="Mesh" type="Node3D" parent="." unique_id=881630646]
-
 [node name="SwingPivot" type="Node3D" parent="." unique_id=2053137124]
 
-[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=1037945688]
+[node name="StaticBody3D" type="StaticBody3D" parent="SwingPivot" unique_id=1037945688]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=54844542]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SwingPivot/StaticBody3D" unique_id=54844542]
 shape = SubResource("BoxShape3D_8rerx")
+
+[node name="Mesh" type="Node3D" parent="SwingPivot" unique_id=881630646]
+
+[node name="UiOffset" type="Node3D" parent="SwingPivot" unique_id=756795993]
+
+[node name="ConnectionPivot" type="Node3D" parent="." unique_id=1695360151]

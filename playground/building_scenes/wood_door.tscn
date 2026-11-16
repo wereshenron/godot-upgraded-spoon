@@ -4,6 +4,9 @@
 [ext_resource type="Texture2D" uid="uid://cpvdclidbydwq" path="res://playground/ps1_assets/Models/GLB (recommended)/Modular Structures/door_4_loose_door_4.png" id="2_n7xi2"]
 [ext_resource type="Texture2D" uid="uid://bss5o65wqqxmm" path="res://playground/ps1_assets/Models/GLB (recommended)/Modular Structures/door_4_loose_door_handle_2.png" id="3_skdbk"]
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_ay546"]
+size = Vector3(1, 2.132843, 0.30130005)
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bxxys"]
 resource_name = "door_4"
 cull_mode = 2
@@ -108,22 +111,25 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_sw2tt")
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_ay546"]
-size = Vector3(1, 2.132843, 0.1665039)
+[node name="WoodDoor" unique_id=1208918519 node_paths=PackedStringArray("SwingPivot", "GeometryList", "InteractableBody", "UiOffset") instance=ExtResource("1_ay546")]
+SwingPivot = NodePath("SwingPivot")
+GeometryList = [NodePath("SwingPivot/Mesh/door_4_loose/door_4_loose_handle")]
+InteractableBody = NodePath("SwingPivot/StaticBody3D")
+UiOffset = NodePath("SwingPivot/UiOffset")
 
-[node name="WoodDoor" unique_id=1208918519 node_paths=PackedStringArray("GeometryList") instance=ExtResource("1_ay546")]
-GeometryList = [NodePath("Mesh/door_4_loose")]
+[node name="CollisionShape3D" parent="SwingPivot/StaticBody3D" parent_id_path=PackedInt32Array(1037945688) index="0" unique_id=54844542]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.53280187, 1.0391083, 0.021316528)
+shape = SubResource("BoxShape3D_ay546")
 
-[node name="door_4_loose" type="MeshInstance3D" parent="Mesh" parent_id_path=PackedInt32Array(881630646) index="0" unique_id=1452374639]
+[node name="door_4_loose" type="MeshInstance3D" parent="SwingPivot/Mesh" parent_id_path=PackedInt32Array(881630646) index="0" unique_id=1452374639]
 mesh = SubResource("ArrayMesh_fcys7")
 
-[node name="door_4_loose_handle" type="MeshInstance3D" parent="Mesh/door_4_loose" index="0" unique_id=1516321015]
+[node name="door_4_loose_handle" type="MeshInstance3D" parent="SwingPivot/Mesh/door_4_loose" index="0" unique_id=1516321015]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.9200001, 1.0469999, 0.07700012)
 mesh = SubResource("ArrayMesh_asn7f")
 
-[node name="SwingPivot" parent="." index="1" unique_id=2053137124]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1462619, 0)
+[node name="UiOffset" parent="SwingPivot" parent_id_path=PackedInt32Array(2053137124) index="2" unique_id=756795993]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1406398, 1.0473412, 0)
 
-[node name="CollisionShape3D" parent="StaticBody3D" parent_id_path=PackedInt32Array(1037945688) index="0" unique_id=54844542]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.53280187, 1.0391083, 0.03100586)
-shape = SubResource("BoxShape3D_ay546")
+[node name="ConnectionPivot" parent="." index="1" unique_id=1695360151]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 1, 0)

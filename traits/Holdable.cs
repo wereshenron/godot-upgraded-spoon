@@ -8,14 +8,14 @@ using upgradedspoon.types;
 
 namespace upgradedspoon.traits;
 
-public abstract partial class Holdable : Interactable
+public abstract partial class Holdable : interactable.Interactable
 {
 	[Export] public Vector3 HoldOffset = new(2.4f, -0.195f, 0.355f);
 	[Export] public double MovementLowerThreshold = 0.33;
 	[Export] public double BaseFollowSpeed = 140;
 	[Export] public double AimFollowSpeed = 142;
 	[Export] public double MassInfluence = 1.5;
-	[Export] public RigidBody3D Body;
+	[Export] public RigidBody3D RigidBody;
 
 	public virtual Vector3 GetHoldOffset() => Vector3.Zero;
 	public virtual double GetFollowSpeed(double baseSpeed) => baseSpeed;
@@ -43,7 +43,7 @@ public abstract partial class Holdable : Interactable
 	{
 		base._Ready();
 
-		Body?.AddToGroup("Holdable");
+		RigidBody?.AddToGroup("Holdable");
 
 		Grabbed += OnGrabbed;
 
@@ -52,7 +52,7 @@ public abstract partial class Holdable : Interactable
 
 	public override void Interact(Interactor interactor, Dictionary? msg = null)
 	{
-		var target = msg?["target"].As<Interactable>();
+		var target = msg?["target"].As<interactable.Interactable>();
 		if (target == null || interactor.StateMachine.CurrentState is InteractorHoldingState)
 			return;
 		interactor.StateMachine.TransitionTo("Holding", new Dictionary { ["holdable"] = target });
@@ -60,7 +60,7 @@ public abstract partial class Holdable : Interactable
 
 	public override void _PhysicsProcess(double delta)
 	{
-		if (Body == null) return;
+		if (RigidBody == null) return;
 		HandleCcd();
 	}
 
@@ -75,35 +75,35 @@ public abstract partial class Holdable : Interactable
 	// Helpers
 	private void HandleCcd()
 	{
-		if (!Body.ContinuousCd && !HasSpiked)
+		if (!RigidBody.ContinuousCd && !HasSpiked)
 		{
 			return;
 		}
 
-		Movement = Mathf.Clamp(Body.LinearVelocity.Length(), 0.0, 1.0);
+		Movement = Mathf.Clamp(RigidBody.LinearVelocity.Length(), 0.0, 1.0);
 
 		// This is the first instance of seeing quick movement - set CCD = true and continue 
-		if (Movement > MovementLowerThreshold && !Body.ContinuousCd)
+		if (Movement > MovementLowerThreshold && !RigidBody.ContinuousCd)
 		{
 			HasSpiked = true;
-			Body.ContinuousCd = true;
+			RigidBody.ContinuousCd = true;
 			return;
 		}
 		
 		// Return if there is quick movement, CCD is true, and it's spiked
-		if (Movement > MovementLowerThreshold && Body.ContinuousCd)
+		if (Movement > MovementLowerThreshold && RigidBody.ContinuousCd)
 		{
 			return;
 		}
 
-		Body.ContinuousCd = false;
+		RigidBody.ContinuousCd = false;
 		HasSpiked = false;
 	}
 
 #nullable enable
 	public void SetShouldHover(bool shouldHover)
 	{
-		Body.AxisLockLinearY = shouldHover;
+		RigidBody.AxisLockLinearY = shouldHover;
 	}
 
 	/// Semantic input from whoever is holding this. Override only the slots you care about.

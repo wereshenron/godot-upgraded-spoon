@@ -5,6 +5,7 @@ using upgradedspoon.player.camera;
 using upgradedspoon.state;
 using upgradedspoon.traits;
 using upgradedspoon.types;
+using Array = System.Array;
 
 namespace upgradedspoon.player.interaction.states;
 
@@ -23,18 +24,18 @@ public partial class InteractorHoldingState : State<Interactor>
 	private Vector3 _cameraForward;
 	private Vector3 _aimPoint;
 	private bool _contextBuilt;
+	private bool[] _slotDown = new bool[Bindings.Length];
 
 #nullable enable
 	private Holdable? _heldObject;
 
 	public override void Enter(Dictionary? msg)
 	{
-		// // Initialization
-		// _camera = Actor.Camera;
-		// _origin = _camera.GlobalPosition;
-		// _cameraForward = -_camera.GlobalBasis.Z;
-		// _aimPoint = _origin + _cameraForward * 1000.0f;
 		_aimContext = default!;
+		
+		for (var i = 0; i < Bindings.Length; i++)
+			_slotDown[i] = Input.IsActionPressed(Bindings[i].Action);
+
 
 		Holdable? holdable = null;
 		if (msg is not null && msg.TryGetValue("holdable", out var value))
@@ -47,7 +48,7 @@ public partial class InteractorHoldingState : State<Interactor>
 			return;
 		}
 
-		holdable.Body.Freeze = true;
+		holdable.RigidBody.Freeze = true;
 		_heldObject = holdable;
 		Actor.ObjectHeld = holdable;
 		holdable.Released += OnReleased;
@@ -59,9 +60,11 @@ public partial class InteractorHoldingState : State<Interactor>
 		if (_heldObject is not null && IsInstanceValid(_heldObject))
 			_heldObject.Released -= OnReleased;
 
-		Actor.ObjectHeld.Body.Freeze = false;
+		Actor.ObjectHeld.RigidBody.Freeze = false;
 		_heldObject = null;
 		Actor.ObjectHeld = null;
+		
+		Array.Clear(_slotDown);
 	}
 
 	// Discrete presses/releases arrive as events, so a quick tap can't be missed between ticks.
@@ -79,12 +82,17 @@ public partial class InteractorHoldingState : State<Interactor>
 			return;
 		}
 
-		foreach (var (action, slot) in Bindings)
+		for (var i = 0; i < Bindings.Length; i++)
 		{
+			var (action, slot) = Bindings[i];
 			if (!@event.IsAction(action)) continue;
-			if (@event.IsEcho()) continue;
 
-			var phase = @event.IsPressed() ? InputPhase.Pressed : InputPhase.Released;
+			// Ask the Input singleton for the debounced state, not the event.
+			var isDown = Input.IsActionPressed(action);
+			if (isDown == _slotDown[i]) continue; // no real edge, ignore axis jitter
+			_slotDown[i] = isDown;
+
+			var phase = isDown ? InputPhase.Pressed : InputPhase.Released;
 
 			if (!_contextBuilt)
 			{
@@ -158,8 +166,8 @@ public partial class InteractorHoldingState : State<Interactor>
 		{
 			_heldObject.SetShouldHover(false);
 			_heldObject.IsAiming = false;
-			_heldObject.Body.AngularVelocity = new Vector3((float)Random.Shared.NextDouble(), (float)Random.Shared.NextDouble(), (float)Random.Shared.NextDouble());
-			_heldObject.Body.ApplyCentralImpulse(_cameraForward * 1.0f);
+			_heldObject.RigidBody.AngularVelocity = new Vector3((float)Random.Shared.NextDouble(), (float)Random.Shared.NextDouble(), (float)Random.Shared.NextDouble());
+			_heldObject.RigidBody.ApplyCentralImpulse(_cameraForward * 1.0f);
 		}
 
 		OnTransitioned(this, "Idle", new Dictionary());

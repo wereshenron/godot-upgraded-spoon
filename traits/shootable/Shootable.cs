@@ -49,7 +49,7 @@ public partial class Shootable : Holdable
 	
 	[Export] public AnimationPlayer AnimationPlayer { get; set; }
 	
-	[Export] public Node3D UiOffset { get; set; }
+	[Export] public Node3D AmmoOffset { get; set; }
 
 	/// Latest aim from the interactor; states read this when firing.
 	public AimContext CurrentAim { get; private set; }
@@ -80,8 +80,8 @@ public partial class Shootable : Holdable
 
 		Ammo = GunSettings.MagazineSize;
 
-		_initialLayer = Body.CollisionLayer;
-		_initialMask = Body.CollisionMask;
+		_initialLayer = RigidBody.CollisionLayer;
+		_initialMask = RigidBody.CollisionMask;
 		_aimRaycast = GameManager.Instance.Player.Camera.AimRaycast;
 		BulletParticles.GlobalPosition = BulletPivot.GlobalPosition;
 
@@ -129,7 +129,7 @@ public partial class Shootable : Holdable
 		var aimPoint = aimOrigin + aimDir * AimLength;
 
 		_shootAimPoint = _aimRaycast.IsColliding() ? _aimRaycast.GetCollisionPoint() : Vector3.Zero;
-		_direction = (aimPoint - Body.GlobalPosition).Normalized();
+		_direction = (aimPoint - RigidBody.GlobalPosition).Normalized();
 
 		var targetBasis = Basis.LookingAt(_direction, holdPivot.GlobalBasis.Y);
 		var yawBasis = new Basis(Vector3.Up, _currentRecoilOffset.Y);
@@ -138,29 +138,36 @@ public partial class Shootable : Holdable
 		var pitchBasis = new Basis(aimWithYaw.X, _currentRecoilOffset.X);
 		var targetBasisFinal = pitchBasis * aimWithYaw;
 
-		var mass = Body.GetMass();
+		var mass = RigidBody.GetMass();
 		var speed = GetFollowSpeed(BaseFollowSpeed);
 		var followSpeed = speed / (1.0 + mass * MassInfluence);
 
 		var clamp = (float)Mathf.Clamp(followSpeed * delta, 0.0, 1.0);
 
-		Body.GlobalPosition = Body.GlobalPosition
+		RigidBody.GlobalPosition = RigidBody.GlobalPosition
 			.Lerp(holdTarget, clamp);
 
-		Body.GlobalBasis = Body.GlobalBasis
+		RigidBody.GlobalBasis = RigidBody.GlobalBasis
 			.Slerp(targetBasisFinal, clamp);
 	}
 
 	public void Shoot()
 	{
+		// Spawn the bullet 
 		var spawnPos = BulletPivot.GlobalPosition;
+		
+		// Handle recoil
 		var toAim = CurrentAim.AimPoint - spawnPos;
 		var direction = toAim.LengthSquared() > 0.01f
 			? toAim.Normalized()
 			: CurrentAim.CameraForward;
 
+		// Handle ammo reduction
 		var reducedAmmo = --Ammo;
 		UpdateAmmo(reducedAmmo);
+		
+		// Handle haptic feedback
+		// Input.StartJoyVibration();
 		
 		ApplyRecoilKick();
 		LaunchBullet(direction, CurrentAim.AimPoint);
@@ -240,9 +247,9 @@ public partial class Shootable : Holdable
 
 	private void OnGrabbed()
 	{
-		Body.Freeze = true;
-		Body.CollisionLayer = 0;
-		Body.CollisionMask = 0;
+		RigidBody.Freeze = true;
+		RigidBody.CollisionLayer = 0;
+		RigidBody.CollisionMask = 0;
 		
 		SignalBus.Instance.RaiseLookedAway();
 		SignalBus.Instance.RaiseAmmoShown(this, true);
@@ -254,9 +261,9 @@ public partial class Shootable : Holdable
 		IsAiming = false;
 		SignalBus.Instance.RaiseShowReticle(true);
 
-		Body.Freeze = false;
-		Body.CollisionLayer = _initialLayer;
-		Body.CollisionMask = _initialMask;
+		RigidBody.Freeze = false;
+		RigidBody.CollisionLayer = _initialLayer;
+		RigidBody.CollisionMask = _initialMask;
 		
 		SignalBus.Instance.RaiseLookedAway();
 		SignalBus.Instance.RaiseAmmoShown(this, false);

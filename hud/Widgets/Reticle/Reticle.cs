@@ -2,6 +2,7 @@ using System;
 using Godot;
 using upgradedspoon.globals;
 using upgradedspoon.traits;
+using Interactable = upgradedspoon.traits.interactable.Interactable;
 
 namespace upgradedspoon.hud.Widgets.Reticle;
 
@@ -33,7 +34,7 @@ public partial class Reticle : HudWidget
 		Bold.Visible = false;
 	}
 
-	private void OnInteractableSeen(object sender, Interactable e)
+	private void OnInteractableSeen(object sender, InteractableSeenArgs e)
 	{
 		Bold.Visible = true;
 	}

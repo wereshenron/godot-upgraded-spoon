@@ -15,4 +15,4 @@ FireVelocity = 150.0
 ReferenceBulletMass = 1.5
 BulletScene = ExtResource("1_12sn5")
 Damage = 200.0
-MagazineSize = 25
+MagazineSize = 6

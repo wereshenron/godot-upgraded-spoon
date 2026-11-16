@@ -83,12 +83,17 @@ shape = SubResource("CylinderShape3D_2pu3u")
 transform = Transform3D(1, 0, 0, 0, 0.042306896, 0.9991047, 0, -0.9991047, 0.042306896, 0, 0.039871983, 0.020857915)
 shape = SubResource("CylinderShape3D_6teqn")
 
-[node name="Holdable" type="Node3D" parent="." unique_id=49660416 node_paths=PackedStringArray("Light", "Body", "GeometryList")]
+[node name="Holdable" type="Node3D" parent="." unique_id=49660416 node_paths=PackedStringArray("Light", "RigidBody", "GeometryList", "InteractableBody", "UiOffset")]
 script = ExtResource("1_tvokj")
 AimOffset = Vector3(0, -0.195, 0.285)
 AdsTime = 0.15
 Light = NodePath("../SpotLight3D")
 HoldOffset = Vector3(0.21, -0.175, 0.29)
-Body = NodePath("..")
+RigidBody = NodePath("..")
 GeometryList = [NodePath("../flashlight_mp_1")]
 Title = "Flashlight"
+InteractableBody = NodePath("..")
+UiOffset = NodePath("../UiOffset")
+
+[node name="UiOffset" type="Node3D" parent="." unique_id=230737100]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.071, 0.067, 0)

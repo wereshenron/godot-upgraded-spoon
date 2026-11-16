@@ -36,7 +36,7 @@ public partial class Throwable : Holdable
 			case (UseSlot.Primary, InputPhase.Pressed):
 				if (IsAiming)
 				{
-					Throw((ctx.AimPoint - Body.GlobalPosition).Normalized());
+					Throw((ctx.AimPoint - RigidBody.GlobalPosition).Normalized());
 				}
 
 				IsAiming = false;
@@ -71,10 +71,10 @@ public partial class Throwable : Holdable
 		var chargedAngularVelocity = Vector3.Zero.Lerp(relativeAngularVelocity, chargeRatio);
 
 		RaiseReleased();
-		Body.ContinuousCd = true;
-		Body.AxisLockLinearY = false;
-		Body.ApplyCentralImpulse(direction * (float)force);
-		Body.AngularVelocity = chargedAngularVelocity;
+		RigidBody.ContinuousCd = true;
+		RigidBody.AxisLockLinearY = false;
+		RigidBody.ApplyCentralImpulse(direction * (float)force);
+		RigidBody.AngularVelocity = chargedAngularVelocity;
 	}
 
 	private Vector3 GetRelativeAngularVelocity(Vector3 direction)
@@ -102,10 +102,10 @@ public partial class Throwable : Holdable
 			+ right * offset.X
 			+ up * offset.Y;
 
-		var mass = Body.Mass;
+		var mass = RigidBody.Mass;
 		var speed = GetFollowSpeed(BaseFollowSpeed);
 		var followSpeed = speed / (1.0 + mass * MassInfluence);
 
-		Body.GlobalPosition = Body.GlobalPosition.Lerp(holdTarget, (float)Math.Clamp(followSpeed * delta, 0.0, 1.0));
+		RigidBody.GlobalPosition = RigidBody.GlobalPosition.Lerp(holdTarget, (float)Math.Clamp(followSpeed * delta, 0.0, 1.0));
 	}
 }

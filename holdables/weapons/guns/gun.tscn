@@ -36,19 +36,19 @@ size = Vector3(0.02, 0.02, 0.02)
 collision_layer = 32768
 collision_mask = 32768
 
-[node name="Shootable" parent="." unique_id=321872780 node_paths=PackedStringArray("BulletPivot", "BulletParticles", "UiOffset", "GeometryList") instance=ExtResource("1_gey3x")]
+[node name="Shootable" parent="." unique_id=321872780 node_paths=PackedStringArray("BulletPivot", "BulletParticles", "AnimationPlayer", "AmmoOffset", "GeometryList", "UiOffset") instance=ExtResource("1_gey3x")]
 AimOffset = Vector3(-0.001, -0.395, 0.505)
 GunSettings = ExtResource("2_541sl")
 Marker = ExtResource("3_it85b")
 BulletPivot = NodePath("../BulletPivot")
 BulletParticles = NodePath("../BulletParticles")
-UiOffset = NodePath("../UiOffset")
+AnimationPlayer = NodePath("")
+AmmoOffset = NodePath("../AmmoOffset")
 HoldOffset = Vector3(0.695, -0.575, 0.8)
-MovementLowerThreshold = 0.33
 BaseFollowSpeed = 125.0
 AimFollowSpeed = 139.84
-MassInfluence = 1.5
 GeometryList = [null, null, null, null, null]
+UiOffset = NodePath("../UiOffset")
 
 [node name="BulletPivot" type="Node3D" parent="." unique_id=1499940003]
 
@@ -66,3 +66,5 @@ process_material = SubResource("ParticleProcessMaterial_7tfrh")
 draw_pass_1 = SubResource("BoxMesh_mya6k")
 
 [node name="UiOffset" type="Node3D" parent="." unique_id=889549477]
+
+[node name="AmmoOffset" type="Node3D" parent="." unique_id=442533779]

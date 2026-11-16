@@ -1,18 +1,20 @@
 using System;
-using System.Collections.Generic;
 using Godot;
 using Godot.Collections;
 using upgradedspoon.player.interaction;
 
-namespace upgradedspoon.traits;
+namespace upgradedspoon.traits.interactable;
 
 public abstract partial class Interactable : Node3D
 {
     [Export] public GeometryInstance3D[] GeometryList;
     [Export] public string Action;
     [Export] public string Title;
+    [Export] public PhysicsBody3D InteractableBody;
+    [Export] public Node3D UiOffset;
 
     private static readonly StringName BlendParam = "blend";
+    private static readonly StringName InteractableName = "Interactable";
     private ShaderMaterial _outlineShaderMaterial;
     private Tween _tween;
     private bool _highlighted;
@@ -25,9 +27,9 @@ public abstract partial class Interactable : Node3D
 
     public override void _Ready()
     {
-        GetParentNode3D().AddToGroup("Interactable");
-        
-        
+        InteractableBody.AddToGroup(InteractableName);
+        InteractableBody.SetCollisionLayerValue(2, true);
+
         _outlineShaderMaterial = GD.Load<ShaderMaterial>("res://textures/materials/outline.tres");
         _setBlend = Callable.From<double>(SetBlend);
         globals.SignalBus.Instance.LookedAway += (_, _) => { SetHighlight(false); };
@@ -37,7 +39,7 @@ public abstract partial class Interactable : Node3D
     {
         if (highlight == _highlighted) return;
         _highlighted = highlight;
-        
+
         foreach (var t in GeometryList)
         {
             if (t == null) return;

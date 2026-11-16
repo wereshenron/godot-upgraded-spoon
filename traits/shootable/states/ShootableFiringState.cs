@@ -30,7 +30,7 @@ public partial class ShootableFiringState : ShootableState
 
     public override void OnAction(UseSlot slot, InputPhase phase, double delta, AimContext ctx)
     {
-        if (slot != UseSlot.Primary) return;
+        if (slot != UseSlot.Primary || (phase == InputPhase.Held && !Actor.GunSettings.FullAuto)) return;
 
         _nextShotQueued = phase switch
         {

@@ -37,6 +37,7 @@ public partial class ShootableIdleState : ShootableState
     private void TryFire()
     {
         if (Actor.Ammo > 0)
+            // var 
             OnTransitioned(this, Actor.FiringState, new Dictionary());
         else
             TryReload(); // empty mag: auto-reload (swap for a dry-fire click if you prefer)

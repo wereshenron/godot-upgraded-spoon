@@ -8,111 +8,118 @@ namespace upgradedspoon.player.controller;
 
 public partial class PlayerController : CharacterBody3D
 {
-	
-	[Export] public float JumpForce = 8.0f;
-	[Export(PropertyHint.Range, "1,3")] public float FallGravityMultiplier = 1.4f;
-	[Export(PropertyHint.Range, "0.01,1")] public float Acceleration = 0.12f;
+    [Export] public float JumpForce = 8.0f;
+    [Export(PropertyHint.Range, "1,3")] public float FallGravityMultiplier = 1.4f;
+    [Export(PropertyHint.Range, "0.01,1")] public float Acceleration = 0.12f;
 
-	[ExportGroup("Node References")]
-	[Export] public Camera Camera { get; set; }
-	[Export] public Node3D Pivot { get; set; }
-	[Export] public Interactor Interactor { get; set; }
-	[Export] public PlayerStats PlayerStats { get; set; }
-	[Export] public float TurnSpeed = 4.8f;
-	[Export] public float FallAcceleration = 75.0f;
+    [ExportGroup("Node References")]
+    [Export]
+    public Camera Camera { get; set; }
 
-	private Vector3 _direction;
-	private float _speed;
-	private float _runningSpeed;
-	private Vector3 _targetVelocity = Vector3.Zero;
-	private bool _isSprinting;
+    [Export] public Node3D Pivot { get; set; }
+    [Export] public Interactor Interactor { get; set; }
+    [Export] public PlayerStats PlayerStats { get; set; }
+    [Export] public float TurnSpeed = 4.8f;
+    [Export] public float FallAcceleration = 75.0f;
 
-	private static readonly StringName MoveLeft = new("move_left");
-	private static readonly StringName MoveRight = new("move_right");
-	private static readonly StringName MoveForward = new("move_forward");
-	private static readonly StringName MoveBack = new("move_back");
-	private static readonly StringName Sprint = new("sprint");
-	private static readonly StringName Jump = new("jump");
+    private Vector3 _direction;
+    private float _speed;
+    private float _runningSpeed;
+    private Vector3 _targetVelocity = Vector3.Zero;
+    private bool _isSprinting;
 
-	public override void _Ready()
-	{
-		_direction = Vector3.Zero;
+    private static readonly StringName MoveLeft = new("move_left");
+    private static readonly StringName MoveRight = new("move_right");
+    private static readonly StringName MoveForward = new("move_forward");
+    private static readonly StringName MoveBack = new("move_back");
+    private static readonly StringName Sprint = new("sprint");
+    private static readonly StringName Jump = new("jump");
 
-		if (PlayerStats is { } playerStats)
-		{
-			_speed = playerStats.Speed;
-			Interactor.PlayerStats = playerStats;
-		}
+    public override void _Ready()
+    {
+        _direction = Vector3.Zero;
 
-		Camera.AimRaycast.AddException(this);
-		Camera.InteractRaycast.AddException(this);
-	}
+        if (PlayerStats is { } playerStats)
+        {
+            _speed = playerStats.Speed;
+            Interactor.PlayerStats = playerStats;
+        }
 
-	public override void _PhysicsProcess(double deltaD)
-	{
-		// using var _ = GcWatcher.Track("Player._PhysicsProcess");
-		var delta = (float)deltaD;
-		_runningSpeed = _speed;
+        Camera.AimRaycast.AddException(this);
+        Camera.InteractRaycast.AddException(this);
+    }
 
-		_direction = Vector3.Zero;
+    public override void _PhysicsProcess(double deltaD)
+    {
+        // using var _ = GcWatcher.Track("Player._PhysicsProcess");
+        var delta = (float)deltaD;
+        _runningSpeed = _speed;
 
-		_direction.X += Input.GetAxis(
-			MoveLeft,
-			MoveRight
-		);
-		
-		_direction.Z += Input.GetAxis(
-			MoveBack,
-			MoveForward
-		);
+        _direction = Vector3.Zero;
 
-		if (Input.IsActionPressed(Sprint))
-		{
-			_runningSpeed *= PlayerStats.SprintMultiplier;
-			_isSprinting = true;
-		}
-		else
-		{
-			_runningSpeed = _speed;
-			_isSprinting = false;
-		}
+        _direction.X += Input.GetAxis(
+            MoveLeft,
+            MoveRight
+        );
 
-		if (_direction != Vector3.Zero)
-		{
-			var cameraBasis = new Basis(Vector3.Up, Camera.GlobalTransform.Basis.GetEuler().Y);
+        _direction.Z += Input.GetAxis(
+            MoveBack,
+            MoveForward
+        );
 
-			var forward = -cameraBasis.Z.Normalized();
-			var right = cameraBasis.X.Normalized();
-			_direction = (right * _direction.X + forward * _direction.Z).Normalized();
+        if (Input.IsActionPressed(Sprint))
+        {
+            _runningSpeed *= PlayerStats.SprintMultiplier;
+            _isSprinting = true;
+        }
+        else
+        {
+            _runningSpeed = _speed;
+            _isSprinting = false;
+        }
 
-			var lookDirection = new Vector3(_direction.X, 0, _direction.Z);
-			var current = Pivot.Basis.Orthonormalized();
-			var target = Basis.LookingAt(lookDirection).Orthonormalized();
-			target = new Basis(target.X.Normalized(), Vector3.Up, target.Z.Normalized());
-			Pivot.Basis = current.Slerp(target, delta * TurnSpeed);
-		}
+        if (_direction != Vector3.Zero)
+        {
+            var cameraBasis = new Basis(Vector3.Up, Camera.GlobalTransform.Basis.GetEuler().Y);
 
-		// Ground Velocity
-		var groundT = 1.0f - Mathf.Pow(1.0f - Acceleration, delta * 60.0f);
-		_targetVelocity.X = Mathf.Lerp(_targetVelocity.X, _direction.X * _runningSpeed, groundT);
-		_targetVelocity.Z = Mathf.Lerp(_targetVelocity.Z, _direction.Z * _runningSpeed, groundT);
+            var forward = -cameraBasis.Z.Normalized();
+            var right = cameraBasis.X.Normalized();
+            _direction = (right * _direction.X + forward * _direction.Z).Normalized();
 
-		if (Input.IsActionJustPressed(Jump) && IsOnFloor())
-		{
-			_targetVelocity.Y = JumpForce;
-		}
+            var lookDirection = new Vector3(_direction.X, 0, _direction.Z);
+            var current = Pivot.Basis.Orthonormalized();
+            var target = Basis.LookingAt(lookDirection).Orthonormalized();
+            target = new Basis(target.X.Normalized(), Vector3.Up, target.Z.Normalized());
+            Pivot.Basis = current.Slerp(target, delta * TurnSpeed);
+        }
 
-		// Vertical Velocity
-		if (!IsOnFloor())
-		{
-			_targetVelocity.Y -= FallAcceleration * delta;
-		}
-		else if (_targetVelocity.Y < 0)
-		{
-			_targetVelocity.Y = 0; // reset on landing so stale fall speed doesn't carry over
-		}
+        // Ground Velocity
+        var groundT = 1.0f - Mathf.Pow(1.0f - Acceleration, delta * 60.0f);
+        _targetVelocity.X = Mathf.Lerp(_targetVelocity.X, _direction.X * _runningSpeed, groundT);
+        _targetVelocity.Z = Mathf.Lerp(_targetVelocity.Z, _direction.Z * _runningSpeed, groundT);
 
-		Velocity = _targetVelocity;
-		MoveAndSlide();
-	}
+        if (Input.IsActionJustPressed(Jump) && IsOnFloor())
+        {
+            _targetVelocity.Y = JumpForce;
+        }
+
+        // Vertical Velocity
+        if (!IsOnFloor())
+        {
+            _targetVelocity.Y -= FallAcceleration * delta;
+
+            if (_targetVelocity.Y is >= 0.1f and <= 3.0f)
+            {
+                _targetVelocity.Y = 0.0f;
+            }
+        }
+        else if (_targetVelocity.Y < 0)
+        {
+            _targetVelocity.Y = 0; // reset on landing so stale fall speed doesn't carry over
+        }
+
+
+        Velocity = _targetVelocity;
+        MoveAndSlide();
+    }
 }

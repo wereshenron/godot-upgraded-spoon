@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://cvsto14uodglk"]
+
+[ext_resource type="PackedScene" uid="uid://wma2gtplq5wy" path="res://playground/building_scenes/wood_floor.tscn" id="1_e07k7"]
+[ext_resource type="PackedScene" uid="uid://bhkw3l3j2koa5" path="res://playground/ps1_assets/Models/GLB (recommended)/Modular Structures/wall_2_1.glb" id="2_m4g6v"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_p1l5l"]
+size = Vector3(4.37323, 0.2974472, 2.980957)
+
+[node name="Hallway" type="Node3D" unique_id=1222331627]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 0, 0, 0)
+
+[node name="WoodFloor" parent="." unique_id=1539599661 instance=ExtResource("1_e07k7")]
+transform = Transform3D(-1.0927847e-08, 0, 1, 0, 1, 0, -0.25, 0, -4.371139e-08, -2, 0, -8.742278e-08)
+
+[node name="wall_2_16" parent="." unique_id=1457509813 instance=ExtResource("2_m4g6v")]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, -9.934764e-08, 0, -1)
+visible = false
+
+[node name="StaticBody3D" type="StaticBody3D" parent="wall_2_16" unique_id=1119107035]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.73125815, 0, 0)
+collision_layer = 32769
+collision_mask = 32769
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="wall_2_16/StaticBody3D" unique_id=1295513055]
+transform = Transform3D(1, -4.371139e-08, -4.371139e-08, 4.371139e-08, -4.371139e-08, 1, -4.371139e-08, -1, -4.3711385e-08, 0.18914795, 1.4795837, -0.067723036)
+shape = SubResource("BoxShape3D_p1l5l")
+
+[node name="ConnectionPivot" type="Node3D" parent="." unique_id=629260198]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)

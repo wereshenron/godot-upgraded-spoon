@@ -18,13 +18,26 @@ size = Vector3(1.1448135, 0.3755722, 0.7702637)
 [sub_resource type="BoxShape3D" id="BoxShape3D_jibk7"]
 size = Vector3(2.2604065, 0.2793808, 2.980957)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_ge2ef"]
+size = Vector3(7.5265503, 0.2974472, 2.980957)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_uea51"]
-size = Vector3(4.4417725, 0.2974472, 2.980957)
+size = Vector3(4.37323, 0.2974472, 2.980957)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_l3sft"]
+size = Vector3(3.2862244, 0.2974472, 2.980957)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_qvg87"]
+size = Vector3(3.608368, 0.2974472, 2.980957)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_p5f2l"]
+size = Vector3(8.131409, 0.7314453, 8.166565)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_rpdso"]
 size = Vector3(1.5876465, 0.63983154, 1)
 
 [node name="House" type="Node3D" unique_id=1045293935]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 0, 0, 0)
 
 [node name="Walls" type="Node3D" parent="." unique_id=471805191]
 
@@ -55,6 +68,15 @@ shape = SubResource("BoxShape3D_jibk7")
 
 [node name="window_2_1_single2" parent="Walls" unique_id=308875509 instance=ExtResource("1_vfwrp")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 2)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Walls/window_2_1_single2" unique_id=1043005038]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5489633, 0, 0.16261053)
+collision_layer = 32769
+collision_mask = 32769
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Walls/window_2_1_single2/StaticBody3D" unique_id=1372392342]
+transform = Transform3D(1, -4.371139e-08, -4.371139e-08, 4.371139e-08, -4.371139e-08, 1, -4.371139e-08, -1, -4.3711385e-08, -2.527216, 1.4795836, -0.13867688)
+shape = SubResource("BoxShape3D_ge2ef")
 
 [node name="wall_2_12" parent="Walls" unique_id=905621162 instance=ExtResource("2_auyw0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
@@ -91,8 +113,8 @@ collision_layer = 32769
 collision_mask = 32769
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Walls/wall_2_17/StaticBody3D" unique_id=1774727709]
-transform = Transform3D(1, -4.371139e-08, -4.371139e-08, 4.371139e-08, -4.371139e-08, 1, -4.371139e-08, -1, -4.3711385e-08, 0.18914795, 1.4795837, -0.067723036)
-shape = SubResource("BoxShape3D_uea51")
+transform = Transform3D(1, -4.371139e-08, -4.371139e-08, 4.371139e-08, -4.371139e-08, 1, -4.371139e-08, -1, -4.3711385e-08, 0.766922, 1.4795837, -0.0677228)
+shape = SubResource("BoxShape3D_l3sft")
 
 [node name="wall_2_18" parent="Walls" unique_id=556068690 instance=ExtResource("2_auyw0")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 6, 0, -3.9999998)
@@ -115,8 +137,8 @@ collision_layer = 32769
 collision_mask = 32769
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Walls/wall_2_19/StaticBody3D" unique_id=692011539]
-transform = Transform3D(1, -4.371139e-08, -4.371139e-08, 4.371139e-08, -4.371139e-08, 1, -4.371139e-08, -1, -4.3711385e-08, 0.18914795, 1.4795837, -0.067723036)
-shape = SubResource("BoxShape3D_uea51")
+transform = Transform3D(1, -4.371139e-08, -4.371139e-08, 4.371139e-08, -4.371139e-08, 1, -4.371139e-08, -1, -4.3711385e-08, -0.19328314, 1.4795837, -0.0677228)
+shape = SubResource("BoxShape3D_qvg87")
 
 [node name="Floor" type="Node3D" parent="." unique_id=848469796]
 
@@ -132,6 +154,15 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 4, 0
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 4, 0, -4.0000005)
 
 [node name="Ceiling" type="Node3D" parent="." unique_id=1237743650]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Ceiling" unique_id=1033714924]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 4.5489635, 3, -0.83738947)
+collision_layer = 32769
+collision_mask = 32769
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ceiling/StaticBody3D" unique_id=887493397]
+transform = Transform3D(1, -4.371139e-08, -4.371139e-08, 4.371139e-08, -4.371139e-08, 1, -4.371139e-08, -1, -4.3711385e-08, -2.5664825, -1.1172487, -0.2019999)
+shape = SubResource("BoxShape3D_p5f2l")
 
 [node name="floor_ceiling_32" parent="Ceiling" unique_id=338005273 instance=ExtResource("6_rpdso")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 3, 0)
