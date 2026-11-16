@@ -1,13 +1,14 @@
 [gd_scene format=3 uid="uid://daokd5re032ms"]
 
-[ext_resource type="Script" uid="uid://b72rfp2piolaq" path="res://world/teleporter.gd" id="1_eumkw"]
+[ext_resource type="Script" uid="uid://kjt4tnlldc7n" path="res://world/Teleporter.cs" id="1_vud4j"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_tuehi"]
 size = Vector3(1000000, 1, 1000000)
 
-[node name="Teleporter" type="Area3D" unique_id=47569724]
+[node name="Teleporter" type="Area3D" unique_id=47569724 node_paths=PackedStringArray("CollisionShape")]
 collision_mask = 32769
-script = ExtResource("1_eumkw")
+script = ExtResource("1_vud4j")
+CollisionShape = NodePath("CollisionShape3D")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=963326453]
 shape = SubResource("BoxShape3D_tuehi")

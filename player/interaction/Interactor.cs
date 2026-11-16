@@ -1,0 +1,114 @@
+using Godot;
+using Godot.Collections;
+using upgradedspoon.globals;
+using upgradedspoon.player.interaction.states;
+using upgradedspoon.player.stats;
+using upgradedspoon.traits;
+using Camera = upgradedspoon.player.camera.Camera;
+using Interactable = upgradedspoon.traits.interactable.Interactable;
+
+namespace upgradedspoon.player.interaction;
+
+public partial class Interactor : Node3D
+{
+    private static readonly StringName InteractAction = "interact";
+
+    [ExportGroup("Node References")] [Export]
+    public Node3D HoldPivot;
+
+    [Export] public InteractorStateMachine StateMachine;
+    [Export] public Camera Camera;
+    public PlayerStats PlayerStats;
+
+    [ExportGroup("Timing")] [Export] public double PickupCooldown = 0.25f;
+
+    public Holdable ObjectHeld;
+
+    private static readonly StringName InteractableName = "Interactable";
+    private Interactable _currentTarget;
+    private PhysicsBody3D _lastBody;
+    private Interactable _lastInteractable;
+
+
+    public override void _Ready()
+    {
+        base._Ready();
+
+        Camera.InteractRaycast.SetCollisionMask(2);
+
+        StateMachine.AddState("Idle", new InteractorIdleState());
+        StateMachine.AddState("Holding", new InteractorHoldingState());
+        StateMachine.Enter("Idle");
+    }
+
+    public override void _Process(double delta)
+    {
+        // using var _ = GcWatcher.Track("Interactor.Process");
+        SetTarget(FindTarget());
+    }
+
+    public override void _UnhandledInput(InputEvent @event)
+    {
+        if (@event.IsActionPressed(InteractAction) && _currentTarget is not null)
+            _currentTarget.Interact(this, new Dictionary { ["target"] = _currentTarget });
+    }
+
+    private Interactable FindTarget()
+    {
+        if (!Camera.InteractRaycast.IsColliding()) return null;
+        if (Camera.InteractRaycast.GetCollider() is not PhysicsBody3D body ||
+            !body.IsInGroup(InteractableName)) return null;
+
+        var target = GetInteractable(body);
+        if (target is null || target == ObjectHeld) return null;
+        if (ObjectHeld is not null && target is Holdable) return null; // hands full
+        return target;
+    }
+
+    private void SetTarget(Interactable next)
+    {
+        if (_currentTarget is not null && !IsInstanceValid(_currentTarget))
+        {
+            _currentTarget = null;
+            SignalBus.Instance.RaiseLookedAway();
+        }
+
+        if (next == _currentTarget) return;
+
+        _currentTarget?.SetHighlight(false);
+        _currentTarget = next;
+
+        if (next is null)
+        {
+            SignalBus.Instance.RaiseLookedAway();
+            return;
+        }
+
+        next.SetHighlight(true);
+        SignalBus.Instance.RaiseInteractableSeen(this, next);
+    }
+
+    private Interactable GetInteractable(PhysicsBody3D body)
+    {
+        if (body == _lastBody && IsInstanceValid(_lastInteractable)) return _lastInteractable;
+        _lastBody = body;
+        _lastInteractable = null;
+
+        // This covers the case where the interactable IS the root of the scene
+        var owner = body.Owner;
+        if (owner is Interactable interactableOwner)
+        {
+            _lastInteractable = interactableOwner;
+            return _lastInteractable;
+        }
+
+        foreach (var child in body.GetChildren())
+            if (child is Interactable interactable)
+            {
+                _lastInteractable = interactable;
+                break;
+            }
+
+        return _lastInteractable;
+    }
+}

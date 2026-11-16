@@ -1,0 +1,281 @@
+using System;
+using Godot;
+using upgradedspoon.globals;
+using upgradedspoon.models.bullets;
+using upgradedspoon.state;
+using upgradedspoon.traits.shootable.gun_settings;
+using upgradedspoon.traits.shootable.states;
+using upgradedspoon.types;
+
+namespace upgradedspoon.traits.shootable;
+
+public partial class Shootable : Holdable
+{
+	/// <summary>
+	/// State machine that drives the gun's behavior (Idle, Firing). States are registered in <c>_Ready</c>.
+	/// </summary>
+	[Export] public ShootableStateMachine StateMachine { get; set; }
+
+	/// <summary>
+	/// Hold position used while aiming down sights, relative to the hold pivot
+	/// (X = right, Y = up, Z = forward). Blended with <c>HoldOffset</c> (hip position)
+	/// over <see cref="GunSettings.AdsTime"/>.
+	/// </summary>
+	[Export] public Vector3 AimOffset { get; set; }
+
+	/// <summary>
+	/// Tuning resource for this gun: recoil, fire rate, ammo, bullet, and ADS timing.
+	/// </summary>
+	[Export] public GunSettings GunSettings { get; set; }
+
+	/// <summary>
+	/// Distance in meters along the camera's aim ray used to compute the aim point
+	/// that the gun body and bullets are directed toward.
+	/// </summary>
+	[Export] public float AimLength { get; set; } = 1000.0f;
+
+	/// <summary>
+	/// Debug scene spawned at the aim point by <c>SpawnMarker</c>
+	/// (currently disabled in <c>Shoot</c>).
+	/// </summary>
+	[Export] public PackedScene Marker { get; set; }
+	
+	/// <summary>
+	/// Node reference to the bullet pivot (where the bullet shoots from)
+	/// </summary>
+	[Export] public Node3D BulletPivot { get; set; }
+	
+	[Export] public GpuParticles3D BulletParticles { get; set; }
+	
+	[Export] public AnimationPlayer AnimationPlayer { get; set; }
+	
+	[Export] public Node3D AmmoOffset { get; set; }
+
+	/// Latest aim from the interactor; states read this when firing.
+	public AimContext CurrentAim { get; private set; }
+
+	public int Ammo { get; private set; }
+	public bool CanReload => Ammo < GunSettings.MagazineSize;
+
+	/// 0 = hold_offset, 1 = aim_offset
+	private double _aimBlend;
+
+	private uint _initialLayer;
+	private uint _initialMask;
+	private Vector3 _targetRecoilOffset;
+	private Vector3 _currentRecoilOffset;
+	private RayCast3D _aimRaycast;
+	private Vector3 _shootAimPoint;
+	private Vector3 _direction = Vector3.Zero;
+
+	public readonly StringName IdleState = "Idle";
+	public readonly StringName FiringState = "Firing";
+	public readonly StringName ReloadState = "Reload";
+
+	private ShootableState CurrentState => StateMachine.CurrentState as ShootableState;
+
+	public override void _Ready()
+	{
+		base._Ready();
+
+		Ammo = GunSettings.MagazineSize;
+
+		_initialLayer = RigidBody.CollisionLayer;
+		_initialMask = RigidBody.CollisionMask;
+		_aimRaycast = GameManager.Instance.Player.Camera.AimRaycast;
+		BulletParticles.GlobalPosition = BulletPivot.GlobalPosition;
+
+		StateMachine.AddState(FiringState, new ShootableFiringState());
+		StateMachine.AddState(IdleState, new ShootableIdleState());
+		StateMachine.AddState(ReloadState, new ShootableReloadingState());
+		StateMachine.Enter(IdleState);
+
+		Grabbed += (_, _) => OnGrabbed();
+		Released += (_, _) => OnReleased();
+	}
+
+	public override void _PhysicsProcess(double delta)
+	{
+		var target = IsAiming ? 1f : 0f;
+		var step = GunSettings.AdsTime > 0 ? (float)(delta / GunSettings.AdsTime) : 1f;
+		_aimBlend = Mathf.MoveToward(_aimBlend, target, step);
+	}
+
+	public override void UpdateHold(Node3D holdPivot, double delta)
+	{
+		// _aimBlend = 1.0f; // Testing always aiming
+		_aimBlend = Mathf.MoveToward(_aimBlend, IsAiming ? 1.0 : 0.0, delta / GunSettings.AdsTime);
+
+		_targetRecoilOffset = _targetRecoilOffset.MoveToward(Vector3.Zero, GunSettings.RecoilSpeed * (float)delta);
+		
+		var weight = 1.0f - MathF.Exp(-GunSettings.Snap * (float)delta);
+		_currentRecoilOffset = _currentRecoilOffset.Lerp(_targetRecoilOffset, weight);
+
+		if (_currentRecoilOffset.DistanceSquaredTo(_targetRecoilOffset) < 0.0001f)
+			_currentRecoilOffset = _targetRecoilOffset;
+
+		var forward = -holdPivot.GlobalBasis.Z;
+		var right = holdPivot.GlobalBasis.X;
+		var up = holdPivot.GlobalBasis.Y;
+		var offset = GetHoldOffset();
+
+		var holdTarget = holdPivot.GlobalPosition
+						 + forward * (offset.Z + _currentRecoilOffset.Z)
+						 + right * (offset.X + _currentRecoilOffset.X)
+						 + up * (offset.Y + _currentRecoilOffset.Y);
+
+		var aimOrigin = _aimRaycast.GlobalPosition;
+		var aimDir = -_aimRaycast.GlobalBasis.Z;
+		var aimPoint = aimOrigin + aimDir * AimLength;
+
+		_shootAimPoint = _aimRaycast.IsColliding() ? _aimRaycast.GetCollisionPoint() : Vector3.Zero;
+		_direction = (aimPoint - RigidBody.GlobalPosition).Normalized();
+
+		var targetBasis = Basis.LookingAt(_direction, holdPivot.GlobalBasis.Y);
+		var yawBasis = new Basis(Vector3.Up, _currentRecoilOffset.Y);
+		var aimWithYaw = yawBasis * targetBasis;
+
+		var pitchBasis = new Basis(aimWithYaw.X, _currentRecoilOffset.X);
+		var targetBasisFinal = pitchBasis * aimWithYaw;
+
+		var mass = RigidBody.GetMass();
+		var speed = GetFollowSpeed(BaseFollowSpeed);
+		var followSpeed = speed / (1.0 + mass * MassInfluence);
+
+		var clamp = (float)Mathf.Clamp(followSpeed * delta, 0.0, 1.0);
+
+		RigidBody.GlobalPosition = RigidBody.GlobalPosition
+			.Lerp(holdTarget, clamp);
+
+		RigidBody.GlobalBasis = RigidBody.GlobalBasis
+			.Slerp(targetBasisFinal, clamp);
+	}
+
+	public void Shoot()
+	{
+		// Spawn the bullet 
+		var spawnPos = BulletPivot.GlobalPosition;
+		
+		// Handle recoil
+		var toAim = CurrentAim.AimPoint - spawnPos;
+		var direction = toAim.LengthSquared() > 0.01f
+			? toAim.Normalized()
+			: CurrentAim.CameraForward;
+
+		// Handle ammo reduction
+		var reducedAmmo = --Ammo;
+		UpdateAmmo(reducedAmmo);
+		
+		// Handle haptic feedback
+		// Input.StartJoyVibration();
+		
+		ApplyRecoilKick();
+		LaunchBullet(direction, CurrentAim.AimPoint);
+		RestartBulletEffect();
+		// SpawnMarker(CurrentAim.AimPoint);
+	}
+
+	public void RefillMagazine() => UpdateAmmo(GunSettings.MagazineSize);
+
+	public void UpdateAmmo(int newValue)
+	{
+		Ammo = newValue;
+		SignalBus.Instance.RaiseAmmoChanged(new AmmoState(Ammo, 0, GunSettings.MagazineSize));
+	}
+
+	private void ApplyRecoilKick()
+	{
+		var min = GunSettings.MinRecoilAmount;
+		var max = GunSettings.RecoilAmount;
+
+		var applied = new Vector3(
+			(float)Random.Shared.NextDouble() * (max.X - min.X) + min.X,
+			(float)Random.Shared.NextDouble() * (max.Y - min.Y) + min.Y,
+			(float)Random.Shared.NextDouble() * (max.Z - min.Z) + min.Z);
+
+		SignalBus.Instance.RaiseRecoilKicked(applied, GunSettings.MaxRecoilOffset);
+		_targetRecoilOffset += applied;
+	}
+
+	private void LaunchBullet(Vector3 direction, Vector3 aimPoint)
+	{
+		var bullet = GunSettings.BulletScene.Instantiate<Bullet>();
+		GetTree().Root.AddChild(bullet);
+		
+		bullet.GlobalPosition = BulletPivot.GlobalPosition;
+		bullet.GlobalBasis = GlobalBasis;
+		bullet.Velocity = direction * GunSettings.FireVelocity;
+		bullet.Mass = GunSettings.ReferenceBulletMass;
+	}
+
+	private void RestartBulletEffect()
+	{
+		BulletParticles.Restart();
+	}
+
+	// Input from the interactor
+	public override void OnAction(UseSlot slot, InputPhase phase, double delta, AimContext ctx)
+	{
+		CurrentAim = ctx;
+
+		if (slot == UseSlot.Secondary)
+			HandleAim(phase);
+
+		CurrentState?.OnAction(slot, phase, delta, ctx);
+	}
+
+	private void HandleAim(InputPhase phase)
+	{
+		switch (phase)
+		{
+			case InputPhase.Pressed:
+				IsAiming = true;
+				SignalBus.Instance.RaiseShowReticle(false);
+				break;
+			case InputPhase.Released:
+				IsAiming = false;
+				SignalBus.Instance.RaiseShowReticle(true);
+				break;
+			case InputPhase.Held:
+				break;
+			default:
+				throw new ArgumentOutOfRangeException(nameof(phase), phase, null);
+		}
+	}
+
+	public override Vector3 GetHoldOffset() => HoldOffset.Lerp(AimOffset, (float)_aimBlend);
+
+	private void OnGrabbed()
+	{
+		RigidBody.Freeze = true;
+		RigidBody.CollisionLayer = 0;
+		RigidBody.CollisionMask = 0;
+		
+		SignalBus.Instance.RaiseLookedAway();
+		SignalBus.Instance.RaiseAmmoShown(this, true);
+	}
+
+	private void OnReleased()
+	{
+		CurrentState?.Cancelled();
+		IsAiming = false;
+		SignalBus.Instance.RaiseShowReticle(true);
+
+		RigidBody.Freeze = false;
+		RigidBody.CollisionLayer = _initialLayer;
+		RigidBody.CollisionMask = _initialMask;
+		
+		SignalBus.Instance.RaiseLookedAway();
+		SignalBus.Instance.RaiseAmmoShown(this, false);
+	}
+
+	private void SpawnMarker(Vector3? endPoint = null)
+	{
+		// Checks if it has a value and assigns it to 'pos' at the same time
+		if (endPoint is not { } pos) return;
+	
+		var instance = Marker.Instantiate<Node3D>();
+		GetTree().Root.AddChild(instance);
+		instance.GlobalPosition = pos;
+	}
+}

@@ -1,12 +1,13 @@
 [gd_scene format=3 uid="uid://lj273it1f0b3"]
 
-[ext_resource type="Script" uid="uid://cbuqwortgp1ys" path="res://player/interaction/interactor.gd" id="1_ux4hp"]
-[ext_resource type="Script" uid="uid://dpfxlagk737um" path="res://state/state_machine.gd" id="2_5bqu1"]
+[ext_resource type="Script" uid="uid://d0fw5pnr3mkme" path="res://player/interaction/Interactor.cs" id="1_5bqu1"]
+[ext_resource type="Script" uid="uid://dj7fmv7bwympn" path="res://player/interaction/states/InteractorStateMachine.cs" id="2_5bqu1"]
 
-[node name="Interactor" type="Node3D" unique_id=844431834 node_paths=PackedStringArray("state_machine")]
-script = ExtResource("1_ux4hp")
-state_machine = NodePath("StateMachine")
+[node name="Interactor" type="Node3D" unique_id=844431834 node_paths=PackedStringArray("StateMachine")]
+script = ExtResource("1_5bqu1")
+StateMachine = NodePath("StateMachine")
 
-[node name="StateMachine" type="Node3D" parent="." unique_id=1051484361 node_paths=PackedStringArray("actor")]
+[node name="StateMachine" type="Node3D" parent="." unique_id=1051484361 node_paths=PackedStringArray("ActorNode")]
 script = ExtResource("2_5bqu1")
-actor = NodePath("..")
+ActorNode = NodePath("..")
+ActorPath = NodePath("..")
