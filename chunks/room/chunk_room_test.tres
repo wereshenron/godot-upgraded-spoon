@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="ChunkData" format=3 uid="uid://cjlq7sj0bl43i"]
+
+[ext_resource type="PackedScene" uid="uid://4rx3a1cv0sly" path="res://chunks/room/chunk_room_test.tscn" id="1_iuwtp"]
+[ext_resource type="Script" uid="uid://dax1f35ph3fb2" path="res://chunks/ChunkData.cs" id="2_vxwd1"]
+
+[resource]
+script = ExtResource("2_vxwd1")
+ChunkScene = ExtResource("1_iuwtp")
+ChunkType = &"room"
+TierMin = 1
+TierMax = 1
+metadata/_custom_type_script = "uid://dax1f35ph3fb2"

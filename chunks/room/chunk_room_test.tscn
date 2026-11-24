@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://4rx3a1cv0sly"]
+
+[ext_resource type="Script" uid="uid://b2vwnr3o4xc7e" path="res://chunks/ChunkBase.cs" id="1_c4kua"]
+[ext_resource type="Script" uid="uid://ci5t5yngkm57u" path="res://chunks/Connector.cs" id="2_thjwm"]
+[ext_resource type="PackedScene" uid="uid://wma2gtplq5wy" path="res://playground/building_scenes/wood_floor.tscn" id="3_neasy"]
+
+[node name="ChunkRoom" type="Node3D" unique_id=655397087]
+transform = Transform3D(4, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("1_c4kua")
+LocalBounds = AABB(-0.505, -0.0100004785, -2.02, 1.01, 0.020000707, 4.04)
+metadata/_custom_type_script = "uid://b2vwnr3o4xc7e"
+
+[node name="Connector" type="Marker3D" parent="." unique_id=1927956770]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+gizmo_extents = 1.16
+script = ExtResource("2_thjwm")
+metadata/_custom_type_script = "uid://ci5t5yngkm57u"
+
+[node name="WoodFloor" parent="." unique_id=1539599661 instance=ExtResource("3_neasy")]
+transform = Transform3D(0.25, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)

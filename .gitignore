@@ -9,3 +9,4 @@ builds/
 .godot/
 .git/
 *.sln.DotSettings.user
+addons/

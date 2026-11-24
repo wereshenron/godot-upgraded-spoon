@@ -1,5 +1,6 @@
 using Godot;
 using Godot.Collections;
+using upgradedspoon.chunks;
 using upgradedspoon.globals;
 using upgradedspoon.player.interaction;
 using upgradedspoon.traits;
@@ -12,6 +13,12 @@ public partial class Door : Interactable
     [Export] public Node3D SwingPivot;
     [Export] public float OpenAngleDegrees = 90f;
     [Export] public float Duration = 0.5f;
+    
+    public ChunkBase[] Room = new ChunkBase[2];  // the room on each side (null until filled)
+    public Connector[] Conn = new Connector[2];  // the connector on each side
+    [Signal] public delegate void OpeningEventHandler(Door door);
+    [Signal] public delegate void CrossedEventHandler(Door door, ChunkBase from, ChunkBase to);
+    public void Lock() { /* disable opening */ }
 
     private bool _opened;
     private float _closedY;

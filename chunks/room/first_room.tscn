@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://e8gfiyd2ngmr" path="res://playground/building_scenes/wood_door.tscn" id="1_hc61n"]
 [ext_resource type="PackedScene" uid="uid://c5t7o3w2x2ohk" path="res://playground/ps1_assets/Models/GLB (recommended)/Modular Structures/doorway_2_1_half.glb" id="1_rpdso"]
+[ext_resource type="Script" uid="uid://b2vwnr3o4xc7e" path="res://chunks/ChunkBase.cs" id="1_uea51"]
 [ext_resource type="PackedScene" uid="uid://bs1ad2wv58jd2" path="res://playground/ps1_assets/Models/GLB (recommended)/Modular Structures/window_2_1_single.glb" id="1_vfwrp"]
 [ext_resource type="PackedScene" uid="uid://bhkw3l3j2koa5" path="res://playground/ps1_assets/Models/GLB (recommended)/Modular Structures/wall_2_1.glb" id="2_auyw0"]
 [ext_resource type="PackedScene" uid="uid://bgoi8yuk0d2w5" path="res://playground/ps1_assets/Models/GLB (recommended)/Modular Structures/wall_1_2_half.glb" id="5_w8xmq"]
@@ -10,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://c4x72vaqbnvjn" path="res://playground/ps1_assets/Models/GLB (recommended)/Lighting/lamp_5_on.glb" id="9_vlmht"]
 [ext_resource type="PackedScene" uid="uid://d14s0577260hg" path="res://playground/ps1_assets/Models/GLB (recommended)/Furniture/coffee_table_1_1.glb" id="10_w8xmq"]
 [ext_resource type="PackedScene" uid="uid://bathrloyj06tw" path="res://holdables/weapons/guns/deagle.tscn" id="12_hc61n"]
+[ext_resource type="Script" uid="uid://ci5t5yngkm57u" path="res://chunks/Connector.cs" id="13_jibk7"]
 [ext_resource type="PackedScene" uid="uid://cirnotkwyri7m" path="res://holdables/util/flashlight.tscn" id="13_uea51"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_hc61n"]
@@ -36,13 +38,23 @@ size = Vector3(8.131409, 0.7314453, 8.166565)
 [sub_resource type="BoxShape3D" id="BoxShape3D_rpdso"]
 size = Vector3(1.5876465, 0.63983154, 1)
 
-[node name="House" type="Node3D" unique_id=1045293935]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 0, 0, 0)
+[node name="FirstRoom" type="Node3D" unique_id=102316227]
+script = ExtResource("1_uea51")
+LocalBounds = AABB(-3.2600002, -0.0100004785, -2.045, 8.350001, 3.0695004, 8.135)
+metadata/_custom_type_script = "uid://b2vwnr3o4xc7e"
+
+[node name="Connector" type="Marker3D" parent="." unique_id=2109420742]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2)
+top_level = true
+gizmo_extents = 2.69
+script = ExtResource("13_jibk7")
+metadata/_custom_type_script = "uid://ci5t5yngkm57u"
 
 [node name="Walls" type="Node3D" parent="." unique_id=471805191]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -1, 0, 0)
 
 [node name="doorway_2_1_half2" parent="Walls" unique_id=1730544871 instance=ExtResource("1_rpdso")]
-transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -2, 0, -0.99999994)
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -1.8912474, 0, -0.99999994)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Walls/doorway_2_1_half2" unique_id=1092969176]
 collision_layer = 32769
@@ -56,7 +68,7 @@ shape = SubResource("BoxShape3D_hc61n")
 transform = Transform3D(-1, 0, 1.509958e-07, 0, 1, 0, -1.509958e-07, 0, -1, -0.49999988, 0, 0)
 
 [node name="wall_1_2_half2" parent="Walls" unique_id=1524659655 instance=ExtResource("5_w8xmq")]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -2, 0, 1)
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -1.8912474, 0, 1)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Walls/wall_1_2_half2" unique_id=153273653]
 collision_layer = 32769
@@ -82,7 +94,7 @@ shape = SubResource("BoxShape3D_ge2ef")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
 
 [node name="wall_2_15" parent="Walls" unique_id=1457509813 instance=ExtResource("2_auyw0")]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -2, 0, -4)
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -1.8912474, 0, -4)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Walls/wall_2_15" unique_id=2127926781]
 collision_layer = 32769
@@ -141,6 +153,7 @@ transform = Transform3D(1, -4.371139e-08, -4.371139e-08, 4.371139e-08, -4.371139
 shape = SubResource("BoxShape3D_qvg87")
 
 [node name="Floor" type="Node3D" parent="." unique_id=848469796]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -1, 0, 0)
 
 [node name="WoodFloor" parent="Floor" unique_id=1539599661 instance=ExtResource("6_2w1pf")]
 
@@ -154,6 +167,7 @@ transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 4, 0
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 4, 0, -4.0000005)
 
 [node name="Ceiling" type="Node3D" parent="." unique_id=1237743650]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -1, 0, 0)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Ceiling" unique_id=1033714924]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 4.5489635, 3, -0.83738947)
@@ -189,9 +203,10 @@ spot_angle = 104.85
 spot_angle_attenuation = 0.70710886
 
 [node name="Deagle" parent="." unique_id=1275172979 instance=ExtResource("12_hc61n")]
-transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 2.5075758, 0.713014, -4.9279556)
+transform = Transform3D(1.9106855e-15, -4.371139e-08, -1, -1, -4.371139e-08, 0, -4.371139e-08, 1, -4.371139e-08, 3.9279556, 0.713014, 2.507576)
 
 [node name="Decor" type="Node3D" parent="." unique_id=4434790]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -1, 0, 0)
 
 [node name="coffee_table_1_12" parent="Decor" unique_id=11873710 instance=ExtResource("10_w8xmq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, -5)

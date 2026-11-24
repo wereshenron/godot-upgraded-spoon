@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://brcd0l3ocimxd"]
 
 [ext_resource type="PackedScene" uid="uid://bhjv8vsyvv7xs" path="res://world/world_environment.tscn" id="1_1bvp3"]
-[ext_resource type="PackedScene" uid="uid://d0kdn6jxbcn2y" path="res://playground/house.tscn" id="4_dg77c"]
+[ext_resource type="PackedScene" uid="uid://d0kdn6jxbcn2y" path="res://chunks/room/first_room.tscn" id="4_dg77c"]
 [ext_resource type="PackedScene" uid="uid://daokd5re032ms" path="res://world/teleporter.tscn" id="5_lquwl"]
 [ext_resource type="PackedScene" uid="uid://cys78sp5v0cs6" path="res://world/spawn_point.tscn" id="10_w48qg"]
 
