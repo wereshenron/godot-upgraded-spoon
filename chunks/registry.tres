@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ChunkRegistry" format=3 uid="uid://cs0g33313jys"]
+
+[ext_resource type="Script" uid="uid://darxqwvbt66dl" path="res://chunks/ChunkRegistry.cs" id="1_gjles"]
+[ext_resource type="Resource" uid="uid://t46ya64cb5oe" path="res://chunks/room/first_room.tres" id="1_oreio"]
+[ext_resource type="Resource" uid="uid://cjlq7sj0bl43i" path="res://chunks/room/chunk_room_test.tres" id="2_hrftr"]
+
+[resource]
+script = ExtResource("1_gjles")
+Chunks = Array[Object]([ExtResource("1_oreio"), ExtResource("2_hrftr")])
+metadata/_custom_type_script = "uid://darxqwvbt66dl"
